@@ -2,7 +2,6 @@
 node_modules
 
 # OS generated files #
-######################
 .DS_Store
 .DS_Store?
 ._*
@@ -10,3 +9,6 @@ node_modules
 .Trashes
 ehthumbs.db
 Thumbs.db
+
+#Distribution directory (where content placed after gulp is run)
+dist
