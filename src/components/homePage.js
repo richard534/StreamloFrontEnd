@@ -7,7 +7,7 @@ var Link = Router.Link;
 var Home = React.createClass({
    render: function() {
        return (
-       <div className="jumbotron">
+       <div className="jumbotron" width="100%">
             <h1>Streamlo</h1>
             <p>Discover your local musicians</p>
        </div>
