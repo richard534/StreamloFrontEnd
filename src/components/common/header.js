@@ -8,28 +8,34 @@ var navbarBrandStyle = {
   paddingTop: "3px"
 };
 
+var searchBarStyle = {
+  paddingTop: "3px"
+};
+
 var Header = React.createClass({
+  getInitialState: function() {
+    return {
+      currentPage: ''
+    };
+  },
+
   render: function() {
     return (
       <div className="container">
         <nav className="navbar navbar-default navbar-fixed-top">
 
           <div className="navbar-header">
-            <a href="#" className="btn btn-success btn-sm navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-              <span className="glyphicon glyphicon-menu-hamburger"></span>
-            </a>
             <Link to="app" className="navbar-brand" style={navbarBrandStyle}>
               <img src="images/StreamloWithAlpha.png" className="img-responsive pull-left" width="125"/>
             </Link>
           </div>
 
-          <div className="navbar-collapse collapse">
             <ul className="nav navbar-nav navbar-left">
               <li className="nav">
                 <Link to="app">Home</Link>
               </li>
               <li>
-                <form className="navbar-form" role="search">
+                <form className="navbar-form" role="search" style={searchBarStyle}>
                   <div className="input-group input-group-sm">
                     <input type="text" className="form-control" placeholder="Search by tracks or artists..."/>
                     <span className="input-group-btn">
@@ -40,10 +46,7 @@ var Header = React.createClass({
                   </div>
                 </form>
               </li>
-              <li>
 
-
-              </li>
             </ul>
             <ul className="nav navbar-nav navbar-right">
               <li className="nav">
@@ -53,8 +56,6 @@ var Header = React.createClass({
                 <Link to="app">Login</Link>
               </li>
             </ul>
-          </div>
-
         </nav>
       </div>
     );
