@@ -13,12 +13,6 @@ var searchBarStyle = {
 };
 
 var Header = React.createClass({
-  getInitialState: function() {
-    return {
-      currentPage: ''
-    };
-  },
-
   render: function() {
     return (
       <div className="container">
@@ -50,10 +44,10 @@ var Header = React.createClass({
             </ul>
             <ul className="nav navbar-nav navbar-right">
               <li className="nav">
-                <Link to="app">Upload</Link>
+                <Link to="upload">Upload</Link>
               </li>
               <li className="nav">
-                <Link to="app">Login</Link>
+                <Link to="signIn">Sign In</Link>
               </li>
             </ul>
         </nav>
