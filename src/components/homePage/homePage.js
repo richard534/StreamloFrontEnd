@@ -1,8 +1,6 @@
 "use strict";
 
 var React = require('react');
-var Router = require('react-router');
-var Link = Router.Link;
 var SearchCity = require('./searchCity');
 var Chart = require('./chart');
 var Footer = require('../common/footer');

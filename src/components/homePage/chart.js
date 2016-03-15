@@ -1,8 +1,6 @@
 "use strict";
 
 var React = require('react');
-var Router = require('react-router');
-var Link = Router.Link;
 
 //TODO: make header for charts dynamic, ie changes for selected city
 var Chart = React.createClass({

@@ -3,12 +3,9 @@
 var React = require('react');
 var Router = require('react-router');
 var Link = Router.Link;
+var SearchBox = require('./searchbox');
 
 var navbarBrandStyle = {
-  paddingTop: "3px"
-};
-
-var searchBarStyle = {
   paddingTop: "3px"
 };
 
@@ -24,23 +21,13 @@ var Header = React.createClass({
             </Link>
           </div>
 
-            <ul className="nav navbar-nav navbar-left">
+            <ul className="nav navbar-nav navbar-left col-md-8">
               <li className="nav">
                 <Link to="app">Home</Link>
               </li>
               <li>
-                <form className="navbar-form" role="search" style={searchBarStyle}>
-                  <div className="input-group input-group-sm">
-                    <input type="text" className="form-control" placeholder="Search by tracks or artists..."/>
-                    <span className="input-group-btn">
-                      <button className="btn btn-default" type="button">
-                        <span className="glyphicon glyphicon-search"></span>
-                      </button>
-                    </span>
-                  </div>
-                </form>
+                <SearchBox />
               </li>
-
             </ul>
             <ul className="nav navbar-nav navbar-right">
               <li className="nav">
