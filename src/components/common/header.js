@@ -10,7 +10,26 @@ var navbarBrandStyle = {
 };
 
 var Header = React.createClass({
-  render: function() {
+
+    getInitialState: function() {
+        return {
+            searchString: ""
+        };
+    },
+
+    setSearchStringState: function(event) { // Handles user input, refreshes DOM every key press
+      var value = event.target.value;
+      this.state.searchString = value;
+      return this.setState({searchString: this.state.searchString});
+    },
+
+    // TODO stop form submitting on pressing enter
+    onSearchSubmit: function(event) {
+        event.preventDefault();
+        event.stopPropagation();
+    },
+
+    render: function() {
     return (
       <div className="container">
         <nav className="navbar navbar-default navbar-fixed-top">
@@ -26,7 +45,9 @@ var Header = React.createClass({
                 <Link to="app">Home</Link>
               </li>
               <li>
-                <SearchBox />
+                <SearchBox searchString={this.state.searchString}
+                    onChange={this.setSearchStringState}
+                    onSearchSubmit={this.onSearchSubmit}/>
               </li>
             </ul>
             <ul className="nav navbar-nav navbar-right">
@@ -40,7 +61,7 @@ var Header = React.createClass({
         </nav>
       </div>
     );
-  }
+    }
 });
 
 module.exports = Header;

@@ -6,9 +6,9 @@ var SearchHeader = React.createClass({
 
   render: function() {
     return (
-
-      <h3>Search results for Placeholder</h3>
-
+        <div className="container">
+            <h3>Search results for {this.props.searchString}</h3>
+        </div>
     );
   }
 });

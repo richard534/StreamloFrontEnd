@@ -15,23 +15,36 @@ var searchBoxStyle = {
 
 var SearchBox = React.createClass({
 
-  render: function() {
-    return (
+    propTypes: {
+      onChange: React.PropTypes.func.isRequired
+    },
 
-        <form className="navbar-form" role="search" style={searchBarStyle}>
-          <div className="input-group input-group-sm">
-            <input type="text" className="form-control" name="searchString" value="" placeholder="Search..." style={searchBoxStyle}/>
-            <span className="input-group-btn">
-                <Link to="searchResults">
-                  <button className="btn btn-default btn-sm" type="button">
-                    <span className="glyphicon glyphicon-search"></span>
-                </button>
-              </Link>
-            </span>
-          </div>
-        </form>
+    render: function() {
+        return (
 
-    );
+            <form className="navbar-form" role="search" style={searchBarStyle}>
+              <div className="input-group input-group-sm">
+                <input type="text"
+                    className="form-control"
+                    type="text"
+                    name="null"
+                    onSubmit={this.onSearchSubmit}
+                    value={this.props.searchString}
+                    placeholder="Search..."
+                    onChange={this.props.onChange}
+                    style={searchBoxStyle} />
+
+                <span className="input-group-btn">
+                    <Link to="searchResults" params={{searchString: "search?q=" + this.props.searchString}}>
+                      <button className="btn btn-default btn-sm" type="button">
+                        <span className="glyphicon glyphicon-search"></span>
+                    </button>
+                  </Link>
+                </span>
+              </div>
+            </form>
+
+        );
   }
 });
 
