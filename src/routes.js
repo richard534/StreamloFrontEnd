@@ -14,8 +14,8 @@ var routes = (
 
       <Route name="upload" handler={require('./components/upload/uploadPage')} />
       <Route name="signIn" handler={require('./components/SignInPage')} />
-      <Route name="profilePage" path="/:userName" handler={require('./components/userProfile/profilePage')} />
-      <Route name="searchResults" path="/search/:searchString" handler={require('./components/search/searchResultsPage')} />
+      <Route name="profilePage" path="/user/:userName" handler={require('./components/userProfile/profilePage')} />
+      <Route name="searchResults" path="/:searchString" handler={require('./components/search/searchResultsPage')} />
       <NotFoundRoute handler={require('./components/NotFoundPage')} />
     </Route>
 );

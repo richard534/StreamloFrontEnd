@@ -16,7 +16,9 @@ var searchBoxStyle = {
 var SearchBox = React.createClass({
 
     propTypes: {
-      onChange: React.PropTypes.func.isRequired
+        searchString: React.PropTypes.string.isRequired,
+        onChange: React.PropTypes.func.isRequired
+
     },
 
     render: function() {

@@ -2,40 +2,47 @@
 
 var React = require('react');
 
+var ThumbnailStyle = {
+    marginBottom: "0px"
+};
+
 var SearchResultsList = React.createClass({
+    propTypes: {
+    trackResults: React.PropTypes.array.isRequired,
+    tracksReturned: React.PropTypes.bool.isRequired
+},
 
-    getInitialState: function() {
-      return {
-        trackResults: ''
-      };
-    },
+componentWillMount: function() {
 
-    componentDidMount: function() {
-        $.ajax({
-             url: 'http://localhost:3001/tracks/TestTitle',
-             dataType: 'json',
-             cache: false,
-             success: function(data) {
-               this.setState({trackResults: data});
-            }.bind(this),
-             error: function(xhr, status, err) {
-               console.error('http://localhost:3001/tracks/', status, err.toString());
-             }.bind(this)
-            });
-    },
+},
 
+// TODO: Add total tracks found for search string
   render: function() {
+      var tracks = this.props.trackResults;
+
+      var createTrackResultRow = function(track) {
+          return (
+              <li key={track._id} className="list-group-item">
+                  <div className="media">
+                      <div className="media-left">
+                          <a href="#">
+                              <img className="media-object thumbnail" src="/images/altAlbumArtLogo.png" alt="" width="160" style={ThumbnailStyle} />
+                          </a>
+                      </div>
+                      <div className="media-body">
+                          <h4 className="media-heading">Media Heading</h4>
+                      </div>
+                  </div>
+              </li>
+          );
+      };
+
     return (
-        <div className="container">
-            <div className="col-md-8">
-                <h1>Test</h1>
-                <ul>
-                    <li>{this.state.trackResults}</li>
+            <div className="col-md-10">
+                <ul className="list-group">
+                  {tracks.map(createTrackResultRow)}
                 </ul>
             </div>
-        </div>
-
-
     );
   }
 });
