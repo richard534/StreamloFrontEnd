@@ -13,6 +13,7 @@ this.props.query.searchString // Gives query string
 this.props.path // Gives full path in url
 */
 
+
 var SearchResultsPage = React.createClass({
 
 
@@ -25,47 +26,37 @@ var SearchResultsPage = React.createClass({
     },
 
     componentWillMount: function() {
-            this.setState({ searchString: this.props.query.q });
+        this.setState({ searchString: this.props.query.q });
     },
 
     componentDidMount: function() {
-        $.ajax({
-            url: 'http://localhost:3001/tracks/search?q=' + this.state.searchString,
-            dataType: 'json',
-            cache: true,
-            success: function(data) {
-                this.setState({trackResults: data});
-                if(this.state.trackResults.length > 0){
-                    this.setState({tracksReturned: true});
-                }
-            }.bind(this),
-            error: function(xhr, status, err) {
-                console.error('http://localhost:3001/tracks/', status, err.toString());
-            }
-        });
+        this.dataSource();
     },
 
     // Lifecycle method run when component revieves new props from searchbox
     componentWillReceiveProps: function(nextProps) {
+        console.log("componentWillReceiveProps");
         this.setState({ searchString: nextProps.query.q });
+        this.dataSource(nextProps);
     },
 
     componentDidUpdate: function() {
-        $.ajax({
-            url: 'http://localhost:3001/tracks/search?q=' + this.state.searchString,
-            dataType: 'json',
-            cache: true,
-            success: function(data) {
-                this.setState({trackResults: data});
-                if(this.state.trackResults.length > 0){
-                    this.setState({tracksReturned: true});
-                }
-            }.bind(this),
-            error: function(xhr, status, err) {
-                console.error('http://localhost:3001/tracks/', status, err.toString());
-            }
-        });
+        console.log("componentDidUpdate");
     },
+
+    // AJAX helper method thats sets state to returned ajax query
+    dataSource: function(props){
+        props = props || this.props;
+
+        return $.ajax({
+          type: "get",
+          dataType: 'json',
+          url: 'http://localhost:3001/tracks/search?q=' + props.query.q
+        }).done(function(result){
+          this.setState({ trackResults: result });
+        }.bind(this));
+    },
+
 
   render: function() {
 
