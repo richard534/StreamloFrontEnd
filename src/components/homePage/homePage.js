@@ -3,14 +3,14 @@
 var React = require('react');
 var SearchCity = require('./searchCity');
 var Chart = require('./chart');
-var Footer = require('../common/footer');
 
 var Home = React.createClass({
   // TODO: Populate table with track information
   getInitialState: function() {
-    return {
-      tracklist: []
-    };
+      return {
+          citySearchString: "",
+          trackResults: []
+      };
   },
 
   // TODO: Add call to tracklist API and set state to tracklist
@@ -25,7 +25,6 @@ var Home = React.createClass({
          <div>
            <SearchCity />
            <Chart />
-           <Footer />
          </div>
        );
      }

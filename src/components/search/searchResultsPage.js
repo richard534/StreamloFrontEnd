@@ -16,12 +16,10 @@ this.props.path // Gives full path in url
 
 var SearchResultsPage = React.createClass({
 
-
     getInitialState: function() {
         return {
             searchString: "",
-            trackResults: [],
-            tracksReturned: false
+            trackResults: []
         };
     },
 
@@ -35,13 +33,8 @@ var SearchResultsPage = React.createClass({
 
     // Lifecycle method run when component revieves new props from searchbox
     componentWillReceiveProps: function(nextProps) {
-        console.log("componentWillReceiveProps");
         this.setState({ searchString: nextProps.query.q });
         this.dataSource(nextProps);
-    },
-
-    componentDidUpdate: function() {
-        console.log("componentDidUpdate");
     },
 
     // AJAX helper method thats sets state to returned ajax query
@@ -64,7 +57,7 @@ var SearchResultsPage = React.createClass({
         <div className="container">
             <SearchHeader searchString={this.state.searchString}/>
             <SearchFilter />
-            <SearchResultsList trackResults={this.state.trackResults} tracksReturned={this.state.tracksReturned}/>
+            <SearchResultsList trackResults={this.state.trackResults} searchString={this.state.searchString}/>
         </div>
     );
   }

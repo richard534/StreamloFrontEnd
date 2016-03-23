@@ -6,7 +6,15 @@ html {
 /* Preventing header from overlapping main content */
 body {
   margin-top: 50px;
-  margin-bottom: 60px;
+  margin-bottom: 160px;
+}
+
+footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  color: #ffff;
+  background-color: #f8f8f8;
 }
 
 .navbar{
@@ -42,4 +50,9 @@ body {
 
 .list-group {
     box-shadow: none;
+}
+
+.search-result-image {
+    padding-top: 15px;
+    padding-bottom: 20px;
 }
