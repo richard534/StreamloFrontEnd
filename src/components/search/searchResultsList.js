@@ -28,17 +28,13 @@ componentWillReceiveProps: function(nextProps) {
 
       var createTrackResultRow = function(track) {
           return (
-              <li key={track._id} className="list-group-item" style={trackListingStyle}>
-                  <div className="media">
-                      <div className="media-left">
-                          <a>
-                              <img className="media-object thumbnail" src="/images/altAlbumArtLogo.png" alt="" width="160" style={ThumbnailStyle} />
-                          </a>
-                      </div>
-                      <div className="media-body">
-                          <h4 className="media-heading">{track.title}</h4>
-                      </div>
-                  </div>
+              <li key={track.trackId} className="list-group-item" style={trackListingStyle}>
+                  <Track title={track.title}
+                      artist={track.artist}
+                      genre={track.genre}
+                      trackURL={track.trackURL}
+                      uploadDate={track.dateUploaded}
+                  />
               </li>
           );
       };

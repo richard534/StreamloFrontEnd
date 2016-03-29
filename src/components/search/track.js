@@ -11,15 +11,18 @@ var trackListingStyle = {
 };
 
 var Track = React.createClass({
-    propTypes: {
-    track: React.PropTypes.object.isRequired
-},
 
   render: function() {
-      var track = this.props.track;
+      var self = this;
+
+      var TrackUploadDate = function() {
+           var date = new Date(self.props.uploadDate);
+           return (date.toString());
+      }();
+
+
 
     return (
-        <li key={track._id} className="list-group-item" style={trackListingStyle}>
             <div className="media">
                 <div className="media-left">
                     <a>
@@ -27,10 +30,16 @@ var Track = React.createClass({
                     </a>
                 </div>
                 <div className="media-body">
-                    <h4 className="media-heading">{this.props.title}</h4>
+                    <div className="col-md-6">
+                        <p className="text-muted">{this.props.artist}</p>
+                        <h4 className="media-heading">{this.props.title}</h4>
+                    </div>
+                    <div className="col-md-6">
+                        <p className="pull-right">{TrackUploadDate}</p>
+                    </div>
+
                 </div>
             </div>
-        </li>
     );
   }
 });
