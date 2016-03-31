@@ -5,7 +5,8 @@ var Router = require('react-router');
 var Link = Router.Link;
 var SearchHeader = require('./searchHeader');
 var SearchFilter = require('./searchFilter');
-var SearchResultsList = require('./SearchResultsList');
+var TrackSearchResultsList = require('./trackSearchResultsList');
+var PeopleSearchResultsList = require('./peopleSearchResultsList');
 
 /*
 this.props.params.search // Gives params
@@ -20,8 +21,10 @@ var SearchResultsPage = React.createClass({
         return {
             searchString: "",
             trackResults: [],
+            peopleResults: [],
             isTrackFilterSelected: true,
-            numTracks: ""
+            numTracks: 0,
+            numPeople: 0
         };
     },
 
@@ -30,19 +33,25 @@ var SearchResultsPage = React.createClass({
     },
 
     componentDidMount: function() {
-        this.dataSource();
-        this.numTracksdataSource();
+        this.tracksDataSource();
+        this.numTracksDataSource();
+
+        this.peopleDatasource();
+        this.numPeopleDatasource();
     },
 
     // Lifecycle method run when component revieves new props from searchbox
     componentWillReceiveProps: function(nextProps) {
         this.setState({ searchString: nextProps.query.q });
-        this.dataSource(nextProps);
-        this.numTracksdataSource(nextProps);
+        this.tracksDataSource(nextProps);
+        this.numTracksDataSource(nextProps);
+
+        this.peopleDatasource(nextProps);
+        this.numPeopleDatasource(nextProps);
     },
 
     // AJAX helper method thats sets state to returned ajax query
-    dataSource: function(props){
+    tracksDataSource: function(props){
         props = props || this.props;
 
         return $.ajax({
@@ -55,7 +64,7 @@ var SearchResultsPage = React.createClass({
     },
 
     // AJAX helper method thats sets state to returned ajax query
-    numTracksdataSource: function(props){
+    numTracksDataSource: function(props){
         props = props || this.props;
 
         return $.ajax({
@@ -67,21 +76,69 @@ var SearchResultsPage = React.createClass({
         }.bind(this));
     },
 
-    changeSelectedFilter: function(event) { // Handles user input, refreshes DOM every key press
+    peopleDatasource: function(props){
+        props = props || this.props;
+
+        return $.ajax({
+          type: "get",
+          dataType: 'json',
+          url: 'http://localhost:3001/users?q=' + props.query.q
+        }).done(function(result){
+          this.setState({ peopleResults: result });
+        }.bind(this));
+    },
+
+    numPeopleDatasource: function(props){
+        props = props || this.props;
+
+        return $.ajax({
+          type: "get",
+          dataType: 'json',
+          url: 'http://localhost:3001/users/getNumOfPeople?q=' + props.query.q
+        }).done(function(result){
+          this.setState({ numPeople: result });
+        }.bind(this));
+    },
+
+    changeSelectedFilter: function(event) {
         event.preventDefault();
         this.setState({ isTrackFilterSelected: !this.state.isTrackFilterSelected });
     },
 
 
+
   render: function() {
+      var self = this;
+
+      var trackResultsList = function() {
+          return (
+              <TrackSearchResultsList trackResults={self.state.trackResults}
+                  searchString={self.state.searchString}
+                  numTracks={self.state.numTracks}/>
+          );
+      }();
+
+      var peopleResultsList = function() {
+          return (
+              <PeopleSearchResultsList peopleResults={self.state.peopleResults}
+                  searchString={self.state.searchString}
+                  numPeople={self.state.numPeople}/>
+          );
+      }();
+
+      var resultsList;
+      if(self.state.isTrackFilterSelected === true){
+           resultsList = trackResultsList;
+      } else {
+          resultsList = peopleResultsList;
+      }
+
 
     return (
         <div className="container">
             <SearchHeader searchString={this.state.searchString}/>
             <SearchFilter onChangeFilter={this.changeSelectedFilter} isTrackFilterSelected={this.state.isTrackFilterSelected}/>
-            <SearchResultsList trackResults={this.state.trackResults}
-                searchString={this.state.searchString}
-                numTracks={this.state.numTracks}/>
+            {resultsList}
         </div>
     );
   }

@@ -3,23 +3,14 @@
 var React = require('react');
 var Track = require('./track');
 
-var ThumbnailStyle = {
-    marginBottom: "0px"
-};
-
 var trackListingStyle = {
     marginBottom: "10px"
 };
 
-var SearchResultsList = React.createClass({
+var TrackSearchResultsList = React.createClass({
     propTypes: {
     trackResults: React.PropTypes.array.isRequired
 },
-
-componentWillReceiveProps: function(nextProps) {
-    this.setState({ trackResults: nextProps.trackResults });
-},
-
 
 // TODO: Add total tracks found for search string
   render: function() {
@@ -28,7 +19,7 @@ componentWillReceiveProps: function(nextProps) {
 
       var createTrackResultRow = function(track) {
           return (
-              <li key={track.trackId} className="list-group-item" style={trackListingStyle}>
+              <li key={track._id} className="list-group-item" style={trackListingStyle}>
                   <Track title={track.title}
                       artist={track.artist}
                       genre={track.genre}
@@ -68,4 +59,4 @@ componentWillReceiveProps: function(nextProps) {
   }
 });
 
-module.exports = SearchResultsList;
+module.exports = TrackSearchResultsList;

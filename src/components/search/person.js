@@ -22,17 +22,11 @@ var Track = React.createClass({
             <div className="media">
                 <div className="media-left">
                     <a>
-                        <img className="media-object thumbnail" src="/images/altAlbumArtLogo.png" alt="" width="160" style={ThumbnailStyle} />
+                        <img className="media-object thumbnail" src="/images/account-icon.png" alt="" width="160" style={ThumbnailStyle} />
                     </a>
                 </div>
                 <div className="media-body">
-                    <div className="col-md-6">
-                        <p className="text-muted">{this.props.artist}</p>
-                        <h4 className="media-heading">{this.props.title}</h4>
-                    </div>
-                    <div className="col-md-6">
-                        <p className="pull-right">{TrackUploadDate}</p>
-                    </div>
+                    <p>{this.props.displayName}</p>
 
                 </div>
             </div>
