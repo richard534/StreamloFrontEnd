@@ -50,7 +50,9 @@ componentWillReceiveProps: function(nextProps) {
       }();
 
       var results;
+      var numTracks;
       if (self.props.trackResults.length > 0) {
+          numTracks = <p className="text-muted">Found {self.props.numTracks} tracks</p>;
           results = <ul className="list-group">{tracks.map(createTrackResultRow)}</ul>;
        } else {
            results = <div>{resultsNotFound}</div>;
@@ -59,6 +61,7 @@ componentWillReceiveProps: function(nextProps) {
 
     return (
             <div className="col-md-10">
+                {numTracks}
                 {results}
             </div>
     );
