@@ -27,8 +27,8 @@ var SearchFilter = React.createClass({
             <div className="col-md-2">
                 <h4>Filters</h4>
                     <ul className="nav nav-pills nav-stacked">
-                        <li role="presentation" className={trackSelected ? "active" : ""}><a href="#" onClick={this.props.onChangeFilter}>Tracks</a></li>
-                        <li role="presentation" className={peopleSelected ? "active" : ""}><a href="#" onClick={this.props.onChangeFilter}>People</a></li>
+                        <li role="presentation" className={trackSelected ? "active" : ""}><a href="#" onClick={this.props.onChangeFilter}><span className="glyphicon glyphicon-music"></span> Tracks</a></li>
+                        <li role="presentation" className={peopleSelected ? "active" : ""}><a href="#" onClick={this.props.onChangeFilter}><span className="glyphicon glyphicon-user"></span> People</a></li>
                     </ul>
             </div>
     );
