@@ -19,7 +19,8 @@ var SearchResultsPage = React.createClass({
     getInitialState: function() {
         return {
             searchString: "",
-            trackResults: []
+            trackResults: [],
+            isTrackFilterSelected: true
         };
     },
 
@@ -50,13 +51,20 @@ var SearchResultsPage = React.createClass({
         }.bind(this));
     },
 
+    changeSelectedFilter: function(event) { // Handles user input, refreshes DOM every key press
+        event.preventDefault();
+        this.setState({ isTrackFilterSelected: !this.state.isTrackFilterSelected });
+        //var selectedFilter = event.target.parentElement.className = "active";
+        //console.log(selectedFilter);
+    },
+
 
   render: function() {
 
     return (
         <div className="container">
             <SearchHeader searchString={this.state.searchString}/>
-            <SearchFilter />
+            <SearchFilter onChangeFilter={this.changeSelectedFilter} isTrackFilterSelected={this.state.isTrackFilterSelected}/>
             <SearchResultsList trackResults={this.state.trackResults} searchString={this.state.searchString}/>
         </div>
     );

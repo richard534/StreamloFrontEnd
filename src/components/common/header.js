@@ -23,7 +23,7 @@ var Header = React.createClass({
       return this.setState({searchString: this.state.searchString});
     },
 
-    // TODO stop form submitting on pressing enter
+    // TODO search for string when user presses enter
     onSearchSubmit: function(event) {
         event.preventDefault();
         event.stopPropagation();
