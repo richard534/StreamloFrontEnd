@@ -2,7 +2,7 @@
 
 var React = require('react');
 
-// TODO get search result filters working
+// TODO stop search results filters from alternating on click
 var SearchFilter = React.createClass({
     getDefaultProps: function() {
         return {

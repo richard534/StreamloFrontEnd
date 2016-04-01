@@ -25,7 +25,10 @@ var TrackSearchResultsList = React.createClass({
                       genre={track.genre}
                       trackURL={track.trackURL}
                       uploadDate={track.dateUploaded}
+                      numLikes={track.numLikes}
+                      numPlays={track.numPlays}
                   />
+              <hr />
               </li>
           );
       };

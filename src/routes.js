@@ -12,8 +12,8 @@ var routes = (
     <Route name="app" path="/" handler={require('./components/app')}>
       <DefaultRoute name="home" handler={require('./components/homePage/homePage')} />
       <Route name="upload" handler={require('./components/upload/uploadPage')} />
-      <Route name="signIn" handler={require('./components/SignInPage')} />
-      <Route name="profilePage" path="/user/:userName" handler={require('./components/userProfile/profilePage')} />
+      <Route name="signIn" handler={require('./components/userAccount/SignInPage')} />
+      <Route name="profilePage" path="/user/:userName" handler={require('./components/userAccount/profilePage')} />
       <Route name="searchResults" path="/:searchString" handler={require('./components/search/searchResultsPage')} />
       <NotFoundRoute handler={require('./components/NotFoundPage')} />
     </Route>
