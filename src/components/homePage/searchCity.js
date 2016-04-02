@@ -6,7 +6,7 @@ var SearchCity = React.createClass({
    render: function() {
        return (
          <div className="container-full">
-            <div className="jumbotron text-center">
+            <div className="jumbotron text-center" id="homeJumbotron">
                  <h1>Streamlo</h1>
                  <p>Discover your local musicians</p>
 

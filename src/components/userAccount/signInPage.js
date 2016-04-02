@@ -8,11 +8,10 @@ var imgStyle = {
   paddingTop: "30px"
 };
 
-// TODO: Add link to create account functionality
 var SignInPage = React.createClass({
   render: function() {
     return (
-      <section className="container">
+      <div className="container">
           <div className="row col-md-4 col-md-offset-4">
             <img src="images/StreamloWithAlpha.png" className="img-responsive center-block" width="250" style={imgStyle}/>
             <div className="text-center text-muted">
@@ -44,7 +43,7 @@ var SignInPage = React.createClass({
 
             </div>
 
-      </section>
+      </div>
 
     );
   }

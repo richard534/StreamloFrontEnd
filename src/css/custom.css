@@ -28,12 +28,28 @@ footer {
   width: 100%;
 }
 
-.jumbotron {
+#homeJumbotron {
   background-image: url("../images/belfast1.jpg");
   background-size: cover;
   height: 600px;
   color: white;
   text-shadow: #444 0 1px 1px;
+}
+
+#userJumbotron {
+    background-size: cover;
+    height: 315px;
+    margin-bottom: 0px;
+}
+
+#profileNav {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    background: #e2e2e2;
+    margin-bottom: 20px;
 }
 
 .list-group-item {

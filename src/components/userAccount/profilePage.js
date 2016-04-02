@@ -2,21 +2,54 @@
 
 var React = require('react');
 
+var followersStyle = {
+    paddingTop: "10px"
+};
+
 // TODO: Create user profile page
 var ProfilePage = React.createClass({
-  getInitialState: function() {
-    return {
-      user: { id: '', username: ''}
-    };
-  },
+    getDefaultProps: function() {
+        return {
+            numFollowers: "0"
+        };
+    },
 
    render: function() {
        return (
-         <div className="container-full">
-            <div className="jumbotron text-center">
-                 <h1 className="text-center">ProfileName</h1>
-            </div>
-          </div>
+           <div>
+               <div className="container-full">
+                  <div className="jumbotron text-center" id="userJumbotron">
+                      <img className="img-circle" src="images/belfast1.jpg" width="150" height="150"></img>
+                      <h4 className="text-center">ProfileName</h4>
+                      <span className="text-center"><span className="glyphicon glyphicon-user"></span> Followers: {this.props.numFollowers}</span>
+                      <div className="btn-group-sm" role="group" style={followersStyle}>
+                          <button type="button" className="btn btn-default"><span className="glyphicon glyphicon-edit"></span> Edit</button>
+                      </div>
+                      <br />
+                  </div>
+              </div>
+              <div className="container-full">
+                  <div className="row" id="profileNav">
+                      <div className="col-md-8 col-md-offset-2">
+                          <ul className="nav nav-pills nav-justified">
+                              <li role="presentation" className="active"><a href="#">Liked</a></li>
+                              <li role="presentation"><a href="#">Uploaded</a></li>
+                              <li role="presentation"><a href="#">Playlists</a></li>
+                          </ul>
+                      </div>
+                  </div>
+              </div>
+              <div className="container">
+                <div className="col-md-12">
+                  <div className="panel panel-default">
+                      <div className="panel-body">
+
+                      </div>
+                  </div>
+                </div>
+              </div>
+           </div>
+
        );
      }
 });

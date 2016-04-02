@@ -82,12 +82,12 @@ var Track = React.createClass({
                             </div>
 
                             <div className="col-md-4 pull-right">
-                                    <div className="col-md-8">
-                                        <p className="pull-right"><span className="glyphicon glyphicon-play"></span> {this.props.numPlays}</p>
-                                    </div>
-                                    <div className="col-md-4">
-                                        <p className="pull-right"><span className="glyphicon glyphicon-comment"></span> {this.props.numPlays}</p>
-                                    </div>
+                                <div className="col-md-8">
+                                    <p className="pull-right"><span className="glyphicon glyphicon-play"></span> {this.props.numPlays}</p>
+                                </div>
+                                <div className="col-md-4">
+                                    <p className="pull-right"><span className="glyphicon glyphicon-comment"></span> {this.props.numPlays}</p>
+                                </div>
                             </div>
                         </div>
                     </div>
