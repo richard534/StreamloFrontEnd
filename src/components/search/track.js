@@ -35,14 +35,6 @@ var audioDivStyle = {
 
 var Track = React.createClass({
 
-
-
-
-    playSong: function(event) {
-        event.preventDefault();
-        document.getElementById('demo').play();
-    },
-
   render: function() {
       var self = this;
 
@@ -73,8 +65,8 @@ var Track = React.createClass({
                         </div>
 
                         <div className="col-md-12" style={audioDivStyle}>
-                            <audio id="demo" style={audioTagStyle} controls>
-                              <source src="/images/COOL.mp3" type="audio/mp3"/>
+                            <audio id={this.props.trackId} style={audioTagStyle} controls>
+                              <source src="" type="audio/mp3"/>
                             </audio>
                         </div>
 

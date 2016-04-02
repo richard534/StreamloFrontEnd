@@ -37,7 +37,7 @@ var SearchBox = React.createClass({
                     style={searchBoxStyle} />
 
                 <span className="input-group-btn">
-                    <Link to="searchResults" params={{searchString: "search?q=" + this.props.searchString}}>
+                    <Link to="searchResults" query={{q: this.props.searchString}}>
                       <button className="btn btn-default btn-sm" type="button">
                         <span className="glyphicon glyphicon-search"></span>
                     </button>

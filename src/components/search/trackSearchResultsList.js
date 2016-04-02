@@ -20,7 +20,9 @@ var TrackSearchResultsList = React.createClass({
       var createTrackResultRow = function(track) {
           return (
               <li key={track._id} className="list-group-item" style={trackListingStyle}>
-                  <Track title={track.title}
+                  <Track
+                      trackId={track._id}
+                      title={track.title}
                       artist={track.artist}
                       genre={track.genre}
                       trackURL={track.trackURL}

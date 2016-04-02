@@ -10,11 +10,14 @@ var Redirect = Router.Redirect;
 
 var routes = (
     <Route name="app" path="/" handler={require('./components/app')}>
-      <DefaultRoute name="home" handler={require('./components/homePage/homePage')} />
-      <Route name="upload" handler={require('./components/upload/uploadPage')} />
-      <Route name="signIn" handler={require('./components/userAccount/SignInPage')} />
-      <Route name="profilePage" path="/user/:userName" handler={require('./components/userAccount/profilePage')} />
-      <Route name="searchResults" path="/:searchString" handler={require('./components/search/searchResultsPage')} />
+      <DefaultRoute handler={require('./components/homePage/homePage')} />
+
+      <Route name="profilePage" path="user/:userName/" handler={require('./components/userAccount/profilePage')} />
+      <Route name="searchResults" path="search" handler={require('./components/search/searchResultsPage')} />
+
+      <Route name="upload" path="upload/" handler={require('./components/upload/uploadPage')} />
+      <Route name="signIn" path="signin/" handler={require('./components/userAccount/SignInPage')} />
+      <Route name="createAccount" path="createAccount/" handler={require('./components/userAccount/createAccountPage')} />
       <NotFoundRoute handler={require('./components/NotFoundPage')} />
     </Route>
 );
