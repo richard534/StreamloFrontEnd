@@ -26,6 +26,7 @@ var PeopleSearchResultsList = React.createClass({
           return (
               <li key={person._id} className="list-group-item" style={PersonListingStyle}>
                   <Person displayName={person.displayName}/>
+              <hr />
               </li>
           );
       };

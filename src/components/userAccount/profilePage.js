@@ -27,6 +27,8 @@ var ProfilePage = React.createClass({
                       <span className="text-center">| <span className="glyphicon glyphicon-eye-open"></span> Following: {this.props.numFollowing}</span>
                       <div className="btn-group-sm" role="group" style={followersStyle}>
                           <button type="button" className="btn btn-default" data-toggle="modal" data-target="#editDetailsModal"><span className="glyphicon glyphicon-edit"></span> Edit</button>
+                          <span> </span>
+                          <button type="button" className="btn btn-default"><span className="glyphicon glyphicon-plus"></span> Follow</button>
                       </div>
                       <br />
                   </div>
