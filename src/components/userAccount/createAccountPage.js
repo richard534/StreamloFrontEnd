@@ -13,7 +13,7 @@ var CreateAccountPage = React.createClass({
        return (
            <div className="container">
                <div className="col-md-8 col-md-offset-2" style={createAccountDiv}>
-                   <h1>Create An Account</h1>
+                   <h1 className="text-center">Create An Account</h1>
                    <br/>
                </div>
                <CreateAccountPanel />
