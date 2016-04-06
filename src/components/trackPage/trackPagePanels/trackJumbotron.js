@@ -64,7 +64,7 @@ var trackJumbotron = React.createClass({
                </div>
                <div className="col-md-12" style={bottomAlignText}>
                    <audio id={this.props.trackId} style={audioTagStyle} controls>
-                     <source src="" type="audio/mp3"/>
+                     <source src="http://localhost:5555/file/5702fdfe5fda8954d817baec" type="audio/mp3"/>
                    </audio>
                </div>
 

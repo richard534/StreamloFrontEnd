@@ -22,6 +22,7 @@ var TrackSearchResultsList = React.createClass({
                   <Track
                       trackId={track._id}
                       uploaderId={track.uploaderId}
+                      trackBinaryId={track.trackBinary}
                       title={track.title}
                       artist={track.artist}
                       genre={track.genre}

@@ -72,6 +72,12 @@ var Track = React.createClass({
            return (dateString);
       }();
 
+      var TrackBinaryURL = function() {
+          var trackBinaryURL = "http://localhost:3001/tracks/" + self.props.trackBinaryId + "/stream";
+          console.log(trackBinaryURL);
+          return trackBinaryURL;
+      }();
+
 
     return (
             <div className="media">
@@ -94,7 +100,7 @@ var Track = React.createClass({
 
                         <div className="col-md-12" style={audioDivStyle}>
                             <audio id={this.props.trackId} style={audioTagStyle} controls>
-                              <source src="" type="audio/mp3"/>
+                              <source src={TrackBinaryURL} type="audio/mp3"/>
                             </audio>
                         </div>
 
