@@ -1,6 +1,8 @@
 "use strict";
 
 var React = require('react');
+var Router = require('react-router');
+var Link = Router.Link;
 
 var ThumbnailStyle = {
     marginBottom: "0px"
@@ -34,8 +36,34 @@ var audioDivStyle = {
 };
 
 var Track = React.createClass({
+    getInitialState: function() {
+        return {
+            userURL: ""
+        };
+    },
 
-  render: function() {
+    componentDidMount: function() {
+        this.userURLDataSource();
+    },
+
+    componentWillReceiveProps: function(nextProps) {
+        this.userURLDataSource(nextProps);
+    },
+
+    // AJAX helper method thats sets state to returned ajax query
+    userURLDataSource: function(props){
+        props = props || this.props;
+
+        return $.ajax({
+          type: "get",
+          dataType: 'json',
+          url: 'http://localhost:3001/users/' + props.uploaderId
+        }).done(function(result){
+            this.setState({ userURL: result.userURL });
+        }.bind(this));
+    },
+
+    render: function() {
       var self = this;
 
       var TrackUploadDate = function() {
@@ -56,7 +84,7 @@ var Track = React.createClass({
                     <div className="col-md-12" style={mediaDivStyle}>
                         <div className="col-md-8" style={mediaDivStyle}>
                             <p className="text-muted">{this.props.artist}</p>
-                            <h4 className="media-heading">{this.props.title}</h4>
+                            <Link to="track" params={{userURL: this.state.userURL, trackURL: this.props.trackURL}}><h4 className="media-heading">{this.props.title}</h4></Link>
                             <p>Genre: {this.props.genre}</p>
                         </div>
 

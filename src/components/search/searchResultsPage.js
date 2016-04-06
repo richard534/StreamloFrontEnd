@@ -43,6 +43,7 @@ var SearchResultsPage = React.createClass({
     // Lifecycle method run when component revieves new props from searchbox
     componentWillReceiveProps: function(nextProps) {
         this.setState({ searchString: nextProps.query.q });
+        
         this.tracksDataSource(nextProps);
         this.numTracksDataSource(nextProps);
 

@@ -10,10 +10,9 @@ var trackListingStyle = {
 var TrackSearchResultsList = React.createClass({
     propTypes: {
     trackResults: React.PropTypes.array.isRequired
-},
+    },
 
-// TODO: Add total tracks found for search string
-  render: function() {
+    render: function() {
       var self = this;
       var tracks = self.props.trackResults;
 
@@ -22,6 +21,7 @@ var TrackSearchResultsList = React.createClass({
               <li key={track._id} className="list-group-item" style={trackListingStyle}>
                   <Track
                       trackId={track._id}
+                      uploaderId={track.uploaderId}
                       title={track.title}
                       artist={track.artist}
                       genre={track.genre}

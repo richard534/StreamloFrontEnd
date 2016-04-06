@@ -13,7 +13,7 @@ var routes = (
       <DefaultRoute handler={require('./components/homePage/homePage')} />
 
       <Route name="searchResults" path="search" handler={require('./components/search/searchResultsPage')} />
-      <Route name="track" path=":user/:trackURL" handler={require('./components/trackPage/trackPage')} />
+      <Route name="track" path=":userURL/:trackURL" handler={require('./components/trackPage/trackPage')} />
 
       <Route name="upload" path="upload/" handler={require('./components/upload/uploadPage')} />
       <Route name="signIn" path="signin/" handler={require('./components/userAccount/SignInPage')} />
