@@ -43,7 +43,7 @@ var SearchResultsPage = React.createClass({
     // Lifecycle method run when component revieves new props from searchbox
     componentWillReceiveProps: function(nextProps) {
         this.setState({ searchString: nextProps.query.q });
-        
+
         this.tracksDataSource(nextProps);
         this.numTracksDataSource(nextProps);
 
@@ -65,6 +65,7 @@ var SearchResultsPage = React.createClass({
     },
 
     // AJAX helper method thats sets state to returned ajax query
+    // TODO remove if backend not working
     numTracksDataSource: function(props){
         props = props || this.props;
 
@@ -89,6 +90,7 @@ var SearchResultsPage = React.createClass({
         }.bind(this));
     },
 
+    // TODO remove if backend not working
     numPeopleDatasource: function(props){
         props = props || this.props;
 

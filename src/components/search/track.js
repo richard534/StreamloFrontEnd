@@ -38,7 +38,10 @@ var audioDivStyle = {
 var Track = React.createClass({
     getInitialState: function() {
         return {
-            userURL: ""
+            userURL: "",
+            numLikes: 0,
+            numPlays: 0,
+            numComments: 0
         };
     },
 
@@ -74,7 +77,6 @@ var Track = React.createClass({
 
       var TrackBinaryURL = function() {
           var trackBinaryURL = "http://localhost:3001/tracks/" + self.props.trackBinaryId + "/stream";
-          console.log(trackBinaryURL);
           return trackBinaryURL;
       }();
 
@@ -110,7 +112,7 @@ var Track = React.createClass({
                             <div className="col-md-7" >
                                 <div className="btn-toolbar" role="toolbar">
                                     <div className="btn-group-xs" role="group">
-                                        <button type="button" className="btn btn-default active" style={likeButtonStyle}><span className="glyphicon glyphicon-thumbs-up"></span> {this.props.numLikes}</button>
+                                        <p><span className="glyphicon glyphicon-thumbs-up"></span> {this.props.numLikes}</p>
                                     </div>
                                 </div>
                             </div>

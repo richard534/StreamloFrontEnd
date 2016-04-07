@@ -1,4 +1,6 @@
 "use strict";
+var Router = require('react-router');
+var Link = Router.Link;
 
 var React = require('react');
 
@@ -28,19 +30,31 @@ var colHeight = {
 };
 
 var trackJumbotron = React.createClass({
+
     getDefaultProps: function() {
         return {
-            uploadDate: Date.now(),
-            trackId: "",
+            title: "",
+            artist: "",
+            genre: "",
+            uploadDate: "",
             numPlays: 0,
-            numLikes: 0
+            numLikes: 0,
+            numComments: 0,
+            trackBinaryURL: ""
         };
     },
+
+    componentWillReceiveProps: function(nextProps) {
+        var audio = document.getElementById('audioElement');
+        audio.load();
+    },
+
+
 
   render: function() {
     var self = this;
 
-    var TrackUploadDate = function() {
+    var trackUploadDate = function() {
        var date = new Date(self.props.uploadDate);
        var dateString = date.toDateString();
        return (dateString);
@@ -51,20 +65,23 @@ var trackJumbotron = React.createClass({
        <div className="jumbotron text-center" id="userJumbotron">
            <div className="col-md-9" style={colHeight}>
                <div className="col-md-6" style={detailsColStyle}>
-                   <p className="text-muted" style={artistStyle}>Test Artist</p>
-                   <h3 style={trackNameStyle}>Test Song</h3>
+                   <Link to="profilePage" params={{userURL: this.props.userURL}}><p className="text-muted" style={artistStyle}>{this.props.artist}</p></Link>
+                   <h3 style={trackNameStyle}>{this.props.title}</h3>
+                   <p>Genre: {this.props.genre}</p>
                    <h5><span className="glyphicon glyphicon-play"></span> {this.props.numPlays}</h5>
 
                    <div className="btn-group-sm" role="group">
                        <button type="button" className="btn btn-default" ><span className="glyphicon glyphicon-thumbs-up"></span> {this.props.numLikes}</button>
                    </div>
+
                </div>
                <div className="col-md-6">
-                   <span className="pull-right">{TrackUploadDate}</span>
+                   <span className="pull-right">{trackUploadDate}</span>
                </div>
+
                <div className="col-md-12" style={bottomAlignText}>
-                   <audio id={this.props.trackId} style={audioTagStyle} controls>
-                     <source src="http://localhost:5555/file/5702fdfe5fda8954d817baec" type="audio/mp3"/>
+                   <audio id="audioElement" style={audioTagStyle} controls>
+                       <source src={this.props.trackBinaryURL} type="audio/mp3"/>
                    </audio>
                </div>
 
