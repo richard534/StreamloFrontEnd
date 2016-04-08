@@ -60,7 +60,7 @@ var Track = React.createClass({
         return $.ajax({
           type: "get",
           dataType: 'json',
-          url: 'http://localhost:3001/users/' + props.uploaderId
+          url: 'http://localhost:3001/users/id/' + props.uploaderId
         }).done(function(result){
             this.setState({ userURL: result.userURL });
         }.bind(this));

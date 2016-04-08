@@ -30,15 +30,55 @@ var commentSubmit = {
 };
 
 var postCommentPanel = React.createClass({
+    getInitialState: function() {
+        return {
+            user: "",
+            date: "",
+            body: ""
+        };
+    },
+
     getDefaultProps: function() {
         return {
             numComments: "0"
         };
     },
 
+    submit: function(event) {
+        var self = this;
+        event.preventDefault();
+        var data = {
+            user: '570660e35737c648407bedf3',
+            date: 'Sun Jun 13 2016 22:17:02 GMT+0000 (GMT)',
+            body: this.state.body
+        };
+        this.postComment(data);
+        this.forceUpdate();
+    },
+
+    postComment: function(data){
+        var trackURL = this.props.trackURL;
+
+        return $.ajax({
+          type: "post",
+          data: data,
+          url: 'http://localhost:3001/tracks/' + trackURL + '/addComment',
+          dataType: 'data'
+
+        }).done(function(result){
+            console.log("SENT");
+        });
+    },
+
+    setCommentInputString: function(event) { // Handles user input, refreshes DOM every key press
+      var value = event.target.value;
+      this.setState({body: value});
+    },
 
 
+    // TODO add signed in user to form sumbission
     render: function() {
+
         return (
             <div className="col-md-12">
                 <div className="panel panel-default">
@@ -56,10 +96,10 @@ var postCommentPanel = React.createClass({
                                             <p className="text-muted">Add a comment</p>
                                         </div>
                                         <div className="col-md-6" style={commentInput}>
-                                            <input rows="4" className="form-control" placeholder="Enter Comment..." />
+                                            <input rows="4" className="form-control" onChange={this.setCommentInputString} placeholder="Enter Comment..." />
                                         </div>
                                         <div className="col-md-3" style={commentSubmit}>
-                                            <button type="submit" className="btn btn-primary btn-block">Post Comment</button>
+                                            <button type="submit" onClick={this.submit} className="btn btn-primary btn-block">Post Comment</button>
                                         </div>
                                     </div>
                             </div>

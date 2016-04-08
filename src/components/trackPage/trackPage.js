@@ -46,7 +46,6 @@ var TrackPage = React.createClass({
           dataType: 'json',
           url: 'http://localhost:3001/tracks/' + state.trackURL
         }).done(function(result){
-            console.log(result);
             this.setState({ title: result.title });
             this.setState({ artist: result.artist });
             this.setState({ genre: result.genre });
@@ -62,28 +61,30 @@ var TrackPage = React.createClass({
     },
 
     render: function() {
-    return (
-        <div className="container">
-            <TrackJumbotron title={this.state.title}
-                artist={this.state.artist}
-                genre={this.state.genre}
-                uploadDate={this.state.uploadDate}
-                numPlays={this.state.numPlays}
-                numLikes={this.state.numLikes}
-                numComments={this.state.numComments}
-                trackBinaryURL={this.state.trackBinaryURL}
-                userURL={this.state.userURL} />
+        return (
+            <div className="container">
+                <TrackJumbotron title={this.state.title}
+                    artist={this.state.artist}
+                    genre={this.state.genre}
+                    uploadDate={this.state.uploadDate}
+                    numPlays={this.state.numPlays}
+                    numLikes={this.state.numLikes}
+                    numComments={this.state.numComments}
+                    trackBinaryURL={this.state.trackBinaryURL}
+                    userURL={this.state.userURL} />
 
-            <div className="col-md-12" style={commentsPanelStyle}>
-                <div className="col-md-8">
-                    <PostCommentPanel numComments={this.state.comments} />
-                    <CommentsPanel comments={this.state.numComments} />
+                <div className="col-md-12" style={commentsPanelStyle}>
+                    <div className="col-md-8">
+                        <PostCommentPanel numComments={this.state.numComments}
+                            trackURL={this.state.trackURL} />
+                        <CommentsPanel comments={this.state.comments}
+                            userURL={this.state.userURL}/>
+                    </div>
+                    <DescriptionPanel description={this.state.description} />
                 </div>
-                <DescriptionPanel description={this.state.description} />
             </div>
-        </div>
 
-    );
+        );
   }
 });
 
