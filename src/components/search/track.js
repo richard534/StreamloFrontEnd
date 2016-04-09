@@ -85,7 +85,7 @@ var Track = React.createClass({
             <div className="media">
                 <div className="media-left">
                     <a>
-                        <img className="media-object thumbnail" src="/images/altAlbumArtLogo.png" alt="" width="160" height="160" style={ThumbnailStyle} />
+                        <img className="media-object thumbnail trackThumbnail" src={this.props.albumArtURL} width="160" height="160" style={ThumbnailStyle} />
                     </a>
                 </div>
                 <div className="media-body">

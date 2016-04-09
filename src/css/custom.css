@@ -71,3 +71,13 @@ footer {
     border-width: 1px;
     border-color: #333;
 }
+
+.accountThumbnail {
+    background-image: url('/images/altAlbumArtLogo.png');
+}
+
+.trackThumbnail {
+    background-image: url('/images/altAlbumArtLogo.png');
+    background-repeat: no-repeat;
+    background-position: center;
+}

@@ -25,7 +25,8 @@ var PeopleSearchResultsList = React.createClass({
       var createPersonResultRow = function(person) {
           return (
               <li key={person._id} className="list-group-item" style={PersonListingStyle}>
-                  <Person displayName={person.displayName}/>
+                  <Person displayName={person.displayName}
+                      userURL={person.userURL}/>
               <hr />
               </li>
           );
