@@ -2,9 +2,9 @@
 
 var React = require('react');
 var Router = require('react-router');
-var Link = Router.Link;
 var validate = require('validate.js');
 var _ = require('lodash');
+var toastr = require('toastr');
 
 var profileURLText = {
     paddingTop: "6px",
@@ -49,6 +49,10 @@ var constraints = {
 };
 
 var CreateAccountPanel = React.createClass({
+    mixins: [
+        Router.Navigation
+    ],
+
     getInitialState: function() {
         return {
             data: {
@@ -96,6 +100,7 @@ var CreateAccountPanel = React.createClass({
     },
 
     handleSubmit: function(e) {
+        var self = this;
         e.preventDefault();
         var data = {
             email: this.state.data.email,
@@ -107,14 +112,16 @@ var CreateAccountPanel = React.createClass({
         return $.ajax({
           type: "post",
           data: data,
+          contentType: 'application/x-www-form-urlencoded',
           url: 'http://localhost:3001/users/',
-          dataType: 'data'
-
-        }).done(function() {
-            console.log("SENT");
-        })
-          .fail(function() {
-            console.log("ERROR");
+          dataType: 'text',
+          success: function(results) {
+              toastr.success('Account Created');
+              self.transitionTo('signIn');
+          },
+          error: function(jqXHR, textStatus, errorThrown) {
+              toastr.error('Error creating account');
+          }
         });
     },
 
@@ -122,7 +129,7 @@ var CreateAccountPanel = React.createClass({
    render: function() {
        var self = this;
        var errorsList;
-       var createAccountButton = <button type="submit" className="btn btn-primary btn-block disabled">Create Account</button>;
+       var createAccountButton;
 
        var populateErrorsList = function() {
            return (

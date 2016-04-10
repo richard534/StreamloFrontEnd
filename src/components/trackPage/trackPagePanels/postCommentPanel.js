@@ -1,6 +1,7 @@
 "use strict";
 
 var React = require('react');
+var Router = require('react-router');
 
 var numCommentsStyle = {
     paddingTop: "12px",
@@ -29,6 +30,7 @@ var commentSubmit = {
     paddingRight: "0px"
 };
 
+// Change hardcoded ajax post to user currently logged in
 var postCommentPanel = React.createClass({
     getInitialState: function() {
         return {

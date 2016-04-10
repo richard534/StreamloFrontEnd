@@ -24,12 +24,12 @@ var Header = React.createClass({
     },
 
     // TODO search for string when user presses enter
-    onSearchSubmit: function(event) {
-        event.preventDefault();
-        event.stopPropagation();
+    onSearchSubmit: function(e) {
+        e.preventDefault();
     },
 
     render: function() {
+
     return (
       <div className="container">
         <nav className="navbar navbar-default navbar-fixed-top">
@@ -47,7 +47,7 @@ var Header = React.createClass({
               <li>
                 <SearchBox searchString={this.state.searchString}
                     onChange={this.setSearchStringState}
-                    onSearchSubmit={this.onSearchSubmit}/>
+                    onSearchSubmit={this.onSearchSubmit} />
               </li>
             </ul>
             <ul className="nav navbar-nav navbar-right">
