@@ -23,7 +23,6 @@ var Header = React.createClass({
       return this.setState({searchString: this.state.searchString});
     },
 
-    // TODO search for string when user presses enter
     onSearchSubmit: function(e) {
         e.preventDefault();
     },

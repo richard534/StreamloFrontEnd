@@ -11,11 +11,15 @@ var SearchCity = React.createClass({
                  <h1>Streamlo</h1>
                  <p>Discover your local musicians</p>
 
-                   <form className="navbar-form" role="search">
+                   <form className="navbar-form" role="search" onSubmit={this.props.onSearchSubmit}>
                      <div className="input-group input-group-sm">
-                       <input type="text" className="form-control" placeholder="Enter name of city..."/>
+                       <input type="text"
+                            className="form-control"
+                            value={this.props.searchString}
+                            onChange={this.props.onChange}
+                            placeholder="Enter name of city..." />
                        <span className="input-group-btn">
-                         <button className="btn btn-default" type="button">
+                         <button type="submit" className="btn btn-default">
                            <span className="glyphicon glyphicon-search"></span>
                          </button>
                        </span>

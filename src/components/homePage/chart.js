@@ -2,13 +2,55 @@
 
 var React = require('react');
 
-//TODO: make header for charts dynamic, ie changes for selected city
 var Chart = React.createClass({
-   render: function() {
+
+    render: function() {
+        var self = this;
+        var tracks = self.props.trackResults;
+        var results;
+        var trackNum = 0;
+
+        var createChartRow = function(track) {
+            trackNum++;
+            return (
+                <tr key={track._id}>
+                    <td>{trackNum}</td>
+                    <td>{track.title}</td>
+                    <td>{track.numPlays}</td>
+                </tr>
+            );
+
+        };
+
+        var resultsNotFound = function() {
+            return (
+                <p>Select a city</p>
+            );
+        };
+
+        if (self.props.trackResults.length > 0) {
+            results = <tbody>{tracks.map(createChartRow)}</tbody>;
+        } else {
+            results =
+            <tbody>
+                <tr>
+                    <td>
+
+                    </td>
+                    <td>
+
+                    </td>
+                    <td>
+
+                    </td>
+                </tr>
+            </tbody>;
+        }
+
        return (
          <div className="container">
            <div className="row>">
-             <h2 className="text-center">Top 10 Tracks for Belfast</h2>
+             <h2 className="text-center">Top 10 Tracks for "<strong>{this.props.resultsHeader}</strong>"</h2>
            </div>
            <br/>
            <hr/>
@@ -21,48 +63,7 @@ var Chart = React.createClass({
                    <th>Plays(All Time)</th>
                  </tr>
                </thead>
-               <tbody>
-                 <tr>
-                   <td>Test</td>
-                   <td>Test</td>
-                   <td>Test</td>
-                 </tr>
-                 <tr>
-                   <td>Test</td>
-                   <td>Test</td>
-                   <td>Test</td>
-                 </tr>
-                 <tr>
-                   <td>Test</td>
-                   <td>Test</td>
-                   <td>Test</td>
-                 </tr>
-                 <tr>
-                   <td>Test</td>
-                   <td>Test</td>
-                   <td>Test</td>
-                 </tr>
-                 <tr>
-                   <td>Test</td>
-                   <td>Test</td>
-                   <td>Test</td>
-                 </tr>
-                 <tr>
-                   <td>Test</td>
-                   <td>Test</td>
-                   <td>Test</td>
-                 </tr>
-                 <tr>
-                   <td>Test</td>
-                   <td>Test</td>
-                   <td>Test</td>
-                 </tr>
-                 <tr>
-                   <td>Test</td>
-                   <td>Test</td>
-                   <td>Test</td>
-                 </tr>
-               </tbody>
+               {results}
              </table>
            </div>
           </div>
