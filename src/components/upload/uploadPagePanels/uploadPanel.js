@@ -44,6 +44,9 @@ var constraints = {
     genre: {
         presence: true
     },
+    city: {
+        presence: true
+    },
     description: {
         presence: true,
         length: { maximum: 4000 }
@@ -66,6 +69,7 @@ var UploadPage = React.createClass({
                 title: "",
                 trackURL: "",
                 genre: "",
+                city: "",
                 uploaderId: "",
                 description: "",
                 track: ""
@@ -81,6 +85,7 @@ var UploadPage = React.createClass({
             data: {
                 title: this.refs.title.getDOMNode().value,
                 genre: this.refs.genre.getDOMNode().value,
+                city: this.refs.city.getDOMNode().value,
                 trackURL: this.refs.trackURL.getDOMNode().value,
                 uploaderId: "570aaef5ca7ea27a1d4e0230",
                 track: this.refs.track.getDOMNode().value,
@@ -110,6 +115,7 @@ var UploadPage = React.createClass({
         var fd = new FormData();
         fd.append('title', this.state.data.title);
         fd.append('genre', this.state.data.genre);
+        fd.append('city', this.state.data.city);
         fd.append('trackURL', this.state.data.trackURL);
         fd.append('dateUploaded', Date.now());
         fd.append('uploaderId', this.state.data.uploaderId);
@@ -146,6 +152,7 @@ var UploadPage = React.createClass({
                     <div>{self.state.errors.title}</div>
                     <div>{self.state.errors.trackURL}</div>
                     <div>{self.state.errors.genre}</div>
+                    <div>{self.state.errors.city}</div>
                     <div>{self.state.errors.description}</div>
                     <div>{self.state.errors.track}</div>
                 </div>
@@ -213,6 +220,15 @@ var UploadPage = React.createClass({
                                         <option>Dance</option>
                                         <option>Country</option>
                                         <option>Alternative</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div className="col-md-12" style={labelDivStyle}>
+                                <div className="form-group">
+                                    <label>City</label>
+                                    <select className="form-control" ref="city" >
+                                        <option>Belfast</option>
+                                        <option>Derry</option>
                                     </select>
                                 </div>
                             </div>
