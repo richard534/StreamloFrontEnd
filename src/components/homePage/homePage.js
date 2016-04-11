@@ -9,9 +9,9 @@ var Home = React.createClass({
     // TODO: Populate table with track information
     getInitialState: function() {
       return {
-          citySearchString: "",
+          citySearchString: "Belfast",
           trackResults: [],
-          resultsCityHeader: ""
+          resultsCityHeader: "Belfast"
       };
     },
 
