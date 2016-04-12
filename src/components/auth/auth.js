@@ -2,19 +2,34 @@
 
 var React = require('react');
 var Router = require('react-router');
+var toastr = require('toastr');
 
 // cb stands for callback
-function pretendRequest(email, pass, cb) {
-  setTimeout(function () {
-    if (email === 'joe@example.com' && pass === 'password1') {
-      cb({
-        authenticated: true,
-        token: Math.random().toString(36).substring(7)
-      });
-    } else {
-      cb({ authenticated: false });
-    }
-  }, 0);
+function requestAuthentication(email, pass, cb) {
+        var data = {
+            email: email,
+            password: pass
+        };
+
+        return $.ajax({
+            type: "post",
+            data: data,
+            dataType: 'json',
+            url: 'http://localhost:3001/auth/signin',
+            success: function(results) {
+                cb({
+                    authenticated: true,
+                    token: Math.random().toString(36).substring(7),
+                    userId: results._id,
+                    userDisplayname: results.displayName,
+                    userURL: results.userURL
+                });
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.log(textStatus + ': ' + errorThrown);
+                cb({ authenticated: false });
+            }
+        });
 }
 
 module.exports = {
@@ -27,15 +42,18 @@ module.exports = {
           this.onChange(true);
           return;
         }
-        pretendRequest(email, pass, function (res) {
-          if (res.authenticated) {
-            localStorage.token = res.token;
-            if (cb) {cb(true); }
-            _this.onChange(true);
+        requestAuthentication(email, pass, function (res) {
+            if (res.authenticated) {
+                localStorage.token = res.token;
+                localStorage.userId = res.userId;
+                localStorage.userDisplayname = res.userDisplayname;
+                localStorage.userURL = res.userURL;
+                if (cb) {cb(true); }
+                _this.onChange(true);
             } else {
-            if (cb) {cb(false); }
-            _this.onChange(false);
-          }
+                if (cb) {cb(false); }
+                _this.onChange(false);
+            }
         });
     },
 
@@ -43,8 +61,23 @@ module.exports = {
         return localStorage.token;
     },
 
+    getUserId: function getUserId() {
+        return localStorage.userId;
+    },
+
+    getUserDisplayname: function() {
+        return localStorage.userDisplayname;
+    },
+
+    getUserURL: function() {
+        return localStorage.userURL;
+    },
+
     logout: function logout(cb) {
         delete localStorage.token;
+        delete localStorage.userId;
+        delete localStorage.userDisplayname;
+        delete localStorage.userURL;
         if (cb) {cb(); }
         this.onChange(false);
     },
@@ -65,6 +98,7 @@ module.exports = {
                         callback();
                     } else {
                         console.log("notloggedin");
+                        toastr.error('You must be logged in to access this page');
                         transition.redirect('signIn');
                         callback();
                     }
@@ -72,7 +106,6 @@ module.exports = {
             },
 
             render: function() {
-                console.log("hererere");
                 return (<Component {...this.props}/>);
             }
         });

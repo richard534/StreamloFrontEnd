@@ -4,7 +4,6 @@ var React = require('react');
 var UploadPanel = require('./uploadPagePanels/uploadPanel.js');
 var auth = require('../auth/auth.js');
 var Router = require('react-router');
-var Link = Router.Link;
 
 var uploadDiv = {
     marginTop: "30px"
@@ -49,12 +48,6 @@ var UploadPage = auth.requireAuth(React.createClass({
     componentWillMount: function() {
       auth.onChange = this.updateAuth;
       auth.login();
-    },
-
-    getDefaultProps: function() {
-        return {
-            profileDisplayname: "richard534"
-        };
     },
 
     render: function() {

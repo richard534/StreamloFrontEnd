@@ -6,20 +6,12 @@ var SearchCity = require('./searchCity');
 var Chart = require('./chart');
 
 var Home = React.createClass({
-    // TODO: Populate table with track information
     getInitialState: function() {
       return {
           citySearchString: "Belfast",
           trackResults: [],
           resultsCityHeader: "Belfast"
       };
-    },
-
-    // TODO: Add call to tracklist API and set state to tracklist
-    componentDidMount: function() {
-    if(this.isMounted()){
-        this.setState({ });
-      }
     },
 
     setCitySearchStringState: function(event) { // Handles user input, refreshes DOM every key press

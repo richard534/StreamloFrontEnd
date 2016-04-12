@@ -37,7 +37,8 @@ footer {
 }
 
 #userJumbotron {
-    background-size: cover;
+    background-image: url("../images/profileBanner.png");
+    background-repeat: repeat;
     height: 315px;
     margin-bottom: 0px;
 }

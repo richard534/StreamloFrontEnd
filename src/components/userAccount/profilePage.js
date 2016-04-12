@@ -2,6 +2,7 @@
 
 var React = require('react');
 var EditDetailsModal = require('./userAccountModals/editDetailsModal');
+var UploadedTracksList = require('./userAccountPanels/uploadedTracksList');
 
 var followersStyle = {
     paddingTop: "10px"
@@ -9,11 +10,44 @@ var followersStyle = {
 
 // TODO: Create user profile page
 var ProfilePage = React.createClass({
-    getDefaultProps: function() {
+    getInitialState: function() {
         return {
+            userURL: "",
+            profileDisplayname: "",
             numFollowers: "0",
-            numFollowing: "0"
+            numFollowing: "0",
+            uploadedTracks: [],
+            followedUsers: [],
+            likedTracks: [],
+            isThisProfileLoggedIn: false
         };
+    },
+
+    componentWillMount: function() {
+        this.setState({ userURL: this.props.params.userURL });
+    },
+
+    componentDidMount: function() {
+        this.profileDataSource();
+    },
+
+    // AJAX helper method thats sets state to returned ajax query
+    profileDataSource: function(props){
+        var self = this;
+
+        return $.ajax({
+          type: "get",
+          dataType: 'json',
+          url: 'http://localhost:3001/users/' + self.state.userURL
+        }).done(function(result){
+            console.log(result);
+            self.setState({ profileDisplayname: result.displayName });
+            self.setState({ numFollowers: result.numberOfFollowers });
+            self.setState({ numFollowing: result.numberOfFollowedUsers });
+            self.setState({ uploadedTracks: result.uploadedTracks });
+            self.setState({ followedUsers: result.followedUsers });
+            self.setState({ likedTracks: result.likedTracks });
+          });
     },
 
    render: function() {
@@ -21,10 +55,10 @@ var ProfilePage = React.createClass({
            <div>
                <div className="container-full">
                   <div className="jumbotron text-center" id="userJumbotron">
-                      <img className="img-circle" src="images/belfast1.jpg" width="150" height="150"></img>
-                      <h4 className="text-center">ProfileName</h4>
-                      <span className="text-center"><span className="glyphicon glyphicon-user"></span> Followers: {this.props.numFollowers} </span>
-                      <span className="text-center">| <span className="glyphicon glyphicon-eye-open"></span> Following: {this.props.numFollowing}</span>
+                      <img className="img-circle" src="images/account-icon.png" width="150" height="150"></img>
+                      <h4 className="text-center">{this.state.profileDisplayname}</h4>
+                      <span className="text-center"><span className="glyphicon glyphicon-user"></span> Followers: {this.state.numFollowers} </span>
+                      <span className="text-center">| <span className="glyphicon glyphicon-eye-open"></span> Following: {this.state.numFollowing}</span>
                       <div className="btn-group-sm" role="group" style={followersStyle}>
                           <button type="button" className="btn btn-default" data-toggle="modal" data-target="#editDetailsModal"><span className="glyphicon glyphicon-edit"></span> Edit</button>
                           <span> </span>
@@ -37,23 +71,18 @@ var ProfilePage = React.createClass({
                   <div className="row" id="profileNav">
                       <div className="col-md-8 col-md-offset-2">
                           <ul className="nav nav-pills nav-justified">
-                              <li role="presentation" className="active"><a href="#">Liked</a></li>
-                              <li role="presentation"><a href="#">Uploaded</a></li>
+                              <li role="presentation"><a href="#">Liked</a></li>
+                              <li role="presentation" className="active"><a href="#">Uploaded</a></li>
                               <li role="presentation"><a href="#">Playlists</a></li>
                           </ul>
                       </div>
                   </div>
               </div>
               <div className="container">
-                <div className="col-md-12">
-                  <div className="panel panel-default">
-                      <div className="panel-body">
+                  <UploadedTracksList />
 
-                      </div>
-                  </div>
-                </div>
 
-                <EditDetailsModal />
+                  <EditDetailsModal />
 
 
               </div>
