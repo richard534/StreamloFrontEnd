@@ -31,6 +31,7 @@ var uploadLabelDivStyle = {
     paddingTop: "10px"
 };
 
+// Require auth wrapper prevents this class from being rendered unless user is logged in
 var UploadPage = auth.requireAuth(React.createClass({
 
     getInitialState: function() {

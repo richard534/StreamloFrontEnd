@@ -91,7 +91,7 @@ var SignInPage = React.createClass({
         var loggedInUser = auth.getUserDisplayname();
 
         if(this.state.loggedIn){
-            header = <p>Signed in as <strong>{loggedInUser}</strong></p>;
+            header = <p>Signed in as <Link to="profilePage" params={{userURL: auth.getUserURL()}}><strong>{loggedInUser}</strong></Link></p>;
             result =
             <div>
                 <button type="submit" className="btn btn-danger btn-block">Logout</button>

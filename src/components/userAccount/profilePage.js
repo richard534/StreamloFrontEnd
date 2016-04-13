@@ -79,7 +79,7 @@ var ProfilePage = React.createClass({
                   </div>
               </div>
               <div className="container">
-                  <UploadedTracksList />
+                  <UploadedTracksList uploadedTracks={this.state.uploadedTracks} />
 
 
                   <EditDetailsModal />

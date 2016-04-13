@@ -5,6 +5,7 @@ var Router = require('react-router');
 var validate = require('validate.js');
 var _ = require('lodash');
 var toastr = require('toastr');
+var auth = require('../../auth/auth.js');
 
 var uploadDiv = {
     marginTop: "30px"
@@ -65,6 +66,7 @@ var UploadPage = React.createClass({
 
     getInitialState: function() {
         return {
+            uploaderURL: "",
             data: {
                 title: "",
                 trackURL: "",
@@ -80,14 +82,20 @@ var UploadPage = React.createClass({
         };
     },
 
+    componentWillMount: function() {
+        var uploaderURL = auth.getUserURL();
+        this.setState({ uploaderURL: uploaderURL});
+    },
+
     changeState: function () {
+        var uploaderId = auth.getUserId();
         this.setState({
             data: {
                 title: this.refs.title.getDOMNode().value,
                 genre: this.refs.genre.getDOMNode().value,
                 city: this.refs.city.getDOMNode().value,
+                uploaderId: uploaderId,
                 trackURL: this.refs.trackURL.getDOMNode().value,
-                uploaderId: "570aaef5ca7ea27a1d4e0230",
                 track: this.refs.track.getDOMNode().value,
                 description: this.refs.description.getDOMNode().value
             }
@@ -121,6 +129,8 @@ var UploadPage = React.createClass({
         fd.append('uploaderId', this.state.data.uploaderId);
         fd.append('description', this.state.data.description);
         fd.append('track', this.refs.track.getDOMNode().files[0] );
+
+        console.log(this.state.data.uploaderId);
 
         return $.ajax({
           type: "post",
@@ -196,10 +206,10 @@ var UploadPage = React.createClass({
                                 <div className="col-md-12" style={trackURLLabel}>
                                     <label>Track URL</label>
                                 </div>
-                                <div className="col-md-4" style={trackURLText}>
-                                    <p className="text-muted">streamlo.com/YourProfileURL/</p>
+                                <div className="col-md-5" style={trackURLText}>
+                                    <p className="text-muted">streamlo.com/{this.state.uploaderURL}/</p>
                                 </div>
-                                <div className="col-md-8" style={trackURLInput}>
+                                <div className="col-md-6 pull-right" style={trackURLInput}>
                                     <input className="form-control" ref="trackURL" value={this.state.trackURL} placeholder="Enter Track URL..." />
                                 </div>
                             </div>
