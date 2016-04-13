@@ -35,14 +35,12 @@ var comment = React.createClass({
 
     userURLDataSource: function(){
         var self = this;
-        console.log("userID: " + self.props.commentUserId);
 
         return $.ajax({
           type: "get",
           dataType: 'json',
           url: 'http://localhost:3001/users/id/' + self.props.commentUserId,
           success: function(result) {
-              console.log(result);
               self.setState({ commentUsername: result.displayName });
               self.setState({ commentUserURL: result.userURL });
           },

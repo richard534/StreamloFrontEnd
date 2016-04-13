@@ -1,6 +1,7 @@
 "use strict";
 
 var React = require('react');
+var Track = require('./uploadedTrack');
 
 var uploadedTracksList = React.createClass({
 
@@ -13,8 +14,16 @@ var uploadedTracksList = React.createClass({
        var createTrackResultRow = function(track) {
            return (
                <li key={track._id} className="list-group-item">
-                   <Track
-                   />
+                   <Track trackId={track._id}
+                   uploaderId={track.uploaderId}
+                   trackBinaryId={track.trackBinary}
+                   title={track.title}
+                   artist={track.artist}
+                   genre={track.genre}
+                   trackURL={track.trackURL}
+                   uploadDate={track.dateUploaded}
+                   numLikes={track.numLikes}
+                   numPlays={track.numPlays} />
                <hr />
                </li>
            );

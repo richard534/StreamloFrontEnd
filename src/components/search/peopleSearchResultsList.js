@@ -41,7 +41,17 @@ var PeopleSearchResultsList = React.createClass({
       var numPeople;
       if (self.props.peopleResults.length > 0) {
           numPeople = <p className="text-muted">Found {self.props.numPeople} people</p>;
-          results = <ul className="list-group">{people.map(createPersonResultRow)}</ul>;
+          results =
+              <div>
+                  <ul className="list-group">{people.map(createPersonResultRow)}</ul>
+                  <nav>
+                      <ul className="pager">
+                          <li className="previous" onClick={this.props.handlePreviousPager}><a><span aria-hidden="true">&larr;</span> Previous</a></li>
+                          <li className="next" onClick={this.props.handleNextPager}><a>Next <span aria-hidden="true">&rarr;</span></a></li>
+                       </ul>
+                  </nav>
+              </div>;
+
        } else {
            results = <div>{resultsNotFound}</div>;
        }
@@ -51,12 +61,6 @@ var PeopleSearchResultsList = React.createClass({
             <div className="col-md-10">
                 {numPeople}
                 {results}
-                <nav>
-                    <ul className="pager">
-                        <li className="previous" onClick={this.props.handlePreviousPager}><a><span aria-hidden="true">&larr;</span> Previous</a></li>
-                        <li className="next" onClick={this.props.handleNextPager}><a>Next <span aria-hidden="true">&rarr;</span></a></li>
-                     </ul>
-                </nav>
             </div>
     );
   }

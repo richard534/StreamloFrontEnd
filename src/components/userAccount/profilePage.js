@@ -40,13 +40,25 @@ var ProfilePage = React.createClass({
           dataType: 'json',
           url: 'http://localhost:3001/users/' + self.state.userURL
         }).done(function(result){
-            console.log(result);
+            self.setState({ uploaderId: result._id });
             self.setState({ profileDisplayname: result.displayName });
             self.setState({ numFollowers: result.numberOfFollowers });
             self.setState({ numFollowing: result.numberOfFollowedUsers });
-            self.setState({ uploadedTracks: result.uploadedTracks });
             self.setState({ followedUsers: result.followedUsers });
             self.setState({ likedTracks: result.likedTracks });
+            self.tracksUploadedDataSource(result._id);
+          });
+    },
+
+    tracksUploadedDataSource: function(uploaderId){
+        var self = this;
+
+        return $.ajax({
+          type: "get",
+          dataType: 'json',
+          url: 'http://localhost:3001/tracks/uploaderId/' + uploaderId
+        }).done(function(result){
+            self.setState({ uploadedTracks: result });
           });
     },
 
@@ -71,9 +83,9 @@ var ProfilePage = React.createClass({
                   <div className="row" id="profileNav">
                       <div className="col-md-8 col-md-offset-2">
                           <ul className="nav nav-pills nav-justified">
-                              <li role="presentation"><a href="#">Liked</a></li>
+                              <li role="presentation"><a>Liked</a></li>
                               <li role="presentation" className="active"><a href="#">Uploaded</a></li>
-                              <li role="presentation"><a href="#">Playlists</a></li>
+                              <li role="presentation"><a>Playlists</a></li>
                           </ul>
                       </div>
                   </div>

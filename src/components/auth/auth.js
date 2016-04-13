@@ -94,10 +94,8 @@ module.exports = {
             statics: {
                 willTransitionTo: function(transition, params, query, callback) {
                     if(self.loggedIn()) {
-                        console.log("Logged in");
                         callback();
                     } else {
-                        console.log("notloggedin");
                         toastr.error('You must be logged in to access this page');
                         transition.redirect('signIn');
                         callback();

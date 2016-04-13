@@ -46,7 +46,17 @@ var TrackSearchResultsList = React.createClass({
       var numTracks;
       if (self.props.trackResults.length > 0) {
           numTracks = <p className="text-muted">Found {self.props.numTracks} tracks</p>;
-          results = <ul className="list-group">{tracks.map(createTrackResultRow)}</ul>;
+          results =
+          <div>
+              <ul className="list-group">{tracks.map(createTrackResultRow)}</ul>
+              <nav>
+                  <ul className="pager">
+                      <li className="previous" onClick={this.props.handlePreviousPager}><a><span aria-hidden="true">&larr;</span> Previous</a></li>
+                      <li className="next" onClick={this.props.handleNextPager}><a>Next <span aria-hidden="true">&rarr;</span></a></li>
+                   </ul>
+              </nav>
+          </div>;
+
        } else {
            results = <div>{resultsNotFound}</div>;
        }
@@ -55,13 +65,6 @@ var TrackSearchResultsList = React.createClass({
         <div className="col-md-10">
             {numTracks}
             {results}
-
-            <nav>
-                <ul className="pager">
-                    <li className="previous" onClick={this.props.handlePreviousPager}><a><span aria-hidden="true">&larr;</span> Previous</a></li>
-                    <li className="next" onClick={this.props.handleNextPager}><a>Next <span aria-hidden="true">&rarr;</span></a></li>
-                 </ul>
-            </nav>
         </div>
 
 

@@ -115,9 +115,7 @@ var SearchResultsPage = React.createClass({
     handlePreviousPagerTracks: function(e) {
         var self = this;
         e.preventDefault();
-        console.log("Previous handler");
         if(self.state.trackPageNum === 0){ // If first page do nothing
-            console.log("Do Nuttin");
             return;
         }
         var previousPage = this.state.trackPageNum - 1;
@@ -140,9 +138,6 @@ var SearchResultsPage = React.createClass({
     handleNextPagerTracks: function(e) {
         var self = this;
         e.preventDefault();
-
-        console.log("Next handler");
-        console.log(self.state.trackPageNum);
         var nextPage = this.state.trackPageNum + 1;
 
         $.ajax({
@@ -150,12 +145,10 @@ var SearchResultsPage = React.createClass({
           dataType: 'json',
           url: 'http://localhost:3001/tracks?q=' + self.state.searchString + "&page=" + nextPage,
           success: function(results) {
-              if(_.isEmpty(results)){
-                  console.log("no more pages");
+              if(_.isEmpty(results)){ // If results object is empty then there are no more pages
                   return;
               }
               self.setState({trackResults: results});
-              console.log("nxtpage:" + nextPage);
               self.setState({trackPageNum: nextPage});
           },
           error: function(jqXHR, textStatus, errorThrown) {
@@ -168,9 +161,7 @@ var SearchResultsPage = React.createClass({
     handlePreviousPagerPeople: function(e) {
         var self = this;
         e.preventDefault();
-        console.log("Previous handler");
         if(self.state.peoplePageNum === 0){ // If first page do nothing
-            console.log("Do Nuttin");
             return;
         }
         var previousPage = this.state.peoplePageNum - 1;
@@ -192,7 +183,6 @@ var SearchResultsPage = React.createClass({
     handleNextPagerPeople: function(e) {
         var self = this;
         e.preventDefault();
-        console.log("Next handler");
         var nextPage = this.state.peoplePageNum + 1;
 
         $.ajax({
@@ -200,12 +190,10 @@ var SearchResultsPage = React.createClass({
           dataType: 'json',
           url: 'http://localhost:3001/users?q=' + self.state.searchString + "&page=" + nextPage,
           success: function(results) {
-              if(_.isEmpty(results)){
-                  console.log("no more pages");
+              if(_.isEmpty(results)) { // If results object is empty then there are no more pages
                   return;
               }
               self.setState({peopleResults: results});
-              console.log("nxtpage:" + nextPage);
               self.setState({peoplePageNum: nextPage});
           },
           error: function(jqXHR, textStatus, errorThrown) {

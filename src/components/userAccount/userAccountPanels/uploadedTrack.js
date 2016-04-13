@@ -9,11 +9,11 @@ var ThumbnailStyle = {
 };
 
 var mediaDivStyle = {
-    paddingLeft: "2px"
+    paddingLeft: "20px"
 };
 
 var likesRowstyle = {
-    paddingLeft: "5px",
+    paddingLeft: "15px",
     paddingTop: "15px"
 };
 
@@ -39,22 +39,23 @@ var Track = React.createClass({
         this.userURLDataSource();
     },
 
-    componentWillReceiveProps: function(nextProps) {
-        this.userURLDataSource(nextProps);
-    },
-
     // AJAX helper method thats sets state to returned ajax query
-    userURLDataSource: function(props){
-        props = props || this.props;
+    userURLDataSource: function(){
+        var self = this;
 
         return $.ajax({
           type: "get",
           dataType: 'json',
-          url: 'http://localhost:3001/users/id/' + props.uploaderId
-        }).done(function(result){
-            this.setState({ userURL: result.userURL });
-        }.bind(this));
+          url: 'http://localhost:3001/users/id/' + self.props.uploaderId,
+          success: function(result) {
+              self.setState({ userURL: result.userURL });
+          },
+          error: function(jqXHR, textStatus, errorThrown) {
+              console.log(textStatus + ': ' + errorThrown);
+          }
+        });
     },
+
 
     render: function() {
       var self = this;

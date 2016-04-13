@@ -130,8 +130,6 @@ var UploadPage = React.createClass({
         fd.append('description', this.state.data.description);
         fd.append('track', this.refs.track.getDOMNode().files[0] );
 
-        console.log(this.state.data.uploaderId);
-
         return $.ajax({
           type: "post",
           data: fd,
