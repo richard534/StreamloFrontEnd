@@ -12,11 +12,6 @@ var PersonListingStyle = {
 };
 
 var PeopleSearchResultsList = React.createClass({
-    propTypes: {
-        peopleResults: React.PropTypes.array.isRequired,
-        numPeople: React.PropTypes.number.isRequired
-    },
-
     render: function() {
 
       var self = this;
@@ -56,6 +51,12 @@ var PeopleSearchResultsList = React.createClass({
             <div className="col-md-10">
                 {numPeople}
                 {results}
+                <nav>
+                    <ul className="pager">
+                        <li className="previous" onClick={this.props.handlePreviousPager}><a><span aria-hidden="true">&larr;</span> Previous</a></li>
+                        <li className="next" onClick={this.props.handleNextPager}><a>Next <span aria-hidden="true">&rarr;</span></a></li>
+                     </ul>
+                </nav>
             </div>
     );
   }

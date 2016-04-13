@@ -3,6 +3,7 @@
 var React = require('react');
 var Router = require('react-router');
 var Link = Router.Link;
+var _ = require('lodash');
 var SearchHeader = require('./searchHeader');
 var SearchFilter = require('./searchFilter');
 var TrackSearchResultsList = require('./trackSearchResultsList');
@@ -24,7 +25,9 @@ var SearchResultsPage = React.createClass({
             peopleResults: [],
             isTrackFilterSelected: true,
             numTracks: 0,
-            numPeople: 0
+            numPeople: 0,
+            trackPageNum: 0,
+            peoplePageNum: 0
         };
     },
 
@@ -108,6 +111,109 @@ var SearchResultsPage = React.createClass({
         this.setState({ isTrackFilterSelected: !this.state.isTrackFilterSelected });
     },
 
+    // Track Pagination handlers
+    handlePreviousPagerTracks: function(e) {
+        var self = this;
+        e.preventDefault();
+        console.log("Previous handler");
+        if(self.state.trackPageNum === 0){ // If first page do nothing
+            console.log("Do Nuttin");
+            return;
+        }
+        var previousPage = this.state.trackPageNum - 1;
+
+
+        $.ajax({
+          type: "get",
+          dataType: 'json',
+          url: 'http://localhost:3001/tracks?q=' + self.state.searchString + "&page=" + previousPage,
+          success: function(results) {
+              self.setState({trackResults: results});
+              self.setState({trackPageNum: previousPage});
+          },
+          error: function(jqXHR, textStatus, errorThrown) {
+              console.log(textStatus + ': ' + errorThrown);
+          }
+        });
+    },
+
+    handleNextPagerTracks: function(e) {
+        var self = this;
+        e.preventDefault();
+
+        console.log("Next handler");
+        console.log(self.state.trackPageNum);
+        var nextPage = this.state.trackPageNum + 1;
+
+        $.ajax({
+          type: "get",
+          dataType: 'json',
+          url: 'http://localhost:3001/tracks?q=' + self.state.searchString + "&page=" + nextPage,
+          success: function(results) {
+              if(_.isEmpty(results)){
+                  console.log("no more pages");
+                  return;
+              }
+              self.setState({trackResults: results});
+              console.log("nxtpage:" + nextPage);
+              self.setState({trackPageNum: nextPage});
+          },
+          error: function(jqXHR, textStatus, errorThrown) {
+              console.log(textStatus + ': ' + errorThrown);
+          }
+        });
+    },
+
+    // People Pagination handlers
+    handlePreviousPagerPeople: function(e) {
+        var self = this;
+        e.preventDefault();
+        console.log("Previous handler");
+        if(self.state.peoplePageNum === 0){ // If first page do nothing
+            console.log("Do Nuttin");
+            return;
+        }
+        var previousPage = this.state.peoplePageNum - 1;
+
+        $.ajax({
+          type: "get",
+          dataType: 'json',
+          url: 'http://localhost:3001/users?q=' + self.state.searchString + "&page=" + previousPage,
+          success: function(results) {
+              self.setState({peopleResults: results});
+              self.setState({peoplePageNum: previousPage});
+          },
+          error: function(jqXHR, textStatus, errorThrown) {
+              console.log(textStatus + ': ' + errorThrown);
+          }
+        });
+    },
+
+    handleNextPagerPeople: function(e) {
+        var self = this;
+        e.preventDefault();
+        console.log("Next handler");
+        var nextPage = this.state.peoplePageNum + 1;
+
+        $.ajax({
+          type: "get",
+          dataType: 'json',
+          url: 'http://localhost:3001/users?q=' + self.state.searchString + "&page=" + nextPage,
+          success: function(results) {
+              if(_.isEmpty(results)){
+                  console.log("no more pages");
+                  return;
+              }
+              self.setState({peopleResults: results});
+              console.log("nxtpage:" + nextPage);
+              self.setState({peoplePageNum: nextPage});
+          },
+          error: function(jqXHR, textStatus, errorThrown) {
+              console.log(textStatus + ': ' + errorThrown);
+          }
+        });
+    },
+
 
 
   render: function() {
@@ -117,7 +223,9 @@ var SearchResultsPage = React.createClass({
           return (
               <TrackSearchResultsList trackResults={self.state.trackResults}
                   searchString={self.state.searchString}
-                  numTracks={self.state.numTracks}/>
+                  numTracks={self.state.numTracks}
+                  handlePreviousPager={self.handlePreviousPagerTracks}
+                  handleNextPager={self.handleNextPagerTracks} />
           );
       }();
 
@@ -125,7 +233,9 @@ var SearchResultsPage = React.createClass({
           return (
               <PeopleSearchResultsList peopleResults={self.state.peopleResults}
                   searchString={self.state.searchString}
-                  numPeople={self.state.numPeople}/>
+                  numPeople={self.state.numPeople}
+                  handlePreviousPager={self.handlePreviousPagerPeople}
+                  handleNextPager={self.handleNextPagerPeople} />
           );
       }();
 

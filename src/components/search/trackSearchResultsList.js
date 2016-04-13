@@ -8,10 +8,6 @@ var trackListingStyle = {
 };
 
 var TrackSearchResultsList = React.createClass({
-    propTypes: {
-    trackResults: React.PropTypes.array.isRequired
-    },
-
     render: function() {
       var self = this;
       var tracks = self.props.trackResults;
@@ -55,12 +51,20 @@ var TrackSearchResultsList = React.createClass({
            results = <div>{resultsNotFound}</div>;
        }
 
-
     return (
-            <div className="col-md-10">
-                {numTracks}
-                {results}
-            </div>
+        <div className="col-md-10">
+            {numTracks}
+            {results}
+
+            <nav>
+                <ul className="pager">
+                    <li className="previous" onClick={this.props.handlePreviousPager}><a><span aria-hidden="true">&larr;</span> Previous</a></li>
+                    <li className="next" onClick={this.props.handleNextPager}><a>Next <span aria-hidden="true">&rarr;</span></a></li>
+                 </ul>
+            </nav>
+        </div>
+
+
     );
   }
 });
