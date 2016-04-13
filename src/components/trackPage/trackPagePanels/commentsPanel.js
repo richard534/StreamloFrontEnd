@@ -9,8 +9,6 @@ var descriptionPanel = React.createClass({
     render: function() {
         var self = this;
         var comments = self.props.comments;
-        var userURL = self.props.userURL;
-        console.log(userURL);
 
         var createCommentRow = function(comment) {
             return (
@@ -19,7 +17,6 @@ var descriptionPanel = React.createClass({
                             commentUserId={comment.user}
                             commentDate={comment.datePosted}
                             commentBody={comment.body}
-                            commentUserURL={userURL}
                         />
                 </li>
 

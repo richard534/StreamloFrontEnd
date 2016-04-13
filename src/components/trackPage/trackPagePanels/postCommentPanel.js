@@ -2,6 +2,8 @@
 
 var React = require('react');
 var Router = require('react-router');
+var toastr = require('toastr');
+var auth = require('../../auth/auth.js');
 
 var numCommentsStyle = {
     paddingTop: "12px",
@@ -30,7 +32,7 @@ var commentSubmit = {
     paddingRight: "0px"
 };
 
-// Change hardcoded ajax post to user currently logged in
+// TODO Change hardcoded ajax post to user currently logged in
 var postCommentPanel = React.createClass({
     getInitialState: function() {
         return {
@@ -47,28 +49,41 @@ var postCommentPanel = React.createClass({
     },
 
     submit: function(event) {
-        var self = this;
+        var userId = auth.getUserId();
         event.preventDefault();
-        var data = {
-            user: '570660e35737c648407bedf3',
-            date: 'Sun Jun 13 2016 22:17:02 GMT+0000 (GMT)',
-            body: this.state.body
-        };
-        this.postComment(data);
-        this.forceUpdate();
+
+        // Must be logged in to post comment
+        if(auth.loggedIn()){
+            var data = {
+                user: userId,
+                date: Date.now(),
+                body: this.state.body
+            };
+            this.postComment(data);
+        } else {
+            toastr.error('You must be logged in to post a comment');
+        }
+
+
     },
 
     postComment: function(data){
         var trackURL = this.props.trackURL;
+        var self = this;
 
         return $.ajax({
           type: "post",
           data: data,
           url: 'http://localhost:3001/tracks/' + trackURL + '/addComment',
-          dataType: 'data'
-
-        }).done(function(result){
-            console.log("SENT");
+          dataType: 'text',
+          success: function(results) {
+              toastr.success('Comment Added To Track');
+              self.props.requestComments();
+          },
+          error: function(jqXHR, textStatus, errorThrown) {
+              console.log(textStatus + ': ' + errorThrown);
+              toastr.error('Error Uploading Track');
+          }
         });
     },
 

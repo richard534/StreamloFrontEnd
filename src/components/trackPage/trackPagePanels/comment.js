@@ -12,35 +12,47 @@ var comment = React.createClass({
 
     getInitialState: function() {
         return {
-            commentUsername: ""
+            commentUsername: "",
+            commentUserURL: ""
         };
     },
 
     getDefaultProps: function() {
         return {
-            userURL: ""
+            commentUserId: "",
+            commentDate: "",
+            commentBody: ""
         };
     },
 
     componentDidMount: function() {
-        this.userDataSource();
+        this.userURLDataSource();
     },
 
-    userDataSource: function(){
+    componentWillReceiveProps: function() {
+        this.userURLDataSource();
+    },
+
+    userURLDataSource: function(){
         var self = this;
+        console.log("userID: " + self.props.commentUserId);
 
         return $.ajax({
           type: "get",
           dataType: 'json',
-          url: 'http://localhost:3001/users/' + self.props.commentUserURL
-        }).done(function(result){
-            this.setState({ commentUsername: result.displayName });
-        }.bind(this));
+          url: 'http://localhost:3001/users/id/' + self.props.commentUserId,
+          success: function(result) {
+              console.log(result);
+              self.setState({ commentUsername: result.displayName });
+              self.setState({ commentUserURL: result.userURL });
+          },
+          error: function(jqXHR, textStatus, errorThrown) {
+              console.log(textStatus + ': ' + errorThrown);
+          }
+        });
     },
 
     render: function() {
-        console.log(this.props.userURL);
-
         return (
             <div className="media">
                 <div className="col-md-1" style={commentThumbnail}>
@@ -48,7 +60,7 @@ var comment = React.createClass({
                 </div>
                 <div className="col-md-11">
                     <div className="col-md-6">
-                        <Link to='profilePage' params={{userURL: this.props.commentUserURL}}><p className="text-muted">{this.state.commentUsername}</p></Link>
+                        <Link to='profilePage' params={{userURL: this.state.commentUserURL}}><p className="text-muted">{this.state.commentUsername}</p></Link>
                     </div>
                     <div className="col-md-6">
                         <p className="text-muted pull-right">{this.props.datePosted}</p>

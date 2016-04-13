@@ -76,9 +76,9 @@ var TrackPage = React.createClass({
                 <div className="col-md-12" style={commentsPanelStyle}>
                     <div className="col-md-8">
                         <PostCommentPanel numComments={this.state.numComments}
-                            trackURL={this.state.trackURL} />
-                        <CommentsPanel comments={this.state.comments}
-                            userURL={this.state.userURL}/>
+                            trackURL={this.state.trackURL}
+                            requestComments={this.tracksDataSource} />
+                        <CommentsPanel comments={this.state.comments} />
                     </div>
                     <DescriptionPanel description={this.state.description} />
                 </div>
