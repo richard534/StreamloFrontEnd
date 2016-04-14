@@ -111,10 +111,10 @@ var CreateAccountPanel = React.createClass({
         };
         return $.ajax({
           type: "post",
-          data: data,
+          data: data, // Data to be sent to the server
           contentType: 'application/x-www-form-urlencoded',
           url: 'http://localhost:3001/users/',
-          dataType: 'text',
+          dataType: 'text', // The type of data that you're expecting back from the server
           success: function(results) {
               toastr.success('Account Created');
               self.transitionTo('signIn');
