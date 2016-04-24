@@ -1,8 +1,6 @@
 "use strict";
 
 var React = require('react');
-var auth = require('./components/auth/auth.js');
-
 var Router = require('react-router');
 var DefaultRoute = Router.DefaultRoute;
 var Route = Router.Route;
