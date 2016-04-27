@@ -18,8 +18,7 @@ var ProfilePage = React.createClass({
             numFollowing: "0",
             uploadedTracks: [],
             followedUsers: [],
-            likedTracks: [],
-            isThisProfileLoggedIn: false
+            likedTracks: []
         };
     },
 

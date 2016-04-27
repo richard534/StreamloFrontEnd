@@ -17,7 +17,6 @@ this.props.path // Gives full path in url
 
 
 var SearchResultsPage = React.createClass({
-
     getInitialState: function() {
         return {
             searchString: "",
@@ -68,7 +67,6 @@ var SearchResultsPage = React.createClass({
     },
 
     // AJAX helper method thats sets state to returned ajax query
-    // TODO remove if backend not working
     numTracksDataSource: function(props){
         props = props || this.props;
 
@@ -93,7 +91,6 @@ var SearchResultsPage = React.createClass({
         }.bind(this));
     },
 
-    // TODO remove if backend not working
     numPeopleDatasource: function(props){
         props = props || this.props;
 
