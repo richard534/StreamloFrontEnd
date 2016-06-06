@@ -4,6 +4,25 @@ The streamlo system was created for my final year project at university
 *Note web service must be running in order for web app to function correctly
 You can find the web service component : [Here](https://github.com/richard534/StreamloWebservice)
 
+Powered by:
+<ul>
+  <li>ReactJS</li> 
+  <li>ExpressJS</li> 
+  <li>NodeJS</li> 
+  <li>MongoDB</li> 
+</ul>
+
+Front end utillizes a number on NPM modules including:
+<ul>
+  <li>Bootstrap</li>
+  <li>Browserify</li>
+  <li>Gulp</li>
+  <li>Jquery</li>
+  <li>Lodash</li>
+  <li>Reactify</li>
+  <li>Toastr</li>
+</ul>
+
 ## Installation
 #### OSX/Windows
 
