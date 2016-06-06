@@ -14,6 +14,7 @@ Powered by:
 
 Front end utillizes a number on NPM modules including:
 <ul>
+  <li>React-Router</li>
   <li>Bootstrap</li>
   <li>Browserify</li>
   <li>Gulp</li>
