@@ -1,8 +1,8 @@
 # Streamlo Frontend
 The streamlo system was created for my final year project at university
 
-*Note server must be running in order for web app to function correctly
-You can find the backend component : [Here](https://github.com/richard534/StreamloWebservice)
+*Note web service must be running in order for web app to function correctly
+You can find the web service component : [Here](https://github.com/richard534/StreamloWebservice)
 
 ## Installation
 #### OSX/Windows
