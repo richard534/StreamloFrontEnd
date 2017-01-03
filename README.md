@@ -12,7 +12,7 @@ Powered by:
   <li>MongoDB</li> 
 </ul>
 
-Front end utillizes a number on NPM modules including:
+Front end utilizes a number of NPM modules including:
 <ul>
   <li>React-Router</li>
   <li>Bootstrap</li>
