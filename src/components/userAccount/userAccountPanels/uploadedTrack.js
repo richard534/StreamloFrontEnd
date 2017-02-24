@@ -51,7 +51,7 @@ var Track = React.createClass({
               self.setState({ userURL: result.userURL });
           },
           error: function(jqXHR, textStatus, errorThrown) {
-              console.log(textStatus + ': ' + errorThrown);
+              // console.log(textStatus + ': ' + errorThrown);
           }
         });
     },

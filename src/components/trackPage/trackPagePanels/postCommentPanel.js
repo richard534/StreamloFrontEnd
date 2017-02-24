@@ -81,7 +81,7 @@ var postCommentPanel = React.createClass({
               self.props.requestComments();
           },
           error: function(jqXHR, textStatus, errorThrown) {
-              console.log(textStatus + ': ' + errorThrown);
+              // console.log(textStatus + ': ' + errorThrown);
               toastr.error('Error Uploading Track');
           }
         });

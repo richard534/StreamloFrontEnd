@@ -1,11 +1,23 @@
 {
-  "ecmaFeatures": {
-    "jsx": true
+  "extends": [
+    "eslint:recommended",
+    "plugin:import/errors",
+    "plugin:import/warnings"
+  ],
+  "plugins": [
+    "react"
+  ],
+  "parserOptions": {
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true
+    }
   },
   "env": {
     "browser": true,
     "node": true,
-    "jquery": true
+    "jquery": true,
+    "mocha": true
   },
   "rules": {
     "quotes": 0,

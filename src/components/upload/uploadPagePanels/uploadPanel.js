@@ -143,7 +143,7 @@ var UploadPage = React.createClass({
               self.transitionTo('app');
           },
           error: function(jqXHR, textStatus, errorThrown) {
-              console.log(textStatus + ': ' + errorThrown);
+              // console.log(textStatus + ': ' + errorThrown);
               toastr.error('Error Uploading Track');
           }
         });

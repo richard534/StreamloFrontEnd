@@ -37,7 +37,7 @@ var Home = React.createClass({
                   }
               },
               error: function(jqXHR, textStatus, errorThrown) {
-                  console.log(textStatus + ": " + errorThrown);
+                  // console.log(textStatus + ": " + errorThrown);
               }
             });
         }

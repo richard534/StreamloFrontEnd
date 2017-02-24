@@ -26,7 +26,6 @@ function requestAuthentication(email, pass, cb) {
                 });
             },
             error: function(jqXHR, textStatus, errorThrown) {
-                console.log(textStatus + ': ' + errorThrown);
                 cb({ authenticated: false });
             }
         });

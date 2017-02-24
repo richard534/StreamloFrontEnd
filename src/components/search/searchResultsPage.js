@@ -127,7 +127,7 @@ var SearchResultsPage = React.createClass({
               self.setState({trackPageNum: previousPage});
           },
           error: function(jqXHR, textStatus, errorThrown) {
-              console.log(textStatus + ': ' + errorThrown);
+              // console.log(textStatus + ': ' + errorThrown);
           }
         });
     },
@@ -149,7 +149,7 @@ var SearchResultsPage = React.createClass({
               self.setState({trackPageNum: nextPage});
           },
           error: function(jqXHR, textStatus, errorThrown) {
-              console.log(textStatus + ': ' + errorThrown);
+              // console.log(textStatus + ': ' + errorThrown);
           }
         });
     },
@@ -172,7 +172,7 @@ var SearchResultsPage = React.createClass({
               self.setState({peoplePageNum: previousPage});
           },
           error: function(jqXHR, textStatus, errorThrown) {
-              console.log(textStatus + ': ' + errorThrown);
+              // console.log(textStatus + ': ' + errorThrown);
           }
         });
     },
@@ -194,7 +194,7 @@ var SearchResultsPage = React.createClass({
               self.setState({peoplePageNum: nextPage});
           },
           error: function(jqXHR, textStatus, errorThrown) {
-              console.log(textStatus + ': ' + errorThrown);
+              // console.log(textStatus + ': ' + errorThrown);
           }
         });
     },

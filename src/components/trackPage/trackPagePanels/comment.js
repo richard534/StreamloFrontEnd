@@ -45,7 +45,7 @@ var comment = React.createClass({
               self.setState({ commentUserURL: result.userURL });
           },
           error: function(jqXHR, textStatus, errorThrown) {
-              console.log(textStatus + ': ' + errorThrown);
+              // console.log(textStatus + ': ' + errorThrown);
           }
         });
     },
