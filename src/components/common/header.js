@@ -1,19 +1,11 @@
-/*
-var React = require('react');
-var Router = require('react-router');
-var Link = Router.Link;
-var SearchBox = require('./searchbox');
-*/
-
 import React from 'react';
-import { Link, IndexLink } from 'react-router';
+import {Link} from 'react-router';
 import SearchBox from './searchBox';
 
 var navbarBrandStyle = {
   paddingTop: "3px"
 };
 
-//var Header = React.createClass({
 class Header extends React.Component {
     constructor(props) {
         super(props);
@@ -21,6 +13,8 @@ class Header extends React.Component {
         this.state = {
             searchString: ""
         };
+        
+        this.setSearchStringState = this.setSearchStringState.bind(this);
     }
     
     setSearchStringState(event) { // Handles user input, refreshes DOM every key press
@@ -69,4 +63,3 @@ class Header extends React.Component {
 }
 
 export default Header;
-//module.exports = Header;

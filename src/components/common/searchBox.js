@@ -1,8 +1,6 @@
-"use strict";
-
-var React = require('react');
-var Router = require('react-router');
-var Link = Router.Link;
+import React, {PropTypes} from 'react';
+import ReactDOM from 'react-dom';
+import {Link} from 'react-router';
 
 var searchBarStyle = {
   paddingTop: "3px"
@@ -12,24 +10,21 @@ var searchBoxStyle = {
   width: "400px"
 };
 
+class SearchBox extends React.Component {
+    constructor(props) {
+        super(props);
+        
+        this.handleKeyDown = this.handleKeyDown.bind(this);
+    }
 
-var SearchBox = React.createClass({
-
-    propTypes: {
-        searchString: React.PropTypes.string.isRequired,
-        onChange: React.PropTypes.func.isRequired
-
-    },
-
-    handleKeyDown: function(e) {
+    handleKeyDown(e) {
         if (e.key === 'Enter') {
-            React.findDOMNode(this.refs.search).click();
+            ReactDOM.findDOMNode(this.refs.search).click();
         }
-    },
+    }
 
-    render: function() {
+    render() {
         return (
-
             <form className="navbar-form" role="search" style={searchBarStyle} onSubmit={this.props.onSearchSubmit}>
               <div className="input-group input-group-sm">
                 <input type="text"
@@ -49,9 +44,13 @@ var SearchBox = React.createClass({
                 </span>
               </div>
             </form>
-
         );
   }
-});
+}
 
-module.exports = SearchBox;
+SearchBox.propTypes = {
+    searchString: React.PropTypes.string.isRequired,
+    onChange: React.PropTypes.func.isRequired
+}
+
+export default SearchBox;
