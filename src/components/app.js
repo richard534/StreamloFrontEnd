@@ -4,7 +4,7 @@ var React = require('react');
 var RouteHandler = require('react-router').RouteHandler;
 var Header = require('./common/header');
 var Footer = require('./common/footer');
-$ = jQuery = require('jquery');
+window.$ = window.jQuery = require('jquery');
 
 var App = React.createClass({
    render: function() {
