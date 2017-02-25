@@ -12,6 +12,8 @@ render (
 );
 
 
+/*
 Router.run(routes, function(Handler) {
     React.render(<Handler />, document.getElementById('app'));
 });
+*/
