@@ -1,33 +1,39 @@
-"use strict";
-
+/*
 var React = require('react');
 var Router = require('react-router');
 var Link = Router.Link;
 var SearchBox = require('./searchbox');
+*/
+
+import React from 'react';
+import { Link, IndexLink } from 'react-router';
+import SearchBox from './searchBox';
 
 var navbarBrandStyle = {
   paddingTop: "3px"
 };
 
-var Header = React.createClass({
-
-    getInitialState: function() {
-        return {
+//var Header = React.createClass({
+class Header extends React.Component {
+    constructor(props) {
+        super(props);
+        
+        this.state = {
             searchString: ""
         };
-    },
-
-    setSearchStringState: function(event) { // Handles user input, refreshes DOM every key press
+    }
+    
+    setSearchStringState(event) { // Handles user input, refreshes DOM every key press
       var value = event.target.value;
       this.state.searchString = value;
       return this.setState({searchString: this.state.searchString});
-    },
+    }
 
-    onSearchSubmit: function(e) {
+    onSearchSubmit(e) {
         e.preventDefault();
-    },
+    }
 
-    render: function() {
+    render() {
         return (
           <div className="container">
             <nav className="navbar navbar-default navbar-fixed-top">
@@ -60,6 +66,7 @@ var Header = React.createClass({
           </div>
         );
     }
-});
+}
 
-module.exports = Header;
+export default Header;
+//module.exports = Header;

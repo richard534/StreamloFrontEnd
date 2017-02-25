@@ -7,9 +7,10 @@ import HomePage from './components/homePage/homePage';
 import SearchResultsPage from './components/search/searchResultsPage';
 import TrackPage from './components/trackPage/trackPage';
 import UploadPage from './components/upload/uploadPage';
-import SignInPage from './components/userAccount/SignInPage';
+import SignInPage from './components/userAccount/signInPage';
 import CreateAccountPage from './components/userAccount/createAccountPage';
 import ProfilePage from './components/userAccount/profilePage';
+import NotFoundPage from './components/notFoundPage';
 
 
 /*
@@ -31,6 +32,9 @@ export default (
     <Route path="signin/" component={SignInPage} />
     <Route path="createAccount/" component={CreateAccountPage} />
     <Route path="user/:userURL/" component={ProfilePage} />
+    
+    // TODO: check if this not found page route works
+    //<Route path="*" component ={NotFoundPage} />
   </Route>
 );
 
