@@ -1,5 +1,3 @@
-"use strict";
-
 var React = require('react');
 var UploadPanel = require('./uploadPagePanels/uploadPanel.js');
 var auth = require('../auth/auth.js');

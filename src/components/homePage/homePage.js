@@ -1,5 +1,3 @@
-"use strict";
-
 var React = require('react');
 var toastr = require('toastr');
 var SearchCity = require('./searchCity');

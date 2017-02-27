@@ -1,5 +1,3 @@
-"use strict";
-
 var React = require('react');
 
 // TODO possibly add html5 geolocation and google maps get administrative_area_level_1 to get city

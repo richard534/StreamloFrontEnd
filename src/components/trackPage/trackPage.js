@@ -1,5 +1,3 @@
-"use strict";
-
 var React = require('react');
 var TrackJumbotron = require('./trackPagePanels/trackJumbotron');
 var CommentsPanel = require('./trackPagePanels/commentsPanel');

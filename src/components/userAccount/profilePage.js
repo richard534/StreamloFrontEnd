@@ -1,5 +1,3 @@
-"use strict";
-
 var React = require('react');
 var EditDetailsModal = require('./userAccountModals/editDetailsModal');
 var UploadedTracksList = require('./userAccountPanels/uploadedTracksList');

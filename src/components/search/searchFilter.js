@@ -1,5 +1,3 @@
-"use strict";
-
 var React = require('react');
 
 // TODO stop search results filters from alternating on click
