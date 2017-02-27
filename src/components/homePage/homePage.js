@@ -1,24 +1,29 @@
-var React = require('react');
-var toastr = require('toastr');
-var SearchCity = require('./searchCity');
-var Chart = require('./chart');
+import React from 'react';
+import toastr from 'toastr';
+import SearchCity from './searchCity';
+import Chart from './chart';
 
-var Home = React.createClass({
-    getInitialState: function() {
-      return {
-          citySearchString: "Belfast",
-          trackResults: [],
-          resultsCityHeader: "Belfast"
-      };
-    },
+class Home extends React.Component {
+    constructor(props) {
+        super(props);
+        
+        this.state = {
+            citySearchString: "Belfast",
+            trackResults: [],
+            resultsCityHeader: "Belfast"
+        }
+        
+        this.setCitySearchStringState = this.setCitySearchStringState.bind(this);
+        this.onSearchSubmit = this.onSearchSubmit.bind(this);
+    }
 
-    setCitySearchStringState: function(event) { // Handles user input, refreshes DOM every key press
+    setCitySearchStringState(event) { // Handles user input, refreshes DOM every key press
         var value = event.target.value;
         this.state.citySearchString = value;
         return this.setState({searchString: this.state.searchString});
-    },
+    }
 
-    onSearchSubmit: function(e) {
+    onSearchSubmit(e) {
         e.preventDefault();
         var self = this;
         if(self.state.citySearchString.length > 0){
@@ -39,10 +44,10 @@ var Home = React.createClass({
               }
             });
         }
-    },
+    }
 
 
-   render: function() {
+   render() {
        return (
          <div>
            <SearchCity onChange={this.setCitySearchStringState}
@@ -53,6 +58,6 @@ var Home = React.createClass({
          </div>
        );
      }
-});
+}
 
-module.exports = Home;
+export default Home;

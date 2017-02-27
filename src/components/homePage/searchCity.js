@@ -1,8 +1,8 @@
-var React = require('react');
+import React from 'react';
 
 // TODO possibly add html5 geolocation and google maps get administrative_area_level_1 to get city
-var SearchCity = React.createClass({
-   render: function() {
+class SearchCity extends React.Component {
+   render() {
        return (
          <div className="container-full">
             <div className="jumbotron text-center" id="homeJumbotron">
@@ -27,6 +27,6 @@ var SearchCity = React.createClass({
           </div>
        );
      }
-});
+}
 
-module.exports = SearchCity;
+export default SearchCity;
