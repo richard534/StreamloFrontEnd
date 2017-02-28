@@ -31,8 +31,7 @@ export default (
     <Route path="createAccount/" component={CreateAccountPage} />
     <Route path="user/:userURL/" component={ProfilePage} />
     
-    // TODO: check if this not found page route works
-    //<Route path="*" component ={NotFoundPage} />
+    <Route path="*" component ={NotFoundPage} />
   </Route>
 );
 

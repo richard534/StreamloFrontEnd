@@ -34,14 +34,14 @@ class Header extends React.Component {
             <nav className="navbar navbar-default navbar-fixed-top">
 
               <div className="navbar-header">
-                <Link to="app" className="navbar-brand" style={navbarBrandStyle}>
+                <Link to="/" className="navbar-brand" style={navbarBrandStyle}>
                   <img src="images/StreamloWithAlpha.png" className="img-responsive pull-left" width="125"/>
                 </Link>
               </div>
 
                 <ul className="nav navbar-nav navbar-left col-md-8">
                   <li className="nav">
-                    <Link to="app">Home</Link>
+                    <Link to="/">Home</Link>
                   </li>
                   <li>
                     <SearchBox searchString={this.state.searchString}
