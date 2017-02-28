@@ -1,22 +1,22 @@
-var React = require('react');
-var Router = require('react-router');
-var Link = Router.Link;
-var _ = require('lodash');
-var SearchHeader = require('./searchHeader');
-var SearchFilter = require('./searchFilter');
-var TrackSearchResultsList = require('./trackSearchResultsList');
-var PeopleSearchResultsList = require('./peopleSearchResultsList');
+import React from 'react';
+import {Link} from 'react-router';
+import SearchHeader from './searchHeader';
+import SearchFilter from './searchFilter';
+import TrackSearchResultsList from './trackSearchResultsList';
+import PeopleSearchResultsList from './peopleSearchResultsList';
+import _ from 'lodash';
 
 /*
 this.props.params.search // Gives params
-this.props.query.searchString // Gives query string
+this.props.location.query.q // Gives query string
 this.props.path // Gives full path in url
 */
 
+class SearchResultsPage extends React.Component {
+    constructor(props) {
+        super(props);
 
-var SearchResultsPage = React.createClass({
-    getInitialState: function() {
-        return {
+        this.state = {
             searchString: "",
             trackResults: [],
             peopleResults: [],
@@ -26,88 +26,96 @@ var SearchResultsPage = React.createClass({
             trackPageNum: 0,
             peoplePageNum: 0
         };
-    },
+        
+        this.tracksDataSource = this.tracksDataSource.bind(this); 
+        this.numTracksDataSource = this.numTracksDataSource.bind(this); 
+        this.peopleDatasource = this.peopleDatasource.bind(this); 
+        this.numPeopleDatasource = this.numPeopleDatasource.bind(this); 
+        this.changeSelectedFilter = this.changeSelectedFilter.bind(this); 
+        this.handlePreviousPagerTracks =this.handlePreviousPagerTracks.bind(this); 
+        this.handleNextPagerTracks = this.handleNextPagerTracks.bind(this); 
+    }
 
-    componentWillMount: function() {
-        this.setState({ searchString: this.props.query.q });
-    },
+    componentWillMount() {
+        this.setState({ searchString: this.props.location.query.q });
+    }
 
-    componentDidMount: function() {
+    componentDidMount() {
         this.tracksDataSource();
         this.numTracksDataSource();
 
         this.peopleDatasource();
         this.numPeopleDatasource();
-    },
+    }
 
     // Lifecycle method run when component revieves new props from searchbox
-    componentWillReceiveProps: function(nextProps) {
-        this.setState({ searchString: nextProps.query.q });
+    componentWillReceiveProps(nextProps) {
+        this.setState({ searchString: nextProps.location.query.q });
 
         this.tracksDataSource(nextProps);
         this.numTracksDataSource(nextProps);
 
         this.peopleDatasource(nextProps);
         this.numPeopleDatasource(nextProps);
-    },
+    }
 
     // AJAX helper method thats sets state to returned ajax query
-    tracksDataSource: function(props){
+    tracksDataSource(props){
         props = props || this.props;
 
         return $.ajax({
           type: "get",
           dataType: 'json',
-          url: 'http://localhost:3001/tracks?q=' + props.query.q
+          url: 'http://localhost:3001/tracks?q=' + props.location.query.q
         }).done(function(result){
           this.setState({ trackResults: result });
         }.bind(this));
-    },
+    }
 
     // AJAX helper method thats sets state to returned ajax query
-    numTracksDataSource: function(props){
+    numTracksDataSource(props){
         props = props || this.props;
 
         return $.ajax({
           type: "get",
           dataType: 'json',
-          url: 'http://localhost:3001/tracks/getNumOfTracks?q=' + props.query.q
+          url: 'http://localhost:3001/tracks/getNumOfTracks?q=' + props.location.query.q
         }).done(function(result){
           this.setState({ numTracks: result });
         }.bind(this));
-    },
+    }
 
-    peopleDatasource: function(props){
+    peopleDatasource(props){
         props = props || this.props;
 
         return $.ajax({
           type: "get",
           dataType: 'json',
-          url: 'http://localhost:3001/users?q=' + props.query.q
+          url: 'http://localhost:3001/users?q=' + props.location.query.q
         }).done(function(result){
           this.setState({ peopleResults: result });
         }.bind(this));
-    },
+    }
 
-    numPeopleDatasource: function(props){
+    numPeopleDatasource(props){
         props = props || this.props;
 
         return $.ajax({
           type: "get",
           dataType: 'json',
-          url: 'http://localhost:3001/users/getNumOfPeople?q=' + props.query.q
+          url: 'http://localhost:3001/users/getNumOfPeople?q=' + props.location.query.q
         }).done(function(result){
           this.setState({ numPeople: result });
         }.bind(this));
-    },
+    }
 
-    changeSelectedFilter: function(event) {
+    changeSelectedFilter(event) {
         event.preventDefault();
         this.setState({ isTrackFilterSelected: !this.state.isTrackFilterSelected });
-    },
+    }
 
     // Track Pagination handlers
-    handlePreviousPagerTracks: function(e) {
+    handlePreviousPagerTracks(e) {
         var self = this;
         e.preventDefault();
         if(self.state.trackPageNum === 0){ // If first page do nothing
@@ -128,9 +136,9 @@ var SearchResultsPage = React.createClass({
               // console.log(textStatus + ': ' + errorThrown);
           }
         });
-    },
+    }
 
-    handleNextPagerTracks: function(e) {
+    handleNextPagerTracks(e) {
         var self = this;
         e.preventDefault();
         var nextPage = this.state.trackPageNum + 1;
@@ -150,10 +158,10 @@ var SearchResultsPage = React.createClass({
               // console.log(textStatus + ': ' + errorThrown);
           }
         });
-    },
+    }
 
     // People Pagination handlers
-    handlePreviousPagerPeople: function(e) {
+    handlePreviousPagerPeople(e) {
         var self = this;
         e.preventDefault();
         if(self.state.peoplePageNum === 0){ // If first page do nothing
@@ -173,9 +181,9 @@ var SearchResultsPage = React.createClass({
               // console.log(textStatus + ': ' + errorThrown);
           }
         });
-    },
+    }
 
-    handleNextPagerPeople: function(e) {
+    handleNextPagerPeople(e) {
         var self = this;
         e.preventDefault();
         var nextPage = this.state.peoplePageNum + 1;
@@ -195,11 +203,9 @@ var SearchResultsPage = React.createClass({
               // console.log(textStatus + ': ' + errorThrown);
           }
         });
-    },
+    }
 
-
-
-  render: function() {
+  render() {
       var self = this;
 
       var trackResultsList = function() {
@@ -238,6 +244,6 @@ var SearchResultsPage = React.createClass({
         </div>
     );
   }
-});
+}
 
-module.exports = SearchResultsPage;
+export default SearchResultsPage;

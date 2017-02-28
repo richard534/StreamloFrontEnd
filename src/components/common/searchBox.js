@@ -36,7 +36,7 @@ class SearchBox extends React.Component {
                     onKeyDown={this.handleKeyDown}/>
 
                 <span className="input-group-btn">
-                    <Link to="searchResults" query={{q: this.props.searchString}} ref="search">
+                    <Link to="search" query={{q: this.props.searchString}} ref="search">
                       <button className="btn btn-default btn-sm" type="button">
                         <span className="glyphicon glyphicon-search"></span>
                     </button>

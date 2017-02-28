@@ -1,6 +1,5 @@
-var React = require('react');
-var Router = require('react-router');
-var Link = Router.Link;
+import React from 'react';
+import {Link} from 'react-router';
 
 var ThumbnailStyle = {
     marginBottom: "0px"
@@ -23,26 +22,30 @@ var audioDivStyle = {
     paddingLeft: "4px"
 };
 
-var Track = React.createClass({
-    getInitialState: function() {
-        return {
+class Track extends React.Component {
+    constructor(props) {
+        super(props);
+        
+        this.state = {
             userURL: "",
             numLikes: 0,
             numPlays: 0,
             numComments: 0
-        };
-    },
+        }
+    
+        this.userURLDataSource = this.userURLDataSource.bind(this);
+    }
 
-    componentDidMount: function() {
+    componentDidMount() {
         this.userURLDataSource();
-    },
+    }
 
-    componentWillReceiveProps: function(nextProps) {
+    componentWillReceiveProps(nextProps) {
         this.userURLDataSource(nextProps);
-    },
+    }
 
     // AJAX helper method thats sets state to returned ajax query
-    userURLDataSource: function(props){
+    userURLDataSource(props){
         props = props || this.props;
 
         return $.ajax({
@@ -52,9 +55,9 @@ var Track = React.createClass({
         }).done(function(result){
             this.setState({ userURL: result.userURL });
         }.bind(this));
-    },
+    }
 
-    render: function() {
+    render() {
       var self = this;
 
       var TrackUploadDate = function() {
@@ -67,7 +70,6 @@ var Track = React.createClass({
           var trackBinaryURL = "http://localhost:3001/tracks/" + self.props.trackBinaryId + "/stream";
           return trackBinaryURL;
       }();
-
 
     return (
             <div className="media">
@@ -94,8 +96,6 @@ var Track = React.createClass({
                             </audio>
                         </div>
 
-
-
                         <div className="col-md-12" style={likesRowstyle}>
                             <div className="col-md-7" >
                                 <div className="btn-toolbar" role="toolbar">
@@ -119,6 +119,6 @@ var Track = React.createClass({
             </div>
     );
   }
-});
+}
 
-module.exports = Track;
+export default Track;

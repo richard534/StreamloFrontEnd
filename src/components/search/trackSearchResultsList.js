@@ -1,16 +1,16 @@
-var React = require('react');
-var Track = require('./track');
+import React from 'react';
+import Track from './track';
 
 var trackListingStyle = {
     marginBottom: "10px"
 };
 
-var TrackSearchResultsList = React.createClass({
-    render: function() {
-      var self = this;
-      var tracks = self.props.trackResults;
+class TrackSearchResultsList extends React.Component {
+    render() {
+        var self = this;
+        var tracks = self.props.trackResults;
 
-      var createTrackResultRow = function(track) {
+        var createTrackResultRow = function(track) {
           return (
               <li key={track._id} className="list-group-item" style={trackListingStyle}>
                   <Track
@@ -28,9 +28,9 @@ var TrackSearchResultsList = React.createClass({
               <hr />
               </li>
           );
-      };
+        };
 
-      var resultsNotFound = function() {
+        var resultsNotFound = function() {
           return (
               <div>
                   <img src="/images/noResultsSearch.svg" className="center-block search-result-image"></img>
@@ -38,11 +38,11 @@ var TrackSearchResultsList = React.createClass({
                   <p className="text-center text-muted">Check the spelling, or try a different search.</p>
               </div>
           );
-      }();
+        }();
 
-      var results;
-      var numTracks;
-      if (self.props.trackResults.length > 0) {
+        var results;
+        var numTracks;
+        if (self.props.trackResults.length > 0) {
           numTracks = <p className="text-muted">Found {self.props.numTracks} tracks</p>;
           results =
           <div>
@@ -55,19 +55,17 @@ var TrackSearchResultsList = React.createClass({
               </nav>
           </div>;
 
-       } else {
+        } else {
            results = <div>{resultsNotFound}</div>;
-       }
+        }
 
-    return (
+        return (
         <div className="col-md-10">
             {numTracks}
             {results}
         </div>
+        );
+    }
+}
 
-
-    );
-  }
-});
-
-module.exports = TrackSearchResultsList;
+export default TrackSearchResultsList;

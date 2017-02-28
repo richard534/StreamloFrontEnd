@@ -1,14 +1,9 @@
-var React = require('react');
+import React from 'react';
 
 // TODO stop search results filters from alternating on click
-var SearchFilter = React.createClass({
-    getDefaultProps: function() {
-        return {
-            isTrackFilterSelected: true
-        };
-    },
-
-  render: function() {
+class SearchFilter extends React.Component {
+    
+  render() {
       var isTrackSelected = this.props.isTrackFilterSelected;
 
       var trackSelected;
@@ -21,7 +16,7 @@ var SearchFilter = React.createClass({
           peopleSelected = true;
       }
 
-    return (
+        return (
             <div className="col-md-2">
                 <h4>Filters</h4>
                     <ul className="nav nav-pills nav-stacked">
@@ -31,6 +26,10 @@ var SearchFilter = React.createClass({
             </div>
     );
   }
-});
+}
 
-module.exports = SearchFilter;
+SearchFilter.getDefaultProps = {
+    isTrackFilterSelected: true
+}
+
+export default SearchFilter;
