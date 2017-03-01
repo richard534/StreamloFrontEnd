@@ -1,7 +1,5 @@
-var Router = require('react-router');
-var Link = Router.Link;
-
-var React = require('react');
+import React from 'react';
+import {Link} from 'react-router';
 
 var trackNameStyle = {
     marginTop: "0px"

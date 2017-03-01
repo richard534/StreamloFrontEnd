@@ -1,13 +1,8 @@
-var React = require('react');
+import React from 'react';
 
 var EditDetailsModal = React.createClass({
-
-
    render: function() {
        return (
-
-
-
            <div className="modal fade" id="editDetailsModal" tabIndex="-1" role="dialog" aria-labelledby="myModalLabel">
              <div className="modal-dialog" role="document">
                <div className="modal-content">

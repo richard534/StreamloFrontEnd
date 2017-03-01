@@ -1,5 +1,5 @@
-var React = require('react');
-var Router = require('react-router');
+import React from 'react';
+import {Link} from 'react-router';
 var toastr = require('toastr');
 var auth = require('../../auth/auth.js');
 

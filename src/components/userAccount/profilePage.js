@@ -1,4 +1,4 @@
-var React = require('react');
+import React from 'react';
 var EditDetailsModal = require('./userAccountModals/editDetailsModal');
 var UploadedTracksList = require('./userAccountPanels/uploadedTracksList');
 

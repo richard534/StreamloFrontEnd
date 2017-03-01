@@ -1,4 +1,4 @@
-var React = require('react');
+import React from 'react';
 var TrackJumbotron = require('./trackPagePanels/trackJumbotron');
 var CommentsPanel = require('./trackPagePanels/commentsPanel');
 var PostCommentPanel = require('./trackPagePanels/postCommentPanel');

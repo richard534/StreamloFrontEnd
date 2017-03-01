@@ -1,4 +1,4 @@
-var React = require('react');
+import React from 'react';
 var UploadPanel = require('./uploadPagePanels/uploadPanel.js');
 var auth = require('../auth/auth.js');
 var Router = require('react-router');
