@@ -1,6 +1,6 @@
 import React from 'react';
 import {Link} from 'react-router';
-var toastr = require('toastr');
+import toastr from 'toastr';
 var auth = require('../../auth/auth.js');
 
 var numCommentsStyle = {
@@ -31,22 +31,22 @@ var commentSubmit = {
 };
 
 // TODO Change hardcoded ajax post to user currently logged in
-var postCommentPanel = React.createClass({
-    getInitialState: function() {
-        return {
+class PostCommentPanel extends React.Component {
+    constructor(props) {
+        super(props);
+        
+        this.state = {
             user: "",
             date: "",
             body: ""
-        };
-    },
+        }
+        
+        this.submit = this.submit.bind(this); 
+        this.postComment = this.postComment.bind(this);
+        this.setCommentInputString = this.setCommentInputString.bind(this);
+    }
 
-    getDefaultProps: function() {
-        return {
-            numComments: "0"
-        };
-    },
-
-    submit: function(event) {
+    submit(event) {
         var userId = auth.getUserId();
         event.preventDefault();
 
@@ -61,11 +61,9 @@ var postCommentPanel = React.createClass({
         } else {
             toastr.error('You must be logged in to post a comment');
         }
+    }
 
-
-    },
-
-    postComment: function(data){
+    postComment(data) {
         var trackURL = this.props.trackURL;
         var self = this;
 
@@ -83,17 +81,15 @@ var postCommentPanel = React.createClass({
               toastr.error('Error Uploading Track');
           }
         });
-    },
+    }
 
-    setCommentInputString: function(event) { // Handles user input, refreshes DOM every key press
+    setCommentInputString(event) { // Handles user input, refreshes DOM every key press
       var value = event.target.value;
       this.setState({body: value});
-    },
-
+    }
 
     // TODO add signed in user to form sumbission
-    render: function() {
-
+    render() {
         return (
             <div className="col-md-12">
                 <div className="panel panel-default">
@@ -123,7 +119,11 @@ var postCommentPanel = React.createClass({
                 </div>
             </div>
         );
-  }
-});
+    }
+}
 
-export default postCommentPanel;
+PostCommentPanel.getDefaultProps = {
+    numComments: "0"
+}
+
+export default PostCommentPanel;

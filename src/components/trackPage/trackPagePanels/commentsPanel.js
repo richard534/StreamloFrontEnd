@@ -1,10 +1,8 @@
 import React from 'react';
-var Comment = require('./comment');
+import Comment from './comment';
 
-var descriptionPanel = React.createClass({
-
-
-    render: function() {
+class CommentsPanel extends React.Component {
+    render() {
         var self = this;
         var comments = self.props.comments;
 
@@ -47,6 +45,6 @@ var descriptionPanel = React.createClass({
             </div>
         );
     }
-});
+}
 
-export default descriptionPanel;
+export default CommentsPanel;

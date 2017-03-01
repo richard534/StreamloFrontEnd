@@ -1,14 +1,7 @@
 import React from 'react';
 
-var descriptionPanel = React.createClass({
-    getDefaultProps: function() {
-        return {
-            description: ""
-        };
-    },
-
-
-    render: function() {
+class DescriptionPanel extends React.Component {
+    render() {
         return (
             <div className="col-md-4">
                 <div className="panel panel-default">
@@ -22,7 +15,11 @@ var descriptionPanel = React.createClass({
                 </div>
             </div>
         );
-  }
-});
+    }
+}
 
-export default descriptionPanel;
+DescriptionPanel.getDefaultProps = {
+    description: ""
+};
+
+export default DescriptionPanel;

@@ -26,29 +26,13 @@ var colHeight = {
     height: "100%"
 };
 
-var trackJumbotron = React.createClass({
-
-    getDefaultProps: function() {
-        return {
-            title: "",
-            artist: "",
-            genre: "",
-            uploadDate: "",
-            numPlays: 0,
-            numLikes: 0,
-            numComments: 0,
-            trackBinaryURL: ""
-        };
-    },
-
-    componentWillReceiveProps: function(nextProps) {
+class TrackJumbotron extends React.Component {
+    componentWillReceiveProps(nextProps) {
         var audio = document.getElementById('audioElement');
         audio.load();
-    },
+    }
 
-
-
-  render: function() {
+    render() {
     var self = this;
 
     var trackUploadDate = function() {
@@ -58,7 +42,6 @@ var trackJumbotron = React.createClass({
     }();
 
     return (
-
        <div className="jumbotron text-center" id="userJumbotron">
            <div className="col-md-9" style={colHeight}>
                <div className="col-md-6" style={detailsColStyle}>
@@ -83,13 +66,23 @@ var trackJumbotron = React.createClass({
                </div>
 
            </div>
-           <div className="col-md-3">
-               <img className="img-responsive pull-right" src="/images/altAlbumArtLogo.png" alt="" width="215" height="215" />
+               <div className="col-md-3">
+                   <img className="img-responsive pull-right" src="/images/altAlbumArtLogo.png" alt="" width="215" height="215" />
+               </div>
            </div>
+       );
+    }
+}
 
-           </div>
-    );
-  }
-});
+TrackJumbotron.getdefaultProps = {
+    title: "",
+    artist: "",
+    genre: "",
+    uploadDate: "",
+    numPlays: 0,
+    numLikes: 0,
+    numComments: 0,
+    trackBinaryURL: ""
+}
 
-export default trackJumbotron;
+export default TrackJumbotron;

@@ -30,6 +30,6 @@ class SearchFilter extends React.Component {
 
 SearchFilter.getDefaultProps = {
     isTrackFilterSelected: true
-}
+};
 
 export default SearchFilter;

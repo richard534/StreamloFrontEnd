@@ -42,6 +42,6 @@ Person.getDefaultProps = {
     numFollowers: "0",
     numUploadedTracks: "0",
     profilePicURL: ""
-}
+};
 
 export default Person;
