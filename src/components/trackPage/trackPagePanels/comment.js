@@ -76,4 +76,4 @@ var comment = React.createClass({
     }
 });
 
-module.exports = comment;
+export default comment;

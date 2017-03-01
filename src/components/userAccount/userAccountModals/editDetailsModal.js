@@ -61,4 +61,4 @@ var EditDetailsModal = React.createClass({
      }
 });
 
-module.exports = EditDetailsModal;
+export default EditDetailsModal;

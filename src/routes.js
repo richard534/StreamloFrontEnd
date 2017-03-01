@@ -51,7 +51,4 @@ var routes = (
       <NotFoundRoute handler={require('./components/NotFoundPage')} />
     </Route>
 );
-
-
-module.exports = routes;
 */

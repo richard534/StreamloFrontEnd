@@ -101,4 +101,4 @@ var ProfilePage = React.createClass({
      }
 });
 
-module.exports = ProfilePage;
+export default ProfilePage;

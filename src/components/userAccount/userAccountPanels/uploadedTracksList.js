@@ -54,4 +54,4 @@ var uploadedTracksList = React.createClass({
      }
 });
 
-module.exports = uploadedTracksList;
+export default uploadedTracksList;

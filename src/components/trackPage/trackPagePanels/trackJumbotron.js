@@ -94,4 +94,4 @@ var trackJumbotron = React.createClass({
   }
 });
 
-module.exports = trackJumbotron;
+export default trackJumbotron;

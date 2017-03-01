@@ -25,4 +25,4 @@ var descriptionPanel = React.createClass({
   }
 });
 
-module.exports = descriptionPanel;
+export default descriptionPanel;

@@ -86,4 +86,4 @@ var TrackPage = React.createClass({
   }
 });
 
-module.exports = TrackPage;
+export default TrackPage;

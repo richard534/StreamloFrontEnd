@@ -126,4 +126,4 @@ var postCommentPanel = React.createClass({
   }
 });
 
-module.exports = postCommentPanel;
+export default postCommentPanel;

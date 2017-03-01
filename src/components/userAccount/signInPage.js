@@ -145,4 +145,4 @@ var SignInPage = React.createClass({
     }
 });
 
-module.exports = SignInPage;
+export default SignInPage;

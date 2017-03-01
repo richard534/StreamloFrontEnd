@@ -20,4 +20,4 @@ var CreateAccountPage = React.createClass({
      }
 });
 
-module.exports = CreateAccountPage;
+export default CreateAccountPage;

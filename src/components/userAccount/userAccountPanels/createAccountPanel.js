@@ -244,4 +244,4 @@ var CreateAccountPanel = React.createClass({
      }
 });
 
-module.exports = CreateAccountPanel;
+export default CreateAccountPanel;

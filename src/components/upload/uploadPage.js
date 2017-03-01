@@ -64,4 +64,4 @@ var UploadPage = auth.requireAuth(React.createClass({
   }
 }));
 
-module.exports = UploadPage;
+export default UploadPage;

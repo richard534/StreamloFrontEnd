@@ -255,4 +255,4 @@ var UploadPage = React.createClass({
   }
 });
 
-module.exports = UploadPage;
+export default UploadPage;

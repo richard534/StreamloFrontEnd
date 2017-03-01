@@ -13,4 +13,4 @@ var NotFoundPage = React.createClass({
   }
 });
 
-module.exports = NotFoundPage;
+export default NotFoundPage;
