@@ -42,7 +42,6 @@ class TrackPage extends React.Component {
     // AJAX helper method thats sets state to returned ajax query
     tracksDataSource(){
         var state = this.state;
-        console.log(state.trackURL);
 
         return $.ajax({
           type: "get",
