@@ -1,7 +1,7 @@
 import React from 'react';
 
-var EditDetailsModal = React.createClass({
-   render: function() {
+class EditDetailsModal extends React.Component {
+   render() {
        return (
            <div className="modal fade" id="editDetailsModal" tabIndex="-1" role="dialog" aria-labelledby="myModalLabel">
              <div className="modal-dialog" role="document">
@@ -42,7 +42,6 @@ var EditDetailsModal = React.createClass({
 
                  </div>
 
-
                  <div className="modal-footer">
                    <button type="button" className="btn btn-default" data-dismiss="modal">Close</button>
                    <button type="submit" className="btn btn-primary">Save changes</button>
@@ -51,9 +50,8 @@ var EditDetailsModal = React.createClass({
                </div>
              </div>
            </div>
-
        );
      }
-});
+}
 
 export default EditDetailsModal;

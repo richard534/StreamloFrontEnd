@@ -1,9 +1,8 @@
-var React = require('react');
-var Router = require('react-router');
-var Link = Router.Link;
+import React from 'react';
+import { Link } from 'react-router';
+import validate from 'validate.js';
+import toastr from 'toastr';
 var auth = require('../auth/auth.js');
-var validate = require('validate.js');
-var toastr = require('toastr');
 
 var imgStyle = {
   paddingTop: "30px"
@@ -18,13 +17,16 @@ var constraints = {
     }
 };
 
-var SignInPage = React.createClass({
+class SignInPage extends React.Component {
+    /*
     mixins: [
         Router.Navigation
     ],
-
-    getInitialState: function() {
-        return {
+    */
+    constructor(props) {
+        super(props);
+        
+        this.state = {
             loggedIn: auth.loggedIn(),
             data: {
                 email: "",
@@ -34,19 +36,24 @@ var SignInPage = React.createClass({
                 email: "",
                 password: ""
             }
-        };
-    },
+        }
+        
+        this.changeState = this.changeState.bind(this);
+        this.validate = this.validate.bind(this);
+        this.handleChange = this.handleChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+    }
 
-    changeState: function () {
+    changeState() {
         this.setState({
             data: {
                 email: this.refs.email.getDOMNode().value,
                 password: this.refs.password.getDOMNode().value
             }
         }, this.validate);
-    },
+    }
 
-    validate: function () {
+    validate() {
         var validationErrors = validate(this.state.data, constraints);
 
             if(validationErrors){
@@ -54,13 +61,13 @@ var SignInPage = React.createClass({
             } else {
                 this.setState({errors: {}});
             }
-    },
-
-    handleChange: function(e) {
+    }
+    
+    handleChange(e) {
         this.changeState();
-    },
+    }
 
-    handleSubmit: function(e) {
+    handleSubmit(e) {
         var self = this;
         e.preventDefault();
 
@@ -80,9 +87,9 @@ var SignInPage = React.createClass({
                 }
             });
         }
-    },
+    }
 
-    render: function() {
+    render() {
         var self = this;
         var header;
         var result;
@@ -112,8 +119,6 @@ var SignInPage = React.createClass({
 
         }
 
-
-
         return (
           <div className="container">
               <div className="row col-md-4 col-md-offset-4">
@@ -136,13 +141,10 @@ var SignInPage = React.createClass({
                     </div>
                   </div>
                 </div>
-
                 </div>
-
           </div>
-
         );
     }
-});
+}
 
 export default SignInPage;

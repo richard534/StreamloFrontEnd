@@ -1,13 +1,12 @@
 import React from 'react';
-var CreateAccountPanel = require('./userAccountPanels/createAccountPanel');
+import CreateAccountPanel from './userAccountPanels/createAccountPanel';
 
 var createAccountDiv = {
     marginTop: "30px"
 };
 
-var CreateAccountPage = React.createClass({
-
-   render: function() {
+class CreateAccountPage extends React.Component {
+   render() {
        return (
            <div className="container">
                <div className="col-md-8 col-md-offset-2" style={createAccountDiv}>
@@ -17,7 +16,7 @@ var CreateAccountPage = React.createClass({
                <CreateAccountPanel />
             </div>
        );
-     }
-});
+    }
+}
 
 export default CreateAccountPage;
