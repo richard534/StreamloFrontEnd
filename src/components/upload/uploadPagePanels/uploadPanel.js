@@ -1,8 +1,8 @@
-var React = require('react');
-var Router = require('react-router');
-var validate = require('validate.js');
-var _ = require('lodash');
-var toastr = require('toastr');
+import React from 'react';
+import {Link} from 'react-router';
+import validate from 'validate.js';
+import _ from 'lodash';
+import toastr from 'toastr';
 var auth = require('../../auth/auth.js');
 
 var uploadDiv = {
@@ -57,13 +57,16 @@ var constraints = {
 
 // TODO replace "yourURL" placeholder with url of logged in user
 // TODO "artist" property of data post object needs to be set to displayname of logged in user
-var UploadPage = React.createClass({
+class UploadPage extends React.Component {
+    /*
     mixins: [
         Router.Navigation
     ],
-
-    getInitialState: function() {
-        return {
+    */
+    constructor(props) {
+        super(props);
+        
+        this.state = {
             uploaderURL: "",
             data: {
                 title: "",
@@ -77,15 +80,20 @@ var UploadPage = React.createClass({
             errors: {
                 title: "Enter Track Details"
             }
-        };
-    },
+        }
+        
+        this.changeState = this.changeState.bind(this);
+        this.validate = this.validate.bind(this);
+        this.handleChange = this.handleChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+    }
 
-    componentWillMount: function() {
+    componentWillMount() {
         var uploaderURL = auth.getUserURL();
         this.setState({ uploaderURL: uploaderURL});
-    },
+    }
 
-    changeState: function () {
+    changeState() {
         var uploaderId = auth.getUserId();
         this.setState({
             data: {
@@ -98,9 +106,9 @@ var UploadPage = React.createClass({
                 description: this.refs.description.getDOMNode().value
             }
         }, this.validate);
-    },
+    }
 
-    validate: function () {
+    validate() {
         var validationErrors = validate(this.state.data, constraints);
 
             if(validationErrors){
@@ -108,13 +116,13 @@ var UploadPage = React.createClass({
             } else {
                 this.setState({errors: {}});
             }
-    },
+    }
 
-    handleChange: function(e) {
+    handleChange(e) {
         this.changeState();
-    },
+    }
 
-    handleSubmit: function(e) {
+    handleSubmit(e) {
         var self = this;
         e.preventDefault();
 
@@ -145,9 +153,9 @@ var UploadPage = React.createClass({
               toastr.error('Error Uploading Track');
           }
         });
-    },
+    }
 
-    render: function() {
+    render() {
         var self = this;
         var errorsList;
         var createAccountButton;
@@ -184,10 +192,7 @@ var UploadPage = React.createClass({
              createAccountButton = enabledCreateAccountButton();
          }
 
-
-
         return (
-
             <div className="panel panel-default">
                <div className="panel-body">
                    {errorsList}
@@ -250,9 +255,8 @@ var UploadPage = React.createClass({
                    </form>
                </div>
             </div>
-
     );
   }
-});
+}
 
 export default UploadPage;
