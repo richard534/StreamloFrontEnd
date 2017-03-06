@@ -26,7 +26,7 @@ class Person extends React.Component {
             </div>
             <div className="media-body">
                 <div className="col-md-12">
-                    <Link to="profilePage" params={{userURL: this.props.userURL}}><h3 style={profileNameStyle}>{this.props.displayName}</h3></Link>
+                    <Link to={"user/" + this.props.userURL}><h3 style={profileNameStyle}>{this.props.displayName}</h3></Link>
                         <div className="col-md-12">
                             <span className="text-center"><span className="glyphicon glyphicon-user"></span> {this.props.numFollowers} </span>
                             <span className="text-center">| <span className="glyphicon glyphicon-upload"></span> {this.props.numUploadedTracks} </span>

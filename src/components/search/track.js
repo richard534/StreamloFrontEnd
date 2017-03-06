@@ -82,7 +82,7 @@ class Track extends React.Component {
                 <div className="col-md-12" style={mediaDivStyle}>
                     <div className="col-md-8" style={mediaDivStyle}>
                         <p className="text-muted">{this.props.artist}</p>
-                            <Link to={this.state.userURL + '/' + this.props.trackURL}><h4 className="media-heading">{this.props.title}</h4></Link>
+                            <Link to={'track/' + this.state.userURL + '/' + this.props.trackURL}><h4 className="media-heading">{this.props.title}</h4></Link>
                         <p>Genre: {this.props.genre}</p>
                     </div>
 

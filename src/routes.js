@@ -24,12 +24,12 @@ export default (
   <Route path="/" component={App}>
     <IndexRoute component={HomePage} />
     <Route path="search" component={SearchResultsPage} />
-    <Route path=":userURL/:trackURL" component={TrackPage} />
+    <Route path="track/:userURL/:trackURL" component={TrackPage} />
     
     <Route path="upload/" component={UploadPage} />
     <Route path="signin/" component={SignInPage} />
     <Route path="createAccount/" component={CreateAccountPage} />
-    <Route path="user/:userURL/" component={ProfilePage} />
+    <Route path="user/:userURL" component={ProfilePage} />
     
     <Route path="*" component ={NotFoundPage} />
   </Route>
