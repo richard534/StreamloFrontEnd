@@ -1,7 +1,5 @@
-"use strict";
-
-var React = require('react');
-var Person = require('./person');
+import React from 'react';
+import Person from './person';
 
 var ThumbnailStyle = {
     marginBottom: "0px"
@@ -11,9 +9,8 @@ var PersonListingStyle = {
     marginBottom: "10px"
 };
 
-var PeopleSearchResultsList = React.createClass({
-    render: function() {
-
+class PeopleSearchResultsList extends React.Component {
+    render() {
       var self = this;
       var people = self.props.peopleResults;
 
@@ -64,6 +61,6 @@ var PeopleSearchResultsList = React.createClass({
             </div>
     );
   }
-});
+}
 
-module.exports = PeopleSearchResultsList;
+export default PeopleSearchResultsList;

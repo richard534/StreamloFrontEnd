@@ -1,10 +1,9 @@
-"use strict";
-
-var React = require('react');
-var Router = require('react-router');
-var validate = require('validate.js');
-var _ = require('lodash');
-var toastr = require('toastr');
+import React from 'react';
+import {Link} from 'react-router';
+import validate from 'validate.js';
+import _ from 'lodash';
+import toastr from 'toastr';
+import update from 'immutability-helper';
 var auth = require('../../auth/auth.js');
 
 var uploadDiv = {
@@ -59,13 +58,16 @@ var constraints = {
 
 // TODO replace "yourURL" placeholder with url of logged in user
 // TODO "artist" property of data post object needs to be set to displayname of logged in user
-var UploadPage = React.createClass({
+class UploadPage extends React.Component {
+    /*
     mixins: [
         Router.Navigation
     ],
-
-    getInitialState: function() {
-        return {
+    */
+    constructor(props) {
+        super(props);
+        
+        this.state = {
             uploaderURL: "",
             data: {
                 title: "",
@@ -79,30 +81,19 @@ var UploadPage = React.createClass({
             errors: {
                 title: "Enter Track Details"
             }
-        };
-    },
+        }
+        
+        this.validate = this.validate.bind(this);
+        this.handleChange = this.handleChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+    }
 
-    componentWillMount: function() {
+    componentWillMount() {
         var uploaderURL = auth.getUserURL();
         this.setState({ uploaderURL: uploaderURL});
-    },
+    }
 
-    changeState: function () {
-        var uploaderId = auth.getUserId();
-        this.setState({
-            data: {
-                title: this.refs.title.getDOMNode().value,
-                genre: this.refs.genre.getDOMNode().value,
-                city: this.refs.city.getDOMNode().value,
-                uploaderId: uploaderId,
-                trackURL: this.refs.trackURL.getDOMNode().value,
-                track: this.refs.track.getDOMNode().value,
-                description: this.refs.description.getDOMNode().value
-            }
-        }, this.validate);
-    },
-
-    validate: function () {
+    validate() {
         var validationErrors = validate(this.state.data, constraints);
 
             if(validationErrors){
@@ -110,13 +101,22 @@ var UploadPage = React.createClass({
             } else {
                 this.setState({errors: {}});
             }
-    },
+    }
 
-    handleChange: function(e) {
-        this.changeState();
-    },
+    handleChange(e) {    
+        const target = e.target;
+        const name = target.name;
+        
+        var newState = update(this.state, {
+            data: {
+                [name]: { $set: target.value }
+            }
+        });
+        
+        this.setState(newState, this.validate);
+    }
 
-    handleSubmit: function(e) {
+    handleSubmit(e) {
         var self = this;
         e.preventDefault();
 
@@ -147,9 +147,9 @@ var UploadPage = React.createClass({
               toastr.error('Error Uploading Track');
           }
         });
-    },
+    }
 
-    render: function() {
+    render() {
         var self = this;
         var errorsList;
         var createAccountButton;
@@ -186,10 +186,7 @@ var UploadPage = React.createClass({
              createAccountButton = enabledCreateAccountButton();
          }
 
-
-
         return (
-
             <div className="panel panel-default">
                <div className="panel-body">
                    {errorsList}
@@ -197,7 +194,7 @@ var UploadPage = React.createClass({
                         <div className="col-md-12">
                             <div className="form-group">
                                 <label>Title</label>
-                                <input className="form-control" ref="title" value={this.state.title} placeholder="Enter Track Title..." />
+                                <input className="form-control" name="title" value={this.state.title} placeholder="Enter Track Title..." />
                             </div>
 
                             <div className="form-group">
@@ -208,21 +205,21 @@ var UploadPage = React.createClass({
                                     <p className="text-muted">streamlo.com/{this.state.uploaderURL}/</p>
                                 </div>
                                 <div className="col-md-6 pull-right" style={trackURLInput}>
-                                    <input className="form-control" ref="trackURL" value={this.state.trackURL} placeholder="Enter Track URL..." />
+                                    <input className="form-control" name="trackURL" value={this.state.trackURL} placeholder="Enter Track URL..." />
                                 </div>
                             </div>
                             <br />
                             <div className="col-md-12" style={uploadLabelDivStyle}>
                                 <div className="form-group">
                                     <label>Select Track to Upload</label>
-                                    <input className="form-control" ref="track" value={this.state.track} type="file" accept="audio/*" />
+                                    <input className="form-control" name="track" value={this.state.track} type="file" accept="audio/*" />
                                 </div>
                             </div>
 
                             <div className="col-md-12" style={labelDivStyle}>
                                 <div className="form-group">
                                     <label>Genre</label>
-                                    <select className="form-control" ref="genre" >
+                                    <select className="form-control" name="genre" >
                                         <option>Pop</option>
                                         <option>Rock</option>
                                         <option>Dance</option>
@@ -234,7 +231,7 @@ var UploadPage = React.createClass({
                             <div className="col-md-12" style={labelDivStyle}>
                                 <div className="form-group">
                                     <label>City</label>
-                                    <select className="form-control" ref="city" >
+                                    <select className="form-control" name="city" >
                                         <option>Belfast</option>
                                         <option>Derry</option>
                                     </select>
@@ -243,7 +240,7 @@ var UploadPage = React.createClass({
                             <div className="col-md-12" style={labelDivStyle}>
                                 <div className="form-group">
                                     <label>Desciption</label>
-                                    <textarea className="form-control" rows="3" ref="description" value={this.state.description} placeholder="Enter Track Title..." />
+                                    <textarea className="form-control" rows="3" name="description" value={this.state.description} placeholder="Enter Track Title..." />
                                 </div>
                             </div>
                             {createAccountButton}
@@ -252,9 +249,8 @@ var UploadPage = React.createClass({
                    </form>
                </div>
             </div>
-
     );
   }
-});
+}
 
-module.exports = UploadPage;
+export default UploadPage;

@@ -1,17 +1,16 @@
-"use strict";
-
-var React = require('react');
-var EditDetailsModal = require('./userAccountModals/editDetailsModal');
-var UploadedTracksList = require('./userAccountPanels/uploadedTracksList');
+import React from 'react';
+import EditDetailsModal from './userAccountModals/editDetailsModal';
+import UploadedTracksList from'./userAccountPanels/uploadedTracksList';
 
 var followersStyle = {
     paddingTop: "10px"
 };
 
-// TODO: Create user profile page
-var ProfilePage = React.createClass({
-    getInitialState: function() {
-        return {
+class ProfilePage extends React.Component {
+    constructor(props) {
+        super(props);
+        
+        this.state = {
             userURL: "",
             profileDisplayname: "",
             numFollowers: "0",
@@ -19,19 +18,22 @@ var ProfilePage = React.createClass({
             uploadedTracks: [],
             followedUsers: [],
             likedTracks: []
-        };
-    },
+        }
+        
+        this.profileDataSource = this.profileDataSource.bind(this);
+        this.tracksUploadedDataSource = this.tracksUploadedDataSource.bind(this);
+    }
 
-    componentWillMount: function() {
+    componentWillMount() {
         this.setState({ userURL: this.props.params.userURL });
-    },
+    }
 
-    componentDidMount: function() {
+    componentDidMount() {
         this.profileDataSource();
-    },
+    }
 
     // AJAX helper method thats sets state to returned ajax query
-    profileDataSource: function(props){
+    profileDataSource(props){
         var self = this;
 
         return $.ajax({
@@ -47,9 +49,9 @@ var ProfilePage = React.createClass({
             self.setState({ likedTracks: result.likedTracks });
             self.tracksUploadedDataSource(result._id);
           });
-    },
+    }
 
-    tracksUploadedDataSource: function(uploaderId){
+    tracksUploadedDataSource(uploaderId){
         var self = this;
 
         return $.ajax({
@@ -59,10 +61,10 @@ var ProfilePage = React.createClass({
         }).done(function(result){
             self.setState({ uploadedTracks: result });
           });
-    },
-
-   render: function() {
-       return (
+    }
+    
+    render() {
+        return (
            <div>
                <div className="container-full">
                   <div className="jumbotron text-center" id="userJumbotron">
@@ -91,16 +93,11 @@ var ProfilePage = React.createClass({
               </div>
               <div className="container">
                   <UploadedTracksList uploadedTracks={this.state.uploadedTracks} />
-
-
                   <EditDetailsModal />
-
-
               </div>
            </div>
+        );
+    }  
+}
 
-       );
-     }
-});
-
-module.exports = ProfilePage;
+export default ProfilePage;

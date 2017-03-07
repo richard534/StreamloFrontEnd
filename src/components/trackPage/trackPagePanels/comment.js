@@ -1,39 +1,31 @@
-"use strict";
-
-var React = require('react');
-var Router = require('react-router');
-var Link = Router.Link;
+import React from 'react';
+import {Link} from 'react-router';
 
 var commentThumbnail = {
     padding: 0
 };
 
-var comment = React.createClass({
-
-    getInitialState: function() {
-        return {
+class Comment extends React.Component {
+    constructor(props) {
+        super(props);
+        
+        this.state = {
             commentUsername: "",
             commentUserURL: ""
-        };
-    },
+        }
+        
+        this.userURLDataSource = this.userURLDataSource.bind(this);
+    }
 
-    getDefaultProps: function() {
-        return {
-            commentUserId: "",
-            commentDate: "",
-            commentBody: ""
-        };
-    },
-
-    componentDidMount: function() {
+    componentDidMount() {
         this.userURLDataSource();
-    },
+    }
 
-    componentWillReceiveProps: function() {
+    componentWillReceiveProps() {
         this.userURLDataSource();
-    },
+    }
 
-    userURLDataSource: function(){
+    userURLDataSource(){
         var self = this;
 
         return $.ajax({
@@ -48,9 +40,9 @@ var comment = React.createClass({
               // console.log(textStatus + ': ' + errorThrown);
           }
         });
-    },
+    }
 
-    render: function() {
+    render() {
         return (
             <div className="media">
                 <div className="col-md-1" style={commentThumbnail}>
@@ -72,10 +64,14 @@ var comment = React.createClass({
                     <hr />
                 </div>
             </div>
-
-
         );
     }
-});
+}
 
-module.exports = comment;
+Comment.getDefaultProps = {
+    commentUserId: "",
+    commentDate: "",
+    commentBody: ""
+};
+
+export default Comment;

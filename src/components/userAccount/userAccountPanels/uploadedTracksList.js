@@ -1,12 +1,8 @@
-"use strict";
+import React from 'react';
+import Track from './uploadedTrack';
 
-var React = require('react');
-var Track = require('./uploadedTrack');
-
-var uploadedTracksList = React.createClass({
-
-
-   render: function() {
+class UploadedTrackList extends React.Component {
+   render() {
        var self = this;
        var tracks = self.props.uploadedTracks;
        var results;
@@ -52,8 +48,8 @@ var uploadedTracksList = React.createClass({
                  </div>
              </div>
            </div>
-       );
-     }
-});
+        );
+    }
+}
 
-module.exports = uploadedTracksList;
+export default UploadedTrackList;

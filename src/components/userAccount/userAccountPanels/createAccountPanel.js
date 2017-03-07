@@ -1,10 +1,8 @@
-"use strict";
-
-var React = require('react');
-var Router = require('react-router');
-var validate = require('validate.js');
-var _ = require('lodash');
-var toastr = require('toastr');
+import React from 'react';
+import {Link} from 'react-router';
+import validate from 'validate.js';
+import _ from 'lodash';
+import toastr from 'toastr';
 
 var profileURLText = {
     paddingTop: "6px",
@@ -48,13 +46,16 @@ var constraints = {
     }
 };
 
-var CreateAccountPanel = React.createClass({
+class CreateAccountPanel extends React.Component {
+    /*
     mixins: [
         Router.Navigation
     ],
-
-    getInitialState: function() {
-        return {
+    */
+    constructor(props) {
+        super(props);
+        
+        this.state = {
             data: {
                 email: "",
                 confEmail: "",
@@ -67,10 +68,15 @@ var CreateAccountPanel = React.createClass({
             errors: {
                 email: "Enter Account Details"
             }
-        };
-    },
+        }
+        
+        this.changeState = this.changeState.bind(this);
+        this.validate = this.validate.bind(this);
+        this.handleChange = this.handleChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+    }
 
-    changeState: function () {
+    changeState() {
         this.setState({
             data: {
                 email: this.refs.email.getDOMNode().value,
@@ -82,9 +88,9 @@ var CreateAccountPanel = React.createClass({
                 profileURL: this.refs.profURL.getDOMNode().value
             }
         }, this.validate);
-    },
+    }
 
-    validate: function () {
+    validate() {
         var validationErrors = validate(this.state.data, constraints);
 
             if(validationErrors){
@@ -93,13 +99,13 @@ var CreateAccountPanel = React.createClass({
                 this.setState({errors: {}});
             }
 
-    },
+    }
 
-    handleChange: function(e) {
+    handleChange(e) {
         this.changeState();
-    },
+    }
 
-    handleSubmit: function(e) {
+    handleSubmit(e) {
         var self = this;
         e.preventDefault();
         var data = {
@@ -123,10 +129,9 @@ var CreateAccountPanel = React.createClass({
               toastr.error('Error creating account');
           }
         });
-    },
+    }
 
-
-   render: function() {
+   render() {
        var self = this;
        var errorsList;
        var createAccountButton;
@@ -163,7 +168,6 @@ var CreateAccountPanel = React.createClass({
         } else {
             createAccountButton = enabledCreateAccountButton();
         }
-
 
        return (
                <div className="col-md-8 col-md-offset-2">
@@ -244,6 +248,6 @@ var CreateAccountPanel = React.createClass({
                </div>
        );
      }
-});
+}
 
-module.exports = CreateAccountPanel;
+export default CreateAccountPanel;

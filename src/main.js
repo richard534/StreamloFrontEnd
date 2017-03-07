@@ -1,9 +1,16 @@
-"use strict";
+import React from 'react';
+import { render } from 'react-dom';
+import { Router, hashHistory } from 'react-router';
+import routes from './routes';
 
-var React = require('react');
-var Router = require('react-router');
-var routes = require('./routes');
+render (
+    <Router history={hashHistory} routes={routes} />,
+    document.getElementById('app')
+);
 
+
+/*
 Router.run(routes, function(Handler) {
     React.render(<Handler />, document.getElementById('app'));
 });
+*/

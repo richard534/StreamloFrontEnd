@@ -1,12 +1,8 @@
-"use strict";
+import React from 'react';
+import Comment from './comment';
 
-var React = require('react');
-var Comment = require('./comment');
-
-var descriptionPanel = React.createClass({
-
-
-    render: function() {
+class CommentsPanel extends React.Component {
+    render() {
         var self = this;
         var comments = self.props.comments;
 
@@ -49,6 +45,6 @@ var descriptionPanel = React.createClass({
             </div>
         );
     }
-});
+}
 
-module.exports = descriptionPanel;
+export default CommentsPanel;

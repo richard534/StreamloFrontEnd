@@ -1,18 +1,18 @@
-"use strict";
-
-var React = require('react');
-var TrackJumbotron = require('./trackPagePanels/trackJumbotron');
-var CommentsPanel = require('./trackPagePanels/commentsPanel');
-var PostCommentPanel = require('./trackPagePanels/postCommentPanel');
-var DescriptionPanel = require('./trackPagePanels/descriptionPanel');
+import React from 'react';
+import TrackJumbotron from './trackPagePanels/trackJumbotron';
+import CommentsPanel from './trackPagePanels/commentsPanel';
+import PostCommentPanel from './trackPagePanels/postCommentPanel';
+import DescriptionPanel from './trackPagePanels/descriptionPanel';
 
 var commentsPanelStyle = {
     marginTop: "10px"
 };
 
-var TrackPage = React.createClass({
-    getInitialState: function() {
-        return {
+class TrackPage extends React.Component {
+    constructor(props) {
+        super(props);
+        
+        this.state = {
             trackURL: "",
             userURL: "",
             title: "",
@@ -25,27 +25,29 @@ var TrackPage = React.createClass({
             description: "",
             trackBinaryURL: "",
             comments: []
-        };
-    },
+        }
+        
+        this.tracksDataSource = this.tracksDataSource.bind(this);
+    }
 
-    componentWillMount: function() {
+    componentWillMount() {
         this.setState({ trackURL: this.props.params.trackURL });
         this.setState({ userURL: this.props.params.userURL });
-    },
+    }
 
-    componentDidMount: function() {
+    componentDidMount() {
         this.tracksDataSource();
-    },
+    }
 
     // AJAX helper method thats sets state to returned ajax query
-    tracksDataSource: function(){
+    tracksDataSource(){
         var state = this.state;
 
         return $.ajax({
           type: "get",
           dataType: 'json',
           url: 'http://localhost:3001/tracks/' + state.trackURL
-        }).done(function(result){
+      }).done(function(result){
             this.setState({ title: result.title });
             this.setState({ artist: result.artist });
             this.setState({ genre: result.genre });
@@ -56,11 +58,10 @@ var TrackPage = React.createClass({
             this.setState({ numComments: result.numComments });
             this.setState({ trackBinaryURL: "http://localhost:3001/tracks/" + result.trackBinary + "/stream" });
             this.setState({ comments: result.comments });
-
         }.bind(this));
-    },
+    }
 
-    render: function() {
+    render() {
         return (
             <div className="container">
                 <TrackJumbotron title={this.state.title}
@@ -83,9 +84,8 @@ var TrackPage = React.createClass({
                     <DescriptionPanel description={this.state.description} />
                 </div>
             </div>
-
         );
-  }
-});
+    }
+}
 
-module.exports = TrackPage;
+export default TrackPage;

@@ -1,10 +1,8 @@
-"use strict";
+import React from 'react';
 
-var React = require('react');
+class Chart extends React.Component {
 
-var Chart = React.createClass({
-
-    render: function() {
+    render() {
         var self = this;
         var tracks = self.props.trackResults;
         var results;
@@ -69,6 +67,6 @@ var Chart = React.createClass({
           </div>
        );
      }
-});
+}
 
-module.exports = Chart;
+export default Chart;

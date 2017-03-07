@@ -1,8 +1,5 @@
-"use strict";
-
-var React = require('react');
-var Router = require('react-router');
-var Link = Router.Link;
+import React from 'react';
+import {Link} from 'react-router';
 
 var ThumbnailStyle = {
     marginBottom: "0px"
@@ -25,22 +22,26 @@ var audioDivStyle = {
     paddingLeft: "4px"
 };
 
-var Track = React.createClass({
-    getInitialState: function() {
-        return {
+class UploadedTrack extends React.Component {
+    constructor(props) {
+        super(props);
+        
+        this.state = {
             userURL: "",
             numLikes: 0,
             numPlays: 0,
             numComments: 0
-        };
-    },
+        }
+        
+        this.userURLDataSource = this.userURLDataSource.bind(this);
+    }
 
-    componentDidMount: function() {
+    componentDidMount() {
         this.userURLDataSource();
-    },
+    }
 
     // AJAX helper method thats sets state to returned ajax query
-    userURLDataSource: function(){
+    userURLDataSource(){
         var self = this;
 
         return $.ajax({
@@ -54,25 +55,23 @@ var Track = React.createClass({
               // console.log(textStatus + ': ' + errorThrown);
           }
         });
-    },
+    }
 
+    render() {
+        var self = this;
 
-    render: function() {
-      var self = this;
-
-      var TrackUploadDate = function() {
+        var TrackUploadDate = function() {
            var date = new Date(self.props.uploadDate);
            var dateString = date.toDateString();
            return (dateString);
-      }();
+        }();
 
-      var TrackBinaryURL = function() {
+        var TrackBinaryURL = function() {
           var trackBinaryURL = "http://localhost:3001/tracks/" + self.props.trackBinaryId + "/stream";
           return trackBinaryURL;
-      }();
+        }();
 
-
-    return (
+        return (
             <div className="media">
                 <div className="media-left">
                     <a>
@@ -97,8 +96,6 @@ var Track = React.createClass({
                             </audio>
                         </div>
 
-
-
                         <div className="col-md-12" style={likesRowstyle}>
                             <div className="col-md-7" >
                                 <div className="btn-toolbar" role="toolbar">
@@ -120,8 +117,8 @@ var Track = React.createClass({
                     </div>
                 </div>
             </div>
-    );
-  }
-});
+        );
+    }
+}
 
-module.exports = Track;
+export default UploadedTrack;
