@@ -3,6 +3,7 @@ import {Link} from 'react-router';
 import validate from 'validate.js';
 import _ from 'lodash';
 import toastr from 'toastr';
+import update from 'immutability-helper';
 var auth = require('../../auth/auth.js');
 
 var uploadDiv = {
@@ -82,7 +83,6 @@ class UploadPage extends React.Component {
             }
         }
         
-        this.changeState = this.changeState.bind(this);
         this.validate = this.validate.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -91,21 +91,6 @@ class UploadPage extends React.Component {
     componentWillMount() {
         var uploaderURL = auth.getUserURL();
         this.setState({ uploaderURL: uploaderURL});
-    }
-
-    changeState() {
-        var uploaderId = auth.getUserId();
-        this.setState({
-            data: {
-                title: this.refs.title.getDOMNode().value,
-                genre: this.refs.genre.getDOMNode().value,
-                city: this.refs.city.getDOMNode().value,
-                uploaderId: uploaderId,
-                trackURL: this.refs.trackURL.getDOMNode().value,
-                track: this.refs.track.getDOMNode().value,
-                description: this.refs.description.getDOMNode().value
-            }
-        }, this.validate);
     }
 
     validate() {
@@ -118,8 +103,17 @@ class UploadPage extends React.Component {
             }
     }
 
-    handleChange(e) {
-        this.changeState();
+    handleChange(e) {    
+        const target = e.target;
+        const name = target.name;
+        
+        var newState = update(this.state, {
+            data: {
+                [name]: { $set: target.value }
+            }
+        });
+        
+        this.setState(newState, this.validate);
     }
 
     handleSubmit(e) {
@@ -200,7 +194,7 @@ class UploadPage extends React.Component {
                         <div className="col-md-12">
                             <div className="form-group">
                                 <label>Title</label>
-                                <input className="form-control" ref="title" value={this.state.title} placeholder="Enter Track Title..." />
+                                <input className="form-control" name="title" value={this.state.title} placeholder="Enter Track Title..." />
                             </div>
 
                             <div className="form-group">
@@ -211,21 +205,21 @@ class UploadPage extends React.Component {
                                     <p className="text-muted">streamlo.com/{this.state.uploaderURL}/</p>
                                 </div>
                                 <div className="col-md-6 pull-right" style={trackURLInput}>
-                                    <input className="form-control" ref="trackURL" value={this.state.trackURL} placeholder="Enter Track URL..." />
+                                    <input className="form-control" name="trackURL" value={this.state.trackURL} placeholder="Enter Track URL..." />
                                 </div>
                             </div>
                             <br />
                             <div className="col-md-12" style={uploadLabelDivStyle}>
                                 <div className="form-group">
                                     <label>Select Track to Upload</label>
-                                    <input className="form-control" ref="track" value={this.state.track} type="file" accept="audio/*" />
+                                    <input className="form-control" name="track" value={this.state.track} type="file" accept="audio/*" />
                                 </div>
                             </div>
 
                             <div className="col-md-12" style={labelDivStyle}>
                                 <div className="form-group">
                                     <label>Genre</label>
-                                    <select className="form-control" ref="genre" >
+                                    <select className="form-control" name="genre" >
                                         <option>Pop</option>
                                         <option>Rock</option>
                                         <option>Dance</option>
@@ -237,7 +231,7 @@ class UploadPage extends React.Component {
                             <div className="col-md-12" style={labelDivStyle}>
                                 <div className="form-group">
                                     <label>City</label>
-                                    <select className="form-control" ref="city" >
+                                    <select className="form-control" name="city" >
                                         <option>Belfast</option>
                                         <option>Derry</option>
                                     </select>
@@ -246,7 +240,7 @@ class UploadPage extends React.Component {
                             <div className="col-md-12" style={labelDivStyle}>
                                 <div className="form-group">
                                     <label>Desciption</label>
-                                    <textarea className="form-control" rows="3" ref="description" value={this.state.description} placeholder="Enter Track Title..." />
+                                    <textarea className="form-control" rows="3" name="description" value={this.state.description} placeholder="Enter Track Title..." />
                                 </div>
                             </div>
                             {createAccountButton}
