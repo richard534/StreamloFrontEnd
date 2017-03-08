@@ -6,10 +6,6 @@ import toastr from 'toastr';
 import update from 'immutability-helper';
 var auth = require('../../auth/auth.js');
 
-var uploadDiv = {
-    marginTop: "30px"
-};
-
 var trackURLText = {
     paddingTop: "6px",
     paddingRight: "0px"
@@ -59,11 +55,6 @@ var constraints = {
 // TODO replace "yourURL" placeholder with url of logged in user
 // TODO "artist" property of data post object needs to be set to displayname of logged in user
 class UploadPage extends React.Component {
-    /*
-    mixins: [
-        Router.Navigation
-    ],
-    */
     constructor(props) {
         super(props);
         
@@ -72,8 +63,8 @@ class UploadPage extends React.Component {
             data: {
                 title: "",
                 trackURL: "",
-                genre: "",
-                city: "",
+                genre: "Pop",
+                city: "Belfast",
                 uploaderId: "",
                 description: "",
                 track: ""
@@ -103,7 +94,7 @@ class UploadPage extends React.Component {
             }
     }
 
-    handleChange(e) {    
+    handleChange(e) {
         const target = e.target;
         const name = target.name;
         
@@ -143,7 +134,6 @@ class UploadPage extends React.Component {
               self.transitionTo('app');
           },
           error: function(jqXHR, textStatus, errorThrown) {
-              // console.log(textStatus + ': ' + errorThrown);
               toastr.error('Error Uploading Track');
           }
         });
@@ -219,21 +209,21 @@ class UploadPage extends React.Component {
                             <div className="col-md-12" style={labelDivStyle}>
                                 <div className="form-group">
                                     <label>Genre</label>
-                                    <select className="form-control" name="genre" >
-                                        <option>Pop</option>
-                                        <option>Rock</option>
-                                        <option>Dance</option>
-                                        <option>Country</option>
-                                        <option>Alternative</option>
+                                    <select value={this.state.value} className="form-control" name="genre" >
+                                        <option value="Pop">Pop</option>
+                                        <option value="Rock">Rock</option>
+                                        <option value="Dance">Dance</option>
+                                        <option value="Country">Country</option>
+                                        <option value="Alternative">Alternative</option>
                                     </select>
                                 </div>
                             </div>
                             <div className="col-md-12" style={labelDivStyle}>
                                 <div className="form-group">
                                     <label>City</label>
-                                    <select className="form-control" name="city" >
-                                        <option>Belfast</option>
-                                        <option>Derry</option>
+                                    <select value={this.state.value} className="form-control" name="city" >
+                                        <option value="Belfast">Belfast</option>
+                                        <option value="Derry">Derry</option>
                                     </select>
                                 </div>
                             </div>
