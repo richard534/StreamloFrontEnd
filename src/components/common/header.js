@@ -18,10 +18,9 @@ class Header extends React.Component {
         this.onSearchSubmit = this.onSearchSubmit.bind(this);
     }
     
-    setSearchStringState(event) { // Handles user input, refreshes DOM every key press
-      var value = event.target.value;
-      this.state.searchString = value;
-      return this.setState({searchString: this.state.searchString});
+    setSearchStringState(e) { // Handles user input, refreshes DOM every key press
+        const target = e.target;
+        this.setState({searchString: target.value});
     }
 
     onSearchSubmit(e) {

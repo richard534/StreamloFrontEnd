@@ -13,31 +13,22 @@ var searchBoxStyle = {
 class SearchBox extends React.Component {
     constructor(props) {
         super(props);
-        
-        this.handleKeyDown = this.handleKeyDown.bind(this);
-    }
-
-    handleKeyDown(e) {
-        if (e.key === 'Enter') {
-            ReactDOM.findDOMNode(this.refs.search).click();
-        }
     }
 
     render() {
         return (
-            <form className="navbar-form" role="search" style={searchBarStyle} onSubmit={this.props.onSearchSubmit}>
+            <form className="navbar-form" role="search" style={searchBarStyle} onSubmit={this.props.onSearchSubmit} onChange={this.props.onChange}>
               <div className="input-group input-group-sm">
                 <input type="text"
                     className="form-control"
                     value={this.props.searchString}
                     placeholder="Search..."
-                    onChange={this.props.onChange}
                     style={searchBoxStyle}
-                    onKeyDown={this.handleKeyDown}/>
+                    />
 
                 <span className="input-group-btn">
-                    <Link to="search" query={{q: this.props.searchString}} ref="search">
-                      <button className="btn btn-default btn-sm" type="button">
+                    <Link to="search" query={{q: this.props.searchString}}>
+                      <button className="btn btn-default btn-sm" type="submit">
                         <span className="glyphicon glyphicon-search"></span>
                     </button>
                   </Link>
