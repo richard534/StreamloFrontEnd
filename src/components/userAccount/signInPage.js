@@ -2,19 +2,11 @@ import React from 'react';
 import { Link } from 'react-router';
 import validate from 'validate.js';
 import toastr from 'toastr';
+import update from 'immutability-helper';
 var auth = require('../auth/auth.js');
 
 var imgStyle = {
   paddingTop: "30px"
-};
-
-var constraints = {
-    email: {
-        presence: true
-    },
-    password: {
-        presence: true
-    }
 };
 
 class SignInPage extends React.Component {
@@ -33,23 +25,13 @@ class SignInPage extends React.Component {
             }
         }
         
-        this.changeState = this.changeState.bind(this);
         this.validate = this.validate.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-    changeState() {
-        this.setState({
-            data: {
-                email: this.refs.email.getDOMNode().value,
-                password: this.refs.password.getDOMNode().value
-            }
-        }, this.validate);
-    }
-
     validate() {
-        var validationErrors = validate(this.state.data, constraints);
+        var validationErrors = validate(this.state.data);
 
             if(validationErrors){
                 this.setState({errors: validationErrors});
@@ -57,9 +39,18 @@ class SignInPage extends React.Component {
                 this.setState({errors: {}});
             }
     }
-    
+
     handleChange(e) {
-        this.changeState();
+        const target = e.target;
+        const name = target.name;
+        
+        var newState = update(this.state, {
+            data: {
+                [name]: { $set: target.value }
+            }
+        });
+        
+        this.setState(newState, this.validate);
     }
 
     handleSubmit(e) {
@@ -103,11 +94,11 @@ class SignInPage extends React.Component {
             <div>
                 <div className="form-group">
                     <label>Email</label>
-                    <input type="email" ref="email" value={this.props.email} className="form-control"/>
+                    <input type="email" name="email" value={this.props.email} className="form-control"/>
                 </div>
                 <div className="form-group">
                     <label>Password</label>
-                    <input type="password" ref="password" value={this.props.password} className="form-control"/>
+                    <input type="password" name="password" value={this.props.password} className="form-control"/>
                 </div>
                 <button type="submit" className="btn btn-success btn-block">Sign in</button>
             </div>;
