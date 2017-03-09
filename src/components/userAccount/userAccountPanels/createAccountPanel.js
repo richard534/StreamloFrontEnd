@@ -1,5 +1,5 @@
 import React from 'react';
-import {Link} from 'react-router';
+import { Link, browserHistory } from 'react-router';
 import validate from 'validate.js';
 import _ from 'lodash';
 import toastr from 'toastr';
@@ -112,7 +112,8 @@ class CreateAccountPanel extends React.Component {
           dataType: 'text', // The type of data that you're expecting back from the server
           success: function(results) {
               toastr.success('Account Created');
-              self.transitionTo('signIn');
+              browserHistory.push('signin/');
+              //self.transitionTo('signIn');
           },
           error: function(jqXHR, textStatus, errorThrown) {
               toastr.error('Error creating account');

@@ -117,7 +117,7 @@ class SignInPage extends React.Component {
         return (
           <div className="container">
               <div className="row col-md-4 col-md-offset-4">
-                <img src="images/StreamloWithAlpha.png" className="img-responsive center-block" width="250" style={imgStyle}/>
+                <img src="/images/StreamloWithAlpha.png" className="img-responsive center-block" width="250" style={imgStyle}/>
                 <div className="text-center text-muted">
                   {header}
                 </div>
