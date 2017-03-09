@@ -15,6 +15,8 @@ class Home extends React.Component {
         
         this.setCitySearchStringState = this.setCitySearchStringState.bind(this);
         this.onSearchSubmit = this.onSearchSubmit.bind(this);
+        
+        this.onSearchSubmit();
     }
 
     setCitySearchStringState(event) { // Handles user input, refreshes DOM every key press
@@ -24,7 +26,10 @@ class Home extends React.Component {
     }
 
     onSearchSubmit(e) {
-        e.preventDefault();
+        if(e){
+            e.preventDefault();
+        }
+
         var self = this;
         if(self.state.citySearchString.length > 0){
             return $.ajax({
@@ -45,7 +50,6 @@ class Home extends React.Component {
             });
         }
     }
-
 
    render() {
        return (

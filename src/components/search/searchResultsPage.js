@@ -39,6 +39,14 @@ class SearchResultsPage extends React.Component {
     componentWillMount() {
         this.setState({ searchString: this.props.location.query.q });
     }
+    
+    componentDidMount() {
+        this.tracksDataSource();
+        this.numTracksDataSource();
+
+        this.peopleDatasource();
+        this.numPeopleDatasource();
+    }
 
     // Lifecycle method run when component revieves new props from searchbox
     componentWillReceiveProps(nextProps) {

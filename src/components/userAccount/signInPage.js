@@ -123,7 +123,7 @@ class SignInPage extends React.Component {
                 <div className="panel panel-default">
                   <div className="panel-body">
                     <div className="text-center">
-                      <p>New to StreamLo? <Link to="createAccount/">Create an account</Link></p>
+                      <p>New to StreamLo? <Link to="createAccount">Create an account</Link></p>
                     </div>
                   </div>
                 </div>
