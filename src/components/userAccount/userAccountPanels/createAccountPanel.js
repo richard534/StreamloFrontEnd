@@ -3,6 +3,7 @@ import {Link} from 'react-router';
 import validate from 'validate.js';
 import _ from 'lodash';
 import toastr from 'toastr';
+import update from 'immutability-helper';
 
 var profileURLText = {
     paddingTop: "6px",
@@ -47,11 +48,6 @@ var constraints = {
 };
 
 class CreateAccountPanel extends React.Component {
-    /*
-    mixins: [
-        Router.Navigation
-    ],
-    */
     constructor(props) {
         super(props);
         
@@ -62,7 +58,7 @@ class CreateAccountPanel extends React.Component {
                 pass: "",
                 confPass: "",
                 dispName: "",
-                city: "",
+                city: "Belfast",
                 profileURL: ""
             },
             errors: {
@@ -70,24 +66,22 @@ class CreateAccountPanel extends React.Component {
             }
         }
         
-        this.changeState = this.changeState.bind(this);
         this.validate = this.validate.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
-
-    changeState() {
-        this.setState({
+    
+    handleChange(e) {
+        const target = e.target;
+        const name = target.name;
+        
+        var newState = update(this.state, {
             data: {
-                email: this.refs.email.getDOMNode().value,
-                confEmail: this.refs.confEmail.getDOMNode().value,
-                pass: this.refs.password.getDOMNode().value,
-                confPass: this.refs.confPassword.getDOMNode().value,
-                dispName: this.refs.dispName.getDOMNode().value,
-                city: this.refs.city.getDOMNode().value,
-                profileURL: this.refs.profURL.getDOMNode().value
+                [name]: { $set: target.value }
             }
-        }, this.validate);
+        });
+        
+        this.setState(newState, this.validate);
     }
 
     validate() {
@@ -98,11 +92,6 @@ class CreateAccountPanel extends React.Component {
             } else {
                 this.setState({errors: {}});
             }
-
-    }
-
-    handleChange(e) {
-        this.changeState();
     }
 
     handleSubmit(e) {
@@ -181,13 +170,13 @@ class CreateAccountPanel extends React.Component {
                                 <div className="col-md-6">
                                     <div className="form-group" error={this.state.errors.email}>
                                         <label>Email Address</label>
-                                        <input className="form-control" type="email" ref="email" value={this.state.email} placeholder="Enter Email Address..." />
+                                        <input className="form-control" type="email" name="email" value={this.state.email} placeholder="Enter Email Address..." />
                                     </div>
                                 </div>
                                 <div className="col-md-6">
                                     <div className="form-group">
                                         <label>Confirm Email Address</label>
-                                        <input className="form-control" type="email" ref="confEmail" value={this.state.confEmail} placeholder="Confrim Email Address..." />
+                                        <input className="form-control" type="email" name="confEmail" value={this.state.confEmail} placeholder="Confrim Email Address..." />
                                     </div>
                                 </div>
                             </div>
@@ -195,13 +184,13 @@ class CreateAccountPanel extends React.Component {
                                 <div className="col-md-6">
                                     <div className="form-group">
                                         <label>Password</label>
-                                        <input className="form-control" type="password" ref="password" value={this.state.pass} placeholder="Enter Password..." />
+                                    <input className="form-control" type="password" name="pass" value={this.state.pass} placeholder="Enter Password..." />
                                     </div>
                                 </div>
                                 <div className="col-md-6">
                                     <div className="form-group">
                                         <label>Confirm Password</label>
-                                        <input className="form-control" type="password" ref="confPassword" value={this.state.confPass} placeholder="Confrim Password..." />
+                                        <input className="form-control" type="password" name="confPass" value={this.state.confPass} placeholder="Confrim Password..." />
                                     </div>
                                 </div>
                             </div>
@@ -212,13 +201,13 @@ class CreateAccountPanel extends React.Component {
                                 <div className="col-md-6">
                                     <div className="form-group">
                                         <label>Display Name</label>
-                                        <input className="form-control" ref="dispName" value={this.state.dispName} placeholder="Enter First Name..." />
+                                        <input className="form-control" name="dispName" value={this.state.dispName} placeholder="Enter First Name..." />
                                     </div>
                                 </div>
                                 <div className="col-md-6">
                                     <div className="form-group">
                                         <label>City</label>
-                                        <select className="form-control" ref="city" >
+                                        <select className="form-control" name="city" >
                                             <option>Belfast</option>
                                             <option>Derry</option>
                                         </select>
@@ -235,7 +224,7 @@ class CreateAccountPanel extends React.Component {
                                             <p className="text-muted">streamlo.com/</p>
                                         </div>
                                         <div className="col-md-10" style={profileURLInput}>
-                                            <input className="form-control" ref="profURL" value={this.state.profURL} placeholder="Enter Profile URL..." />
+                                            <input className="form-control" name="profileURL" value={this.state.profileURL} placeholder="Enter Profile URL..." />
                                         </div>
                                     </div>
                                 </div>

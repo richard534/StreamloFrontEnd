@@ -18,11 +18,6 @@ var constraints = {
 };
 
 class SignInPage extends React.Component {
-    /*
-    mixins: [
-        Router.Navigation
-    ],
-    */
     constructor(props) {
         super(props);
         
@@ -96,7 +91,7 @@ class SignInPage extends React.Component {
         var loggedInUser = auth.getUserDisplayname();
 
         if(this.state.loggedIn){
-            header = <p>Signed in as <Link to="profilePage" params={{userURL: auth.getUserURL()}}><strong>{loggedInUser}</strong></Link></p>;
+            header = <p>Signed in as <Link to={"user/" + auth.getUserURL()}><strong>{loggedInUser}</strong></Link></p>;
             result =
             <div>
                 <button type="submit" className="btn btn-danger btn-block">Logout</button>
@@ -137,7 +132,7 @@ class SignInPage extends React.Component {
                 <div className="panel panel-default">
                   <div className="panel-body">
                     <div className="text-center">
-                      <p>New to StreamLo? <Link to="createAccount">Create an account</Link></p>
+                      <p>New to StreamLo? <Link to="createAccount/">Create an account</Link></p>
                     </div>
                   </div>
                 </div>
