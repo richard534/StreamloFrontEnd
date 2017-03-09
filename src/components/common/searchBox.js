@@ -27,7 +27,7 @@ class SearchBox extends React.Component {
                     />
 
                 <span className="input-group-btn">
-                    <Link to="search" query={{q: this.props.searchString}}>
+                    <Link to={{ pathname: "search", query: { q: this.props.searchString }}}>
                       <button className="btn btn-default btn-sm" type="submit">
                         <span className="glyphicon glyphicon-search"></span>
                     </button>
