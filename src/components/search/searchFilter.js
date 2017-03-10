@@ -4,32 +4,29 @@ import React from 'react';
 class SearchFilter extends React.Component {
     
   render() {
-      var isTrackSelected = this.props.isTrackFilterSelected;
+    var filterSelected = this.props.filterSelected;
 
-      var trackSelected;
-      var peopleSelected;
-      if(isTrackSelected) {
-          trackSelected = true;
-          peopleSelected = false;
-      } else {
-          trackSelected = false;
-          peopleSelected = true;
-      }
+    var trackSelected;
+    var peopleSelected;
+    if(filterSelected == "tracks") {
+      trackSelected = true;
+      peopleSelected = false;
+    } else {
+      trackSelected = false;
+      peopleSelected = true;
+    }
 
-        return (
-            <div className="col-md-2">
-                <h4>Filters</h4>
-                    <ul className="nav nav-pills nav-stacked">
-                        <li role="presentation" className={trackSelected ? "active" : ""}><a href="#" onClick={this.props.onChangeFilter}><span className="glyphicon glyphicon-music"></span> Tracks</a></li>
-                        <li role="presentation" className={peopleSelected ? "active" : ""}><a href="#" onClick={this.props.onChangeFilter}><span className="glyphicon glyphicon-user"></span> People</a></li>
-                    </ul>
-            </div>
+    return (
+        <div className="col-md-2">
+            <h4>Filters</h4>
+                <ul className="nav nav-pills nav-stacked">
+                    <li role="presentation" name="tracks" className={trackSelected ? "active" : ""} onClick={this.props.onChangeFilter}><a href="" ><span className="glyphicon glyphicon-music"></span> Tracks</a></li>
+                    <li role="presentation" name="people" className={peopleSelected ? "active" : ""} onClick={this.props.onChangeFilter}><a href="" ><span className="glyphicon glyphicon-user"></span> People</a></li>
+                </ul>
+        </div>
     );
   }
 }
 
-SearchFilter.getDefaultProps = {
-    isTrackFilterSelected: true
-};
 
 export default SearchFilter;

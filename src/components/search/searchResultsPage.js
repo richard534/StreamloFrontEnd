@@ -4,6 +4,7 @@ import SearchHeader from './searchHeader';
 import SearchFilter from './searchFilter';
 import TrackSearchResultsList from './trackSearchResultsList';
 import PeopleSearchResultsList from './peopleSearchResultsList';
+import update from 'immutability-helper';
 import _ from 'lodash';
 
 /*
@@ -20,11 +21,15 @@ class SearchResultsPage extends React.Component {
             searchString: "",
             trackResults: [],
             peopleResults: [],
-            isTrackFilterSelected: true,
+            //isTrackFilterSelected: true,
             numTracks: 0,
             numPeople: 0,
             trackPageNum: 0,
-            peoplePageNum: 0
+            peoplePageNum: 0,
+            selectedFilter: {
+                tracks: true,
+                people: false
+            }
         };
         
         this.tracksDataSource = this.tracksDataSource.bind(this); 
@@ -109,9 +114,20 @@ class SearchResultsPage extends React.Component {
         }.bind(this));
     }
 
-    changeSelectedFilter(event) {
-        event.preventDefault();
-        this.setState({ isTrackFilterSelected: !this.state.isTrackFilterSelected });
+    changeSelectedFilter(e) {
+        e.preventDefault();
+        const name = e.target.parentNode.getAttribute('name');
+    
+        
+        var newState = update(this.state, {
+            selectedFilter: {
+                tracks: { $set: false },
+                people: { $set: false },
+                [name]: { $set: true }
+            }
+        });
+        
+        this.setState(newState);
     }
 
     // Track Pagination handlers
@@ -207,6 +223,7 @@ class SearchResultsPage extends React.Component {
 
   render() {
       var self = this;
+      var resultsList;
 
       var trackResultsList = function() {
           return (
@@ -227,19 +244,31 @@ class SearchResultsPage extends React.Component {
                   handleNextPager={self.handleNextPagerPeople} />
           );
       }();
-
-      var resultsList;
-      if(self.state.isTrackFilterSelected === true){
-           resultsList = trackResultsList;
-      } else {
-          resultsList = peopleResultsList;
+      
+      function determineSelectedFilter() {
+          if(self.state.selectedFilter.tracks == true) {
+              return "tracks";
+          } else if (self.state.selectedFilter.people == true) {
+              return "people";
+          }
+      }
+      
+      let selectedFiler = determineSelectedFilter();
+      
+      switch(selectedFiler) {
+        case "tracks":
+            resultsList = trackResultsList;
+            break;
+        case "people":
+            resultsList = peopleResultsList;
+            break;
       }
 
 
     return (
         <div className="container">
             <SearchHeader searchString={this.state.searchString}/>
-            <SearchFilter onChangeFilter={this.changeSelectedFilter} isTrackFilterSelected={this.state.isTrackFilterSelected}/>
+            <SearchFilter onChangeFilter={this.changeSelectedFilter} filterSelected={selectedFiler}/>
             {resultsList}
         </div>
     );
