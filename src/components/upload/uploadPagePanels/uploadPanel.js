@@ -107,7 +107,7 @@ class UploadPage extends React.Component {
     }
     
     
-    // TODO Fix appending track to ajax call
+    // TODO check if uploading track works with new ref syntax
     // TODO fix transitionTo function call (mixins not supported by react es6 Classes)
     handleSubmit(e) {
         var self = this;
@@ -121,7 +121,7 @@ class UploadPage extends React.Component {
         fd.append('dateUploaded', Date.now());
         fd.append('uploaderId', this.state.data.uploaderId);
         fd.append('description', this.state.data.description);
-        fd.append('track', this.refs.track.getDOMNode().files[0] );
+        fd.append('track', this.trackNode.files[0] );
 
         return $.ajax({
           type: "post",
@@ -144,7 +144,7 @@ class UploadPage extends React.Component {
     render() {
         var self = this;
         var errorsList;
-        var createAccountButton;
+        var uploadTrackButton;
 
         var populateErrorsList = function() {
             return (
@@ -158,14 +158,14 @@ class UploadPage extends React.Component {
                 </div>
             );
         };
-
-        var disabledCreateAccountButton = function() {
+        
+        var disableduploadTrackButton = function() {
             return (
-                <button type="submit" className="btn btn-primary btn-block disabled">Upload Track</button>
+                <button type="submit" className="btn btn-primary btn-block" disabled>Upload Track</button>
             );
         };
 
-        var enabledCreateAccountButton = function() {
+        var enableduploadTrackButton = function() {
             return (
                 <button type="submit" className="btn btn-primary btn-block">Upload Track</button>
             );
@@ -173,9 +173,9 @@ class UploadPage extends React.Component {
 
          if(!_.isEmpty(self.state.errors)) {
              errorsList = populateErrorsList();
-             createAccountButton = disabledCreateAccountButton();
+             uploadTrackButton = disableduploadTrackButton();
          } else {
-             createAccountButton = enabledCreateAccountButton();
+             uploadTrackButton = enableduploadTrackButton();
          }
 
         return (
@@ -204,7 +204,7 @@ class UploadPage extends React.Component {
                             <div className="col-md-12" style={uploadLabelDivStyle}>
                                 <div className="form-group">
                                     <label>Select Track to Upload</label>
-                                    <input className="form-control" name="track" value={this.state.track} type="file" accept="audio/*" />
+                                    <input className="form-control" name="track" ref={trackNode => this.trackNode = trackNode} value={this.state.track} type="file" accept="audio/*" />
                                 </div>
                             </div>
 
@@ -235,7 +235,7 @@ class UploadPage extends React.Component {
                                     <textarea className="form-control" rows="3" name="description" value={this.state.description} placeholder="Enter Track Title..." />
                                 </div>
                             </div>
-                            {createAccountButton}
+                            {uploadTrackButton}
                             <br />
                         </div>
                    </form>
