@@ -52,7 +52,6 @@ var constraints = {
     }
 };
 
-// TODO replace "yourURL" placeholder with url of logged in user
 // TODO "artist" property of data post object needs to be set to displayname of logged in user
 class UploadPage extends React.Component {
     constructor(props) {
@@ -106,7 +105,10 @@ class UploadPage extends React.Component {
         
         this.setState(newState, this.validate);
     }
-
+    
+    
+    // TODO Fix appending track to ajax call
+    // TODO fix transitionTo function call (mixins not supported by react es6 Classes)
     handleSubmit(e) {
         var self = this;
         e.preventDefault();

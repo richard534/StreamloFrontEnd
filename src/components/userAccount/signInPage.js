@@ -53,6 +53,7 @@ class SignInPage extends React.Component {
         this.setState(newState, this.validate);
     }
 
+    // TODO fix transitionTo function call (mixins not supported by react es6 Classes)
     handleSubmit(e) {
         var self = this;
         e.preventDefault();

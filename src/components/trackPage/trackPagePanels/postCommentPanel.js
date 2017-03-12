@@ -30,7 +30,6 @@ var commentSubmit = {
     paddingRight: "0px"
 };
 
-// TODO Change hardcoded ajax post to user currently logged in
 class PostCommentPanel extends React.Component {
     constructor(props) {
         super(props);

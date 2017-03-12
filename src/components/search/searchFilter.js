@@ -1,8 +1,6 @@
 import React from 'react';
 
-// TODO stop search results filters from alternating on click
-class SearchFilter extends React.Component {
-    
+class SearchFilter extends React.Component {    
   render() {
     var filterSelected = this.props.filterSelected;
 
@@ -27,6 +25,5 @@ class SearchFilter extends React.Component {
     );
   }
 }
-
 
 export default SearchFilter;

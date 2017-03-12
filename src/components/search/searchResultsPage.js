@@ -264,7 +264,6 @@ class SearchResultsPage extends React.Component {
             break;
       }
 
-
     return (
         <div className="container">
             <SearchHeader searchString={this.state.searchString}/>

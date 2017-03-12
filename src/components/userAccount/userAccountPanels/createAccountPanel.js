@@ -94,6 +94,7 @@ class CreateAccountPanel extends React.Component {
             }
     }
 
+    // TODO fix transitionTo function call (mixins not supported by react es6 Classes)
     handleSubmit(e) {
         var self = this;
         e.preventDefault();
