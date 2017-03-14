@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {PropTypes} from 'react';
 import { Link } from 'react-router';
 import validate from 'validate.js';
 import toastr from 'toastr';
@@ -133,5 +133,10 @@ class SignInPage extends React.Component {
         );
     }
 }
+
+SignInPage.propTypes = {
+    location: PropTypes.object
+    //auth: PropTypes.instanceOf(AuthService)
+  }
 
 export default SignInPage;

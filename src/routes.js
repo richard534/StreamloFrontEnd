@@ -1,5 +1,7 @@
 import React from 'react';
 import { Route, IndexRoute } from 'react-router';
+import AuthService from './utils/AuthService';
+
 import App from './components/app';
 import HomePage from './components/homePage/homePage';
 import SearchResultsPage from './components/search/searchResultsPage';
@@ -18,6 +20,17 @@ var DefaultRoute = Router.DefaultRoute;
 var Route = Router.Route;
 var NotFoundRoute = Router.NotFoundRoute;
 var Redirect = Router.Redirect;
+*/
+
+// Future auth0 placeholders
+/*
+const auth = new AuthService('###', '###');
+
+const requireAuth = (nextState, replace) => {
+  if (!auth.loggedIn()) {
+    replace({ pathname: '/signin' })
+  }
+}
 */
 
 export default (

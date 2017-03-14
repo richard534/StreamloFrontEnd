@@ -8,11 +8,11 @@ window.$ = window.jQuery = require('jquery');
 class App extends React.Component {
   render() {
     return (
-      <div>
+    <div>
         <Header />
-        {this.props.children}
+            {this.props.children}
         <Footer />
-      </div>
+    </div>
   );
   }
 }
