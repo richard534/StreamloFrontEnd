@@ -12,3 +12,6 @@ Thumbs.db
 
 #Distribution directory (where content placed after gulp is run)
 dist
+
+#NPM
+npm-debug.log

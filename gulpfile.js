@@ -10,7 +10,7 @@ var concat = require('gulp-concat'); // concatenates files
 var lint = require('gulp-eslint'); // Lint JS files, including JSX
 
 var config = {
-	port: 9006,
+  port: 9006,
 	devBaseUrl: 'http://localhost',
 	paths: {
 		html: './src/*.html',
