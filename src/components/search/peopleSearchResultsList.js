@@ -1,5 +1,6 @@
 import React from 'react';
 import Person from './person';
+var noResultImg = require('../../images/noResultsSearch.png');
 
 var ThumbnailStyle = {
     marginBottom: "0px"
@@ -27,7 +28,7 @@ class PeopleSearchResultsList extends React.Component {
       var resultsNotFound = function() {
           return (
               <div>
-                  <img src="/images/noResultsSearch.svg" className="center-block search-result-image"></img>
+                  <img src={noResultImg} className="center-block search-result-image"></img>
                   <p className="text-center text-muted">Sorry we didn't find any results for "{self.props.searchString}".</p>
                   <p className="text-center text-muted">Check the spelling, or try a different search.</p>
               </div>
@@ -43,7 +44,7 @@ class PeopleSearchResultsList extends React.Component {
                   <ul className="list-group">{people.map(createPersonResultRow)}</ul>
                   <nav>
                       <ul className="pager">
-                          <li className="previous" onClick={this.props.handlePreviousPager}><a a href=""><span aria-hidden="true">&larr;</span> Previous</a></li>
+                          <li className="previous" onClick={this.props.handlePreviousPager}><a href=""><span aria-hidden="true">&larr;</span> Previous</a></li>
                           <li className="next" onClick={this.props.handleNextPager}><a href="">Next <span aria-hidden="true">&rarr;</span></a></li>
                        </ul>
                   </nav>
@@ -52,7 +53,6 @@ class PeopleSearchResultsList extends React.Component {
        } else {
            results = <div>{resultsNotFound}</div>;
        }
-
 
     return (
             <div className="col-md-10">

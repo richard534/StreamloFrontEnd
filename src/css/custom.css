@@ -37,7 +37,7 @@ footer {
 }
 
 #userJumbotron {
-    background-image: url("../images/profileBanner.png");
+    background-image: url("/profileBanner.png");
     background-repeat: repeat;
     height: 315px;
     margin-bottom: 0px;
@@ -71,14 +71,4 @@ footer {
     border-style: solid;
     border-width: 1px;
     border-color: #333;
-}
-
-.accountThumbnail {
-    background-image: url('/images/altAlbumArtLogo.png');
-}
-
-.trackThumbnail {
-    background-image: url('/images/altAlbumArtLogo.png');
-    background-repeat: no-repeat;
-    background-position: center;
 }

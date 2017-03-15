@@ -1,5 +1,6 @@
 import React from 'react';
 import Track from './uploadedTrack';
+var noResultImg = require('../../../images/noResultsSearch.png');
 
 class UploadedTrackList extends React.Component {
    render() {
@@ -28,7 +29,7 @@ class UploadedTrackList extends React.Component {
        var noTracksUploaded = function() {
            return (
                <div>
-                   <img src="/images/noResultsSearch.svg" className="center-block search-result-image"></img>
+                   <img src={noResultImg} className="center-block search-result-image"></img>
                    <p className="text-center text-muted">This user had not uploaded any tracks</p>
                </div>
            );

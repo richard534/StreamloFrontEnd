@@ -4,8 +4,9 @@
   "description": "Streamlo local artists streaming website",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "gulp"
+    "prestart": "babel-node tools/startmessage.js",
+    "start": "npm-run-all --parallel open",
+    "open": "babel-node tools/srcServer.js"
   },
   "repository": {
     "type": "git",
@@ -19,24 +20,17 @@
   "homepage": "https://github.com/richard534/MusicSteamWebsite#readme",
   "dependencies": {
     "auth0-lock": "^10.12.3",
-    "babel-cli": "6.8.0",
-    "babel-preset-env": "^1.1.10",
-    "babel-preset-es2015": "6.6.0",
-    "babel-preset-react": "6.5.0",
-    "babelify": "^7.3.0",
+    "babelify": "7.3.0",
     "bootstrap": "3.3.6",
     "browserify": "11.0.1",
-    "dotenv": "^4.0.0",
-    "eslint": "2.9.0",
-    "eslint-plugin-import": "1.6.1",
-    "eslint-plugin-react": "5.0.1",
+    "dotenv": "4.0.0",
     "gulp": "3.9.0",
-    "gulp-babel": "^6.1.2",
+    "gulp-babel": "6.1.2",
     "gulp-concat": "2.6.0",
     "gulp-connect": "2.2.0",
     "gulp-eslint": "3.0.1",
     "gulp-open": "1.0.0",
-    "immutability-helper": "^2.1.2",
+    "immutability-helper": "2.1.2",
     "jquery": "2.2.0",
     "lodash": "4.9.0",
     "react": "15.4.2",
@@ -45,5 +39,26 @@
     "toastr": "2.1.0",
     "validate.js": "0.9.0",
     "vinyl-source-stream": "1.1.0"
+  },
+  "devDependencies": {
+    "babel-cli": "6.8.0",
+    "babel-core": "6.8.0",
+    "babel-loader": "6.2.4",
+    "babel-preset-env": "1.1.10",
+    "babel-preset-es2015": "6.6.0",
+    "babel-preset-react": "6.5.0",
+    "babel-register": "6.8.0",
+    "css-loader": "0.23.1",
+    "eslint": "2.9.0",
+    "eslint-plugin-import": "1.6.1",
+    "eslint-plugin-react": "5.0.1",
+    "express": "4.13.4",
+    "file-loader": "^0.8.5",
+    "npm-run-all": "4.0.2",
+    "style-loader": "0.13.1",
+    "url-loader": "^0.5.7",
+    "webpack": "1.13.0",
+    "webpack-dev-middleware": "1.6.1",
+    "webpack-hot-middleware": "2.10.0"
   }
 }

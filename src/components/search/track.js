@@ -1,5 +1,6 @@
 import React from 'react';
 import {Link} from 'react-router';
+var defaultAlbumArt= require('../../images/altAlbumArtLogo.png');
 
 var ThumbnailStyle = {
     marginBottom: "0px"
@@ -75,7 +76,7 @@ class Track extends React.Component {
         <div className="media">
             <div className="media-left">
                 <a>
-                    <img className="media-object thumbnail trackThumbnail" src={this.props.albumArtURL} width="160" height="160" style={ThumbnailStyle} />
+                    <img className="media-object thumbnail trackThumbnail" src={defaultAlbumArt} width="160" height="160" style={ThumbnailStyle} />
                 </a>
             </div>
             <div className="media-body">
