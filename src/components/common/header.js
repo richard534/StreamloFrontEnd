@@ -1,6 +1,7 @@
 import React from 'react';
 import {Link} from 'react-router';
 import SearchBox from './searchBox';
+var streamloLogo = require('../../images/StreamloWithAlpha.png');
 
 var navbarBrandStyle = {
   paddingTop: "3px"
@@ -34,7 +35,7 @@ class Header extends React.Component {
 
               <div className="navbar-header">
                 <Link to="/" className="navbar-brand" style={navbarBrandStyle}>
-                  <img src="images/StreamloWithAlpha.png" className="img-responsive pull-left" width="125"/>
+                  <img src={streamloLogo} className="img-responsive pull-left" width="125"/>
                 </Link>
               </div>
 

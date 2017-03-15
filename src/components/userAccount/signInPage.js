@@ -3,6 +3,8 @@ import { Link } from 'react-router';
 import validate from 'validate.js';
 import toastr from 'toastr';
 import update from 'immutability-helper';
+var streamloLogo = require('../../images/StreamloWithAlpha.png');
+
 var auth = require('../auth/auth.js');
 
 var imgStyle = {
@@ -109,7 +111,7 @@ class SignInPage extends React.Component {
         return (
           <div className="container">
               <div className="row col-md-4 col-md-offset-4">
-                <img src="/images/StreamloWithAlpha.png" className="img-responsive center-block" width="250" style={imgStyle}/>
+                <img src={streamloLogo} className="img-responsive center-block" width="250" style={imgStyle}/>
                 <div className="text-center text-muted">
                   {header}
                 </div>

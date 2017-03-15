@@ -1,5 +1,6 @@
 import React from 'react';
 import Track from './track';
+var noResultImg = require('../../images/noResultsSearch.png');
 
 var trackListingStyle = {
     marginBottom: "10px"
@@ -33,7 +34,7 @@ class TrackSearchResultsList extends React.Component {
         var resultsNotFound = function() {
           return (
               <div>
-                  <img src="/images/noResultsSearch.svg" className="center-block search-result-image"></img>
+                  <img src={noResultImg} className="center-block search-result-image"></img>
                   <p className="text-center text-muted">Sorry we didn't find any results for "{self.props.searchString}".</p>
                   <p className="text-center text-muted">Check the spelling, or try a different search.</p>
               </div>
