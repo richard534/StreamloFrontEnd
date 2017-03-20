@@ -170,7 +170,7 @@ class CreateAccountPanel extends React.Component {
                         <form onSubmit={this.handleSubmit} onChange={this.handleChange}>
                             <div className="row">
                                 <div className="col-md-6">
-                                    <div className="form-group" error={this.state.errors.email}>
+                                    <div className="form-group">
                                         <label>Email Address</label>
                                         <input className="form-control" type="email" name="email" value={this.state.email} placeholder="Enter Email Address..." />
                                     </div>
