@@ -1,3 +1,5 @@
+/* global __AUTH0_CLIENT_ID__, __AUTH0_DOMAIN__ */
+
 import React from 'react';
 import { Route, IndexRoute } from 'react-router';
 import AuthService from './utils/AuthService';
@@ -22,16 +24,13 @@ var NotFoundRoute = Router.NotFoundRoute;
 var Redirect = Router.Redirect;
 */
 
-// Future auth0 placeholders
-/*
-const auth = new AuthService('###', '###');
+const auth = new AuthService('__AUTH0_CLIENT_ID__', '__AUTH0_DOMAIN__');
 
 const requireAuth = (nextState, replace) => {
   if (!auth.loggedIn()) {
     replace({ pathname: '/signin' })
   }
 }
-*/
 
 export default (
   <Route path="/" component={App}>

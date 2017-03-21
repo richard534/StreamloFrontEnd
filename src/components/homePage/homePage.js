@@ -52,16 +52,16 @@ class Home extends React.Component {
     }
 
    render() {
-       return (
-         <div>
+    return (
+        <div>
            <SearchCity onChange={this.setCitySearchStringState}
                searchString={this.state.citySearchString}
                onSearchSubmit={this.onSearchSubmit} />
            <Chart trackResults={this.state.trackResults}
                resultsHeader={this.state.resultsCityHeader} />
-         </div>
-       );
-     }
+        </div>
+    );
+    }
 }
 
 export default Home;
