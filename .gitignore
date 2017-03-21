@@ -15,3 +15,6 @@ dist
 
 #NPM
 npm-debug.log
+
+# environment variables (don't commit)
+.env
