@@ -3,6 +3,7 @@ import { Link } from 'react-router';
 import validate from 'validate.js';
 import toastr from 'toastr';
 import update from 'immutability-helper';
+import AuthService from '../../utils/AuthService';
 var streamloLogo = require('../../images/StreamloWithAlpha.png');
 
 var auth = require('../auth/auth.js');
@@ -137,8 +138,8 @@ class SignInPage extends React.Component {
 }
 
 SignInPage.propTypes = {
-    location: PropTypes.object
-    //auth: PropTypes.instanceOf(AuthService)
+    location: PropTypes.object,
+    auth: PropTypes.instanceOf(AuthService)
   }
 
 export default SignInPage;

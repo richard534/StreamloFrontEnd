@@ -7,6 +7,13 @@ window.$ = window.jQuery = require('jquery');
 
 class App extends React.Component {
   render() {
+    let children = null;
+    if (this.props.children) {
+        children = React.cloneElement(this.props.children, {
+            auth: this.props.route.auth // sends auth instance to children
+        })
+    }
+        
     return (
     <div>
         <Header />

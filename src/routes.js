@@ -24,7 +24,7 @@ var NotFoundRoute = Router.NotFoundRoute;
 var Redirect = Router.Redirect;
 */
 
-const auth = new AuthService('__AUTH0_CLIENT_ID__', '__AUTH0_DOMAIN__');
+const auth = new AuthService(__AUTH0_CLIENT_ID__, __AUTH0_DOMAIN__);
 
 const requireAuth = (nextState, replace) => {
   if (!auth.loggedIn()) {
@@ -32,8 +32,9 @@ const requireAuth = (nextState, replace) => {
   }
 }
 
+
 export default (
-  <Route path="/" component={App}>
+  <Route path="/" component={App} auth={auth}>
     <IndexRoute component={HomePage} />
     <Route path="search" component={SearchResultsPage} />
     <Route path="track/:userURL/:trackURL" component={TrackPage} />
