@@ -44,7 +44,7 @@ export default (
     <Route path="createAccount" component={CreateAccountPage} />
     <Route path="user/:userURL" component={ProfilePage} />
     
-    <Route path="*" component ={NotFoundPage} />
+    <Route path="*" component={NotFoundPage} />
   </Route>
 );
 

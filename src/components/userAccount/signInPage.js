@@ -57,6 +57,7 @@ class SignInPage extends React.Component {
     }
 
     // TODO fix transitionTo function call (mixins not supported by react es6 Classes)
+    // TODO fix toasr popups (no styling)
     handleSubmit(e) {
         var self = this;
         e.preventDefault();
@@ -80,6 +81,7 @@ class SignInPage extends React.Component {
     }
 
     render() {
+        const auth0 = this.props.auth;
         var self = this;
         var header;
         var result;
@@ -104,7 +106,7 @@ class SignInPage extends React.Component {
                     <label>Password</label>
                     <input type="password" name="password" value={this.props.password} className="form-control"/>
                 </div>
-                <button type="submit" className="btn btn-success btn-block">Sign in</button>
+                <button className="btn btn-success btn-block" onClick={auth0.login.bind(self)}>Login</button>
             </div>;
 
         }
