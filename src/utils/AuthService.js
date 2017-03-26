@@ -1,50 +1,109 @@
-import Auth0Lock from 'auth0-lock'
+/* global __AUTH0_CLIENT_ID__, __AUTH0_DOMAIN__ */
+
+import { EventEmitter } from 'events'
+import { isTokenExpired } from './jwtHelper'
 import { browserHistory } from 'react-router'
+import auth0 from 'auth0-js'
 
-export default class AuthService {
-  constructor(clientId, domain) {
-    // Configure Auth0
-    this.lock = new Auth0Lock(clientId, domain, {
-      auth: {
-        redirectUrl: 'http://localhost:3000/login',
-        responseType: 'token'
-      }
-    })
-    // Add callback for lock `authenticated` event
-    this.lock.on('authenticated', this._doAuthentication.bind(this))
-    // binds login functions to keep this context
-    this.login = this.login.bind(this)
-  }
+export default class AuthService extends EventEmitter {
+    constructor(clientId, domain) {
+        super()
+        // Configure Auth0
+        this.auth0 = new auth0.WebAuth({
+            clientID: __AUTH0_CLIENT_ID__,
+            domain: __AUTH0_DOMAIN__,
+            responseType: 'token id_token',
+            redirectUri: 'http://localhost:3000/signin'
+        })
 
-  _doAuthentication(authResult) {
-    // Saves the user token
-    this.setToken(authResult.idToken)
-    // navigate to the home route
-    browserHistory.replace('/')
-  }
+        this.login = this.login.bind(this)
+        this.signup = this.signup.bind(this)
+        this.loginWithGoogle = this.loginWithGoogle.bind(this)
+    }
 
-  login() {
-    // Call the show method to display the widget.
-    this.lock.show()
-  }
+    login(username, password) {
+        this.auth0.redirect.loginWithCredentials({
+            connection: 'Username-Password-Authentication',
+            username,
+            password,
+            scope: 'openid'
+        }, err => {
+            if (err) return alert(err.description)
+        })
+    }
 
-  loggedIn() {
-    // Checks if there is a saved token and it's still valid
-    return !!this.getToken()
-  }
+    signup(email, password) {
+        this.auth0.redirect.signupAndLogin({
+            connection: 'Username-Password-Authentication',
+            email,
+            password
+        }, function(err) {
+            if (err) {
+                alert('Error: ' + err.description)
+            }
+        })
+    }
 
-  setToken(idToken) {
-    // Saves user token to local storage
-    localStorage.setItem('id_token', idToken)
-  }
+    loginWithGoogle() {
+        this.auth0.authorize({
+            connection: 'google-oauth2'
+        })
+    }
 
-  getToken() {
-    // Retrieves the user token from local storage
-    return localStorage.getItem('id_token')
-  }
+    parseHash(hash) {
+        this.auth0.parseHash({
+            hash,
+            _idTokenVerification: false
+        }, (err, authResult) => {
+            if (authResult && authResult.accessToken && authResult.idToken) {
+                this.setToken(authResult.accessToken, authResult.idToken)
+                this.auth0.client.userInfo(authResult.accessToken, (error, profile) => {
+                    if (error) {
+                        console.log('Error loading the Profile', error)
+                    } else {
+                        this.setProfile(profile)
+                        browserHistory.replace('/')
+                    }
+                })
+            } else if (authResult && authResult.error) {
+                alert('Error: ' + authResult.error)
+            }
+        })
+    }
 
-  logout() {
-    // Clear user token and profile data from local storage
-    localStorage.removeItem('id_token');
-  }
+    loggedIn() {
+        // Checks if there is a saved token and it's still valid
+        const token = this.getToken()
+        return !!token && !isTokenExpired(token)
+    }
+
+    setToken(accessToken, idToken) {
+        // Saves user access token and ID token into local storage
+        localStorage.setItem('access_token', accessToken)
+        localStorage.setItem('id_token', idToken)
+    }
+
+    setProfile(profile) {
+        // Saves profile data to localStorage
+        localStorage.setItem('profile', JSON.stringify(profile))
+        // Triggers profile_updated event to update the UI
+        this.emit('profile_updated', profile)
+    }
+
+    getProfile() {
+        // Retrieves the profile data from localStorage
+        const profile = localStorage.getItem('profile')
+        return profile ? JSON.parse(localStorage.profile) : {}
+    }
+
+    getToken() {
+        // Retrieves the user token from localStorage
+        return localStorage.getItem('id_token')
+    }
+
+    logout() {
+        // Clear user token and profile data from localStorage
+        localStorage.removeItem('id_token')
+        localStorage.removeItem('profile')
+    }
 }

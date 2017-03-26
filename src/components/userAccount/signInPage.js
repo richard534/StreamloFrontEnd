@@ -30,7 +30,8 @@ class SignInPage extends React.Component {
         
         this.validate = this.validate.bind(this);
         this.handleChange = this.handleChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
+        this.login = this.login.bind(this);
+        //this.handleSubmit = this.handleSubmit.bind(this);
     }
 
     validate() {
@@ -79,6 +80,13 @@ class SignInPage extends React.Component {
             });
         }
     }
+    
+    login(e) {
+      e.preventDefault()
+      const email = this.state.data.email;
+      const password = this.state.data.password;
+      this.props.auth.login(email, password)
+    }
 
     render() {
         const auth0 = this.props.auth;
@@ -106,7 +114,7 @@ class SignInPage extends React.Component {
                     <label>Password</label>
                     <input type="password" name="password" value={this.props.password} className="form-control"/>
                 </div>
-                <button className="btn btn-success btn-block" onClick={auth0.login.bind(self)}>Login</button>
+                <button type="submit" className="btn btn-success btn-block">Login</button>
             </div>;
 
         }
@@ -118,7 +126,7 @@ class SignInPage extends React.Component {
                 <div className="text-center text-muted">
                   {header}
                 </div>
-                <form onSubmit={this.handleSubmit} onChange={this.handleChange}>
+                <form onSubmit={this.login} onChange={this.handleChange}>
                   <div className="panel panel-default">
                     <div className="panel-body">
                       {result}

@@ -26,12 +26,18 @@ var Redirect = Router.Redirect;
 
 const auth = new AuthService(__AUTH0_CLIENT_ID__, __AUTH0_DOMAIN__);
 
+// onEnter callback to validate authentication in private routes
 const requireAuth = (nextState, replace) => {
-  if (!auth.loggedIn()) {
-    replace({ pathname: '/signin' })
-  }
+    if (!auth.loggedIn()) {
+        replace({ pathname: '/signin' })
+    }
 }
 
+const parseAuthHash = (nextState, replace) => {
+    if (/access_token|id_token|error/.test(nextState.location.hash)) {
+        auth.parseHash(nextState.location.hash)
+    }
+}
 
 export default (
   <Route path="/" component={App} auth={auth}>
@@ -40,7 +46,7 @@ export default (
     <Route path="track/:userURL/:trackURL" component={TrackPage} />
     
     <Route path="upload" component={UploadPage} />
-    <Route path="signin" component={SignInPage} />
+    <Route path="signin" component={SignInPage} onEnter={parseAuthHash} />
     <Route path="createAccount" component={CreateAccountPage} />
     <Route path="user/:userURL" component={ProfilePage} />
     
