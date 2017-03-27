@@ -45,7 +45,7 @@ export default (
     <Route path="search" component={SearchResultsPage} />
     <Route path="track/:userURL/:trackURL" component={TrackPage} />
     
-    <Route path="upload" component={UploadPage} />
+    <Route path="upload" component={UploadPage} onEnter={requireAuth} />
     <Route path="signin" component={SignInPage} onEnter={parseAuthHash} />
     <Route path="createAccount" component={CreateAccountPage} />
     <Route path="user/:userURL" component={ProfilePage} />

@@ -15,10 +15,12 @@ export default class AuthService extends EventEmitter {
             responseType: 'token id_token',
             redirectUri: 'http://localhost:3000/signin'
         })
+        
+        // Add callback for lock `authenticated` event
+        this.lock.on('authenticated', this._doAuthentication.bind(this))
 
         this.login = this.login.bind(this)
         this.signup = this.signup.bind(this)
-        this.loginWithGoogle = this.loginWithGoogle.bind(this)
     }
 
     login(username, password) {
@@ -44,12 +46,7 @@ export default class AuthService extends EventEmitter {
         })
     }
 
-    loginWithGoogle() {
-        this.auth0.authorize({
-            connection: 'google-oauth2'
-        })
-    }
-
+    // parseHash method is necessary to get the authentication result from the URL in redirect-based authentication transactions.
     parseHash(hash) {
         this.auth0.parseHash({
             hash,
@@ -101,6 +98,7 @@ export default class AuthService extends EventEmitter {
         return localStorage.getItem('id_token')
     }
 
+    // removes the user's tokens from local storage which effectively logs them out of the application.
     logout() {
         // Clear user token and profile data from localStorage
         localStorage.removeItem('id_token')
