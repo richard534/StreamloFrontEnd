@@ -6,8 +6,6 @@ import update from 'immutability-helper';
 import AuthService from '../../utils/AuthService';
 var streamloLogo = require('../../images/StreamloWithAlpha.png');
 
-var auth = require('../auth/auth.js');
-
 var imgStyle = {
   paddingTop: "30px"
 };
@@ -17,7 +15,6 @@ class SignInPage extends React.Component {
         super(props);
         
         this.state = {
-            loggedIn: auth.loggedIn(),
             data: {
                 email: "",
                 password: ""
@@ -37,28 +34,35 @@ class SignInPage extends React.Component {
     validate() {
         var validationErrors = validate(this.state.data);
 
-            if(validationErrors){
-                this.setState({errors: validationErrors});
-            } else {
-                this.setState({errors: {}});
-            }
+        if (validationErrors) {
+            this.setState({
+                errors: validationErrors
+            });
+        } else {
+            this.setState({
+                errors: {}
+            });
+        }
     }
 
     handleChange(e) {
         const target = e.target;
         const name = target.name;
-        
+
         var newState = update(this.state, {
             data: {
-                [name]: { $set: target.value }
+                [name]: {
+                    $set: target.value
+                }
             }
         });
-        
+
         this.setState(newState, this.validate);
     }
 
     // TODO fix transitionTo function call (mixins not supported by react es6 Classes)
     // TODO fix toasr popups (no styling)
+    /*
     handleSubmit(e) {
         var self = this;
         e.preventDefault();
@@ -80,6 +84,7 @@ class SignInPage extends React.Component {
             });
         }
     }
+    */
     
     login(e) {
       e.preventDefault()
@@ -87,19 +92,24 @@ class SignInPage extends React.Component {
       const password = this.state.data.password;
       this.props.auth.login(email, password)
     }
+    
+    logout() {
+        // destroys the session data
+        this.props.auth.logout()
+        // redirects to login page
+        this.context.router.push('/signin');
+    }
 
     render() {
-        const auth0 = this.props.auth;
-        var self = this;
         var header;
         var result;
-        var loggedInUser = auth.getUserDisplayname();
-
-        if(this.state.loggedIn){
-            header = <p>Signed in as <Link to={"user/" + auth.getUserURL()}><strong>{loggedInUser}</strong></Link></p>;
+        //var loggedInUser = auth.getUserDisplayname();
+        
+        if(this.props.auth.loggedIn()){
+            header = <p>Signed in as <Link to={"user/test"}><strong>Someone</strong></Link></p>;
             result =
             <div>
-                <button type="submit" className="btn btn-danger btn-block">Logout</button>
+                <button onClick={this.logout.bind(this)} className="btn btn-danger btn-block">Logout</button>
             </div>;
 
         } else {
@@ -116,7 +126,6 @@ class SignInPage extends React.Component {
                 </div>
                 <button type="submit" className="btn btn-success btn-block">Login</button>
             </div>;
-
         }
 
         return (
@@ -126,7 +135,7 @@ class SignInPage extends React.Component {
                 <div className="text-center text-muted">
                   {header}
                 </div>
-                <form onSubmit={this.login} onChange={this.handleChange}>
+                <form onSubmit={this.login.bind(this)} onChange={this.handleChange}>
                   <div className="panel panel-default">
                     <div className="panel-body">
                       {result}
@@ -150,6 +159,10 @@ class SignInPage extends React.Component {
 SignInPage.propTypes = {
     location: PropTypes.object,
     auth: PropTypes.instanceOf(AuthService)
-  }
+}
 
+SignInPage.contextTypes = {
+router: React.PropTypes.object.isRequired
+}
+  
 export default SignInPage;
