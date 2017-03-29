@@ -1,7 +1,7 @@
 import React from 'react';
 import {Link} from 'react-router';
 import UploadPanel from './uploadPagePanels/uploadPanel.js';
-var auth = require('../auth/auth.js');
+//var auth = require('../auth/auth.js');
 
 var uploadDiv = {
     marginTop: "30px"
@@ -14,21 +14,25 @@ class UploadPage extends React.Component {
         super(props);
         
         this.state = {
-            loggedIn: auth.loggedIn()
+            //loggedIn: auth.loggedIn()
         }
         
         this.updateAuth = this.updateAuth.bind(this);
     }
     
     componentWillMount() {
+        /*
       auth.onChange = this.updateAuth;
       auth.login();
+      */
     }
 
     updateAuth(loggedIn) {
-      this.setState({
-        loggedIn: loggedIn
+        /*
+        this.setState({
+            loggedIn: loggedIn
         });
+        */
     }
 
     render() {

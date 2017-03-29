@@ -20,14 +20,17 @@ export default class AuthService extends EventEmitter {
         this.signup = this.signup.bind(this)
     }
 
-    login(username, password) {
+    login(username, password, cb) {
         this.auth0.redirect.loginWithCredentials({
             connection: 'Username-Password-Authentication',
             username,
             password,
             scope: 'openid'
         }, err => {
-            if (err) return alert(err.description)
+            //if (err) return alert(err.description)
+            if(err){
+                cb(err.description);
+            }
         })
     }
 

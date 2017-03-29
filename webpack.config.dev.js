@@ -41,7 +41,7 @@ var config = {
   }
 }
 
-// ENV variables
+// ENV variables dependency injection
 const dotEnvVars = dotenv.config();
 const environmentEnv = dotenv.config({
   path: join(root, 'config', `${NODE_ENV}.config.js`),
@@ -62,6 +62,6 @@ const defines =
 config.plugins = [
   new webpack.DefinePlugin(defines)
 ].concat(config.plugins);
-// END ENV variables
+// END ENV variables dependency injection
 
 export default config;
