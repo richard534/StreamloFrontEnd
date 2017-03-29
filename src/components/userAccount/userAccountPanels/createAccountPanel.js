@@ -77,21 +77,24 @@ class CreateAccountPanel extends React.Component {
         
         var newState = update(this.state, {
             data: {
-                [name]: { $set: target.value }
+                [name]: {
+                    $set: target.value
+                }
             }
         });
-        
         this.setState(newState, this.validate);
     }
-
     validate() {
         var validationErrors = validate(this.state.data, constraints);
-
-            if(validationErrors){
-                this.setState({errors: validationErrors});
-            } else {
-                this.setState({errors: {}});
-            }
+        if (validationErrors) {
+            this.setState({
+                errors: validationErrors
+            });
+        } else {
+            this.setState({
+                errors: {}
+            });
+        }
     }
 
     // TODO fix transitionTo function call (mixins not supported by react es6 Classes)
@@ -122,13 +125,13 @@ class CreateAccountPanel extends React.Component {
         });
     }
 
-   render() {
-       var self = this;
-       var errorsList;
-       var createAccountButton;
+    render() {
+        var self = this;
+        var errorsList;
+        var createAccountButton;
 
-       var populateErrorsList = function() {
-           return (
+        var populateErrorsList = function() {
+            return (
                <div className="div-md-12 alert alert-danger" id="dangerDiv">
                    <div>{self.state.errors.email}</div>
                    <div>{self.state.errors.confEmail}</div>
@@ -138,8 +141,8 @@ class CreateAccountPanel extends React.Component {
                    <div>{self.state.errors.city}</div>
                    <div>{self.state.errors.profileURL}</div>
                </div>
-           );
-       };
+            );
+        };
 
        var disabledCreateAccountButton = function() {
            return (
@@ -161,84 +164,84 @@ class CreateAccountPanel extends React.Component {
         }
 
        return (
-               <div className="col-md-8 col-md-offset-2">
-                   <div className="panel panel-default">
-                        <div className="panel-body">
-                        <h4>Sign In Details</h4>
+           <div className="col-md-8 col-md-offset-2">
+               <div className="panel panel-default">
+                    <div className="panel-body">
+                    <h4>Sign In Details</h4>
+                    <br/>
+                    {errorsList}
+                    <form onSubmit={this.handleSubmit} onChange={this.handleChange}>
+                        <div className="row">
+                            <div className="col-md-6">
+                                <div className="form-group">
+                                    <label>Email Address</label>
+                                    <input className="form-control" type="email" name="email" value={this.state.email} placeholder="Enter Email Address..." />
+                                </div>
+                            </div>
+                            <div className="col-md-6">
+                                <div className="form-group">
+                                    <label>Confirm Email Address</label>
+                                    <input className="form-control" type="email" name="confEmail" value={this.state.confEmail} placeholder="Confrim Email Address..." />
+                                </div>
+                            </div>
+                        </div>
+                        <div className="row">
+                            <div className="col-md-6">
+                                <div className="form-group">
+                                    <label>Password</label>
+                                <input className="form-control" type="password" name="pass" value={this.state.pass} placeholder="Enter Password..." />
+                                </div>
+                            </div>
+                            <div className="col-md-6">
+                                <div className="form-group">
+                                    <label>Confirm Password</label>
+                                    <input className="form-control" type="password" name="confPass" value={this.state.confPass} placeholder="Confrim Password..." />
+                                </div>
+                            </div>
+                        </div>
+                        <hr />
+                        <h4>Profile Details</h4>
                         <br/>
-                        {errorsList}
-                        <form onSubmit={this.handleSubmit} onChange={this.handleChange}>
-                            <div className="row">
-                                <div className="col-md-6">
-                                    <div className="form-group">
-                                        <label>Email Address</label>
-                                        <input className="form-control" type="email" name="email" value={this.state.email} placeholder="Enter Email Address..." />
-                                    </div>
+                        <div className="row">
+                            <div className="col-md-6">
+                                <div className="form-group">
+                                    <label>Display Name</label>
+                                    <input className="form-control" name="dispName" value={this.state.dispName} placeholder="Enter First Name..." />
                                 </div>
-                                <div className="col-md-6">
-                                    <div className="form-group">
-                                        <label>Confirm Email Address</label>
-                                        <input className="form-control" type="email" name="confEmail" value={this.state.confEmail} placeholder="Confrim Email Address..." />
+                            </div>
+                            <div className="col-md-6">
+                                <div className="form-group">
+                                    <label>City</label>
+                                    <select className="form-control" name="city" >
+                                        <option>Belfast</option>
+                                        <option>Derry</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="row">
+                            <div className="col-md-12">
+                                <div className="form-group">
+                                    <div className="col-md-12" style={profURLLabel}>
+                                        <label>Profile URL</label>
+                                    </div>
+                                    <div className="col-md-2" style={profileURLText}>
+                                        <p className="text-muted">streamlo.com/</p>
+                                    </div>
+                                    <div className="col-md-10" style={profileURLInput}>
+                                        <input className="form-control" name="profileURL" value={this.state.profileURL} placeholder="Enter Profile URL..." />
                                     </div>
                                 </div>
                             </div>
-                            <div className="row">
-                                <div className="col-md-6">
-                                    <div className="form-group">
-                                        <label>Password</label>
-                                    <input className="form-control" type="password" name="pass" value={this.state.pass} placeholder="Enter Password..." />
-                                    </div>
-                                </div>
-                                <div className="col-md-6">
-                                    <div className="form-group">
-                                        <label>Confirm Password</label>
-                                        <input className="form-control" type="password" name="confPass" value={this.state.confPass} placeholder="Confrim Password..." />
-                                    </div>
-                                </div>
-                            </div>
-                            <hr />
-                            <h4>Profile Details</h4>
-                            <br/>
-                            <div className="row">
-                                <div className="col-md-6">
-                                    <div className="form-group">
-                                        <label>Display Name</label>
-                                        <input className="form-control" name="dispName" value={this.state.dispName} placeholder="Enter First Name..." />
-                                    </div>
-                                </div>
-                                <div className="col-md-6">
-                                    <div className="form-group">
-                                        <label>City</label>
-                                        <select className="form-control" name="city" >
-                                            <option>Belfast</option>
-                                            <option>Derry</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="row">
-                                <div className="col-md-12">
-                                    <div className="form-group">
-                                        <div className="col-md-12" style={profURLLabel}>
-                                            <label>Profile URL</label>
-                                        </div>
-                                        <div className="col-md-2" style={profileURLText}>
-                                            <p className="text-muted">streamlo.com/</p>
-                                        </div>
-                                        <div className="col-md-10" style={profileURLInput}>
-                                            <input className="form-control" name="profileURL" value={this.state.profileURL} placeholder="Enter Profile URL..." />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <br /><br />
-                            {createAccountButton}
-                        </form>
-                       </div>
+                        </div>
+                        <br /><br />
+                        {createAccountButton}
+                    </form>
                    </div>
                </div>
+           </div>
        );
-     }
+    }
 }
 
 export default CreateAccountPanel;
