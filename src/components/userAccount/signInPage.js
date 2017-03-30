@@ -25,6 +25,20 @@ class SignInPage extends React.Component {
             }
         }
         
+        // listen to profile_updated events to update internal state
+        props.auth.on('profile_updated', (newProfile) => {
+            var newState = update(this.state, {
+                data: {
+                    email: {
+                        $set: newProfile.email
+                    }
+                }
+            });
+
+            this.setState(newState, this.validate);
+            this.setState({profile: newProfile})
+        });
+        
         this.validate = this.validate.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.login = this.login.bind(this);
@@ -107,7 +121,7 @@ class SignInPage extends React.Component {
         //var loggedInUser = auth.getUserDisplayname();
         
         if(this.props.auth.loggedIn()){
-            header = <p>Signed in as <Link to={"user/test"}><strong>Someone</strong></Link></p>;
+            header = <p>Signed in as <Link to={"user/test"}><strong>{this.state.data.email}</strong></Link></p>;
             result =
             <div>
                 <button onClick={this.logout.bind(this)} className="btn btn-danger btn-block">Logout</button>
@@ -160,10 +174,10 @@ class SignInPage extends React.Component {
 SignInPage.propTypes = {
     location: PropTypes.object,
     auth: PropTypes.instanceOf(AuthService)
-}
+};
 
 SignInPage.contextTypes = {
-router: React.PropTypes.object.isRequired
-}
+    router: React.PropTypes.object.isRequired
+};
   
 export default SignInPage;

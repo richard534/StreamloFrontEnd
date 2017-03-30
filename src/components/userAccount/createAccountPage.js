@@ -6,6 +6,10 @@ var createAccountDiv = {
 };
 
 class CreateAccountPage extends React.Component {
+    constructor(props) {
+        super(props);
+    }
+    
    render() {
        return (
            <div className="container">
@@ -13,7 +17,7 @@ class CreateAccountPage extends React.Component {
                    <h1 className="text-center">Create An Account</h1>
                    <br/>
                </div>
-               <CreateAccountPanel />
+               <CreateAccountPanel auth={this.props.auth}/>
             </div>
        );
     }

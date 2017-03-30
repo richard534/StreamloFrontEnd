@@ -1,9 +1,10 @@
-import React from 'react';
+import React, {PropTypes} from 'react';
 import { Link, browserHistory } from 'react-router';
 import validate from 'validate.js';
 import _ from 'lodash';
 import toastr from 'toastr';
 import update from 'immutability-helper';
+import AuthService from '../../../utils/AuthService';
 
 var profileURLText = {
     paddingTop: "6px",
@@ -27,13 +28,13 @@ var constraints = {
         presence: true,
         equality: "email"
     },
-    pass: {
+    password: {
         presence: true,
         length: { minimum: 5 }
     },
-    confPass: {
+    confpassword: {
         presence: true,
-        equality: "pass"
+        equality: "password"
     },
     dispName: {
         presence: true,
@@ -55,8 +56,8 @@ class CreateAccountPanel extends React.Component {
             data: {
                 email: "",
                 confEmail: "",
-                pass: "",
-                confPass: "",
+                password: "",
+                confpassword: "",
                 dispName: "",
                 city: "Belfast",
                 profileURL: ""
@@ -68,7 +69,8 @@ class CreateAccountPanel extends React.Component {
         
         this.validate = this.validate.bind(this);
         this.handleChange = this.handleChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
+        this.signup = this.signup.bind(this);
+        //this.handleSubmit = this.handleSubmit.bind(this);
     }
     
     handleChange(e) {
@@ -84,6 +86,7 @@ class CreateAccountPanel extends React.Component {
         });
         this.setState(newState, this.validate);
     }
+    
     validate() {
         var validationErrors = validate(this.state.data, constraints);
         if (validationErrors) {
@@ -97,13 +100,14 @@ class CreateAccountPanel extends React.Component {
         }
     }
 
+    /*
     // TODO fix transitionTo function call (mixins not supported by react es6 Classes)
     handleSubmit(e) {
         var self = this;
         e.preventDefault();
         var data = {
             email: this.state.data.email,
-            password: this.state.data.pass,
+            password: this.state.data.password,
             userURL: this.state.data.profileURL,
             displayName: this.state.data.dispName,
             city: this.state.data.city
@@ -124,6 +128,14 @@ class CreateAccountPanel extends React.Component {
           }
         });
     }
+    */
+    
+    signup() {
+        const email = this.state.data.email;
+        const password = this.state.data.password;
+        this.props.auth.signup(email, password);
+        this.context.router.push('/signin');
+    }
 
     render() {
         var self = this;
@@ -135,8 +147,8 @@ class CreateAccountPanel extends React.Component {
                <div className="div-md-12 alert alert-danger" id="dangerDiv">
                    <div>{self.state.errors.email}</div>
                    <div>{self.state.errors.confEmail}</div>
-                   <div>{self.state.errors.pass}</div>
-                   <div>{self.state.errors.confPass}</div>
+                   <div>{self.state.errors.password}</div>
+                   <div>{self.state.errors.confpassword}</div>
                    <div>{self.state.errors.dispName}</div>
                    <div>{self.state.errors.city}</div>
                    <div>{self.state.errors.profileURL}</div>
@@ -146,7 +158,7 @@ class CreateAccountPanel extends React.Component {
 
        var disabledCreateAccountButton = function() {
            return (
-               <button type="submit" className="btn btn-primary btn-block disabled">Create Account</button>
+               <button type="submit" className="btn btn-primary btn-block disabled" disabled>Create Account</button>
            );
        };
 
@@ -170,7 +182,7 @@ class CreateAccountPanel extends React.Component {
                     <h4>Sign In Details</h4>
                     <br/>
                     {errorsList}
-                    <form onSubmit={this.handleSubmit} onChange={this.handleChange}>
+                    <form onSubmit={this.signup.bind(this)} onChange={this.handleChange}>
                         <div className="row">
                             <div className="col-md-6">
                                 <div className="form-group">
@@ -188,14 +200,14 @@ class CreateAccountPanel extends React.Component {
                         <div className="row">
                             <div className="col-md-6">
                                 <div className="form-group">
-                                    <label>Password</label>
-                                <input className="form-control" type="password" name="pass" value={this.state.pass} placeholder="Enter Password..." />
+                                    <label>password</label>
+                                <input className="form-control" type="password" name="password" value={this.state.password} placeholder="Enter password..." />
                                 </div>
                             </div>
                             <div className="col-md-6">
                                 <div className="form-group">
-                                    <label>Confirm Password</label>
-                                    <input className="form-control" type="password" name="confPass" value={this.state.confPass} placeholder="Confrim Password..." />
+                                    <label>Confirm password</label>
+                                    <input className="form-control" type="password" name="confpassword" value={this.state.confpassword} placeholder="Confrim password..." />
                                 </div>
                             </div>
                         </div>
@@ -243,5 +255,13 @@ class CreateAccountPanel extends React.Component {
        );
     }
 }
+
+CreateAccountPanel.propTypes = {
+    auth: PropTypes.instanceOf(AuthService)
+};
+
+CreateAccountPanel.contextTypes = {
+    router: React.PropTypes.object.isRequired
+};
 
 export default CreateAccountPanel;

@@ -12,7 +12,7 @@ export default class AuthService extends EventEmitter {
         this.auth0 = new auth0.WebAuth({
             clientID: __AUTH0_CLIENT_ID__,
             domain: __AUTH0_DOMAIN__,
-            responseType: 'token id_token',
+            responseType: 'token id_token', // In this case the response will include both an access token and an ID token. (alt. "token", response will only include access token)
             redirectUri: 'http://localhost:3000/signin'
         })
 
@@ -27,7 +27,6 @@ export default class AuthService extends EventEmitter {
             password,
             scope: 'openid'
         }, err => {
-            //if (err) return alert(err.description)
             if(err){
                 cb(err.description);
             }
