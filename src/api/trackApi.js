@@ -1,9 +1,11 @@
+/* global __API_URL__ */
+
 class TrackApi {
   static getCityChartByName(cityName, cb) {
     if(cityName.length > 0){
       return $.ajax({
         type: "get",
-        url: 'http://localhost:3001/tracks/' + cityName + '/chart',
+        url: __API_URL__ + 'tracks/' + cityName + '/chart',
         dataType: 'json',
         success: function(result) {
           if(result.length > 0) {
