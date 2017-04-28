@@ -1,3 +1,4 @@
+// To prevent "no-undef" eslint rule firing
 /* global __AUTH0_CLIENT_ID__, __AUTH0_DOMAIN__ */
 
 import { EventEmitter } from 'events'
@@ -20,16 +21,14 @@ export default class AuthService extends EventEmitter {
         this.signup = this.signup.bind(this)
     }
 
-    login(username, password, cb) {
+    login(username, password) {
         this.auth0.redirect.loginWithCredentials({
             connection: 'Username-Password-Authentication',
             username,
             password,
             scope: 'openid'
         }, err => {
-            if(err){
-                cb(err.description);
-            }
+            if (err) return alert(err.description)
         })
     }
 

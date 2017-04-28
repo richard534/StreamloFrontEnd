@@ -103,9 +103,7 @@ class SignInPage extends React.Component {
       toastr.remove()
       const email = this.state.data.email;
       const password = this.state.data.password;
-      this.props.auth.login(email, password, (errDesc) => {
-          toastr.error(errDesc);
-      });
+      this.props.auth.login(email, password);
     }
     
     logout() {

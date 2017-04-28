@@ -1,5 +1,5 @@
 const NODE_ENV = process.env.NODE_ENV;
-const dotenv = require('dotenv');
+const dotenv   = require('dotenv');
 
 const webpack = require('webpack');
 const fs      = require('fs');
@@ -14,7 +14,7 @@ const dest    = join(root, 'dist');
 
 var config = {
   entry: [
-    path.resolve(root, src, 'main')
+    path.resolve(root, src, 'main') // resolves to streamloFrontEnd/src/main, entry can use either string, array or object
   ],
   output: {
     path: dest,
