@@ -5,23 +5,38 @@ import { EventEmitter } from 'events'
 import { isTokenExpired } from './jwtHelper'
 import { browserHistory } from 'react-router'
 import auth0 from 'auth0-js'
+import axios from 'axios';
 
 export default class AuthService extends EventEmitter {
     constructor(clientId, domain) {
         super()
         // Configure Auth0
+        /*
         this.auth0 = new auth0.WebAuth({
             clientID: __AUTH0_CLIENT_ID__,
             domain: __AUTH0_DOMAIN__,
             responseType: 'token id_token', // In this case the response will include both an access token and an ID token. (alt. "token", response will only include access token)
             redirectUri: 'http://localhost:3000/signin'
         })
+        */
+
+        this.domain = domain;
 
         this.login = this.login.bind(this)
         this.signup = this.signup.bind(this)
     }
 
     login(username, password) {
+      // TODO implement login to streamlo web service
+      fetch(__AUTH0_DOMAIN__ , {
+        method: 'get'
+      }).then(function(response) {
+        //
+      }).catch(function(err) {
+        // Error :(
+      });
+
+      /*
         this.auth0.redirect.loginWithCredentials({
             connection: 'Username-Password-Authentication',
             username,
@@ -30,18 +45,25 @@ export default class AuthService extends EventEmitter {
         }, err => {
             if (err) return alert(err.description)
         })
+      */
     }
 
-    signup(email, password) {
-        this.auth0.redirect.signupAndLogin({
-            connection: 'Username-Password-Authentication',
-            email,
-            password
-        }, function(err) {
-            if (err) {
-                alert('Error: ' + err.description)
-            }
-        })
+    signup(form, cb) {
+      var data = {
+          email: form.email,
+          password: form.password,
+          userURL: form.profileURL,
+          displayName: form.dispName,
+          city: form.city
+      };
+
+      axios.post(this.domain, data)
+      .then(function (response) {
+        cb(response);
+      })
+      .catch(function (error) {
+        cb(error.response, error.response.data);
+      });
     }
 
     // parseHash method is necessary to get the authentication result from the URL in redirect-based authentication transactions.

@@ -30,7 +30,7 @@ var constraints = {
     },
     password: {
         presence: true,
-        length: { minimum: 5 }
+        length: { minimum: 8 }
     },
     confpassword: {
         presence: true,
@@ -51,7 +51,7 @@ var constraints = {
 class CreateAccountPanel extends React.Component {
     constructor(props) {
         super(props);
-        
+
         this.state = {
             data: {
                 email: "",
@@ -66,17 +66,17 @@ class CreateAccountPanel extends React.Component {
                 email: "Enter Account Details"
             }
         }
-        
+
         this.validate = this.validate.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.signup = this.signup.bind(this);
         //this.handleSubmit = this.handleSubmit.bind(this);
     }
-    
+
     handleChange(e) {
         const target = e.target;
         const name = target.name;
-        
+
         var newState = update(this.state, {
             data: {
                 [name]: {
@@ -86,7 +86,7 @@ class CreateAccountPanel extends React.Component {
         });
         this.setState(newState, this.validate);
     }
-    
+
     validate() {
         var validationErrors = validate(this.state.data, constraints);
         if (validationErrors) {
@@ -129,12 +129,28 @@ class CreateAccountPanel extends React.Component {
         });
     }
     */
-    
-    signup() {
-        const email = this.state.data.email;
-        const password = this.state.data.password;
-        this.props.auth.signup(email, password);
-        this.context.router.push('/signin');
+
+    signup(e) {
+      e.preventDefault();
+      const form = this.state.data;
+      this.props.auth.signup(form, (response, err) => {
+        if(err) {
+          let errorMessage = "";
+          if(err.errors.email) {
+            errorMessage += err.errors.email;
+          }
+          if(err.errors.password) {
+            errorMessage += err.errors.password;
+          }
+          if(err.errors.userURL) {
+            errorMessage += err.errors.userURL;
+          }
+          toastr.error(errorMessage);
+        } else {
+          toastr.success('Account Created');
+          this.context.router.push('/signin');
+        }
+      });
     }
 
     render() {

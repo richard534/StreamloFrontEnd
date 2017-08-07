@@ -22,6 +22,7 @@
   "homepage": "https://github.com/richard534/MusicSteamWebsite#readme",
   "dependencies": {
     "auth0-js": "^8.4.0",
+    "axios": "0.16.2",
     "babelify": "7.3.0",
     "bootstrap": "3.3.6",
     "browserify": "11.0.1",
