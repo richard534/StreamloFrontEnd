@@ -32,7 +32,6 @@
   "globals": {
     jQuery: true,
     $: true,
-    "__AUTH0_CLIENT_ID__": true,
-    "AUTH0_DOMAIN": true
+    "API_DOMAIN": true
   }
 }

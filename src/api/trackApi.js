@@ -1,5 +1,5 @@
-/* global __API_URL__ */
-let ApiUrl = __API_URL__;
+/* global __API_DOMAIN__ */
+let ApiUrl = __API_DOMAIN__;
 
 class TrackApi {
   static getCityChartByName(cityName, cb) {

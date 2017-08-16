@@ -1,4 +1,4 @@
-/* global __AUTH0_CLIENT_ID__, __AUTH0_DOMAIN__ */
+/* global __API_DOMAIN__ */
 
 import React from 'react';
 import { Route, IndexRoute } from 'react-router';
@@ -24,7 +24,7 @@ var NotFoundRoute = Router.NotFoundRoute;
 var Redirect = Router.Redirect;
 */
 
-const auth = new AuthService(__AUTH0_CLIENT_ID__, __AUTH0_DOMAIN__);
+const auth = new AuthService(__API_DOMAIN__);
 
 // onEnter callback to validate authentication in private routes
 const requireAuth = (nextState, replace) => {

@@ -13,7 +13,7 @@ var imgStyle = {
 class SignInPage extends React.Component {
     constructor(props) {
         super(props);
-        
+
         this.state = {
             data: {
                 email: "",
@@ -22,27 +22,34 @@ class SignInPage extends React.Component {
             errors: {
                 email: "",
                 password: ""
+            },
+            profile: {
+              email: ""
             }
         }
-        
+
         // listen to profile_updated events to update internal state
         props.auth.on('profile_updated', (newProfile) => {
-            var newState = update(this.state, {
-                data: {
-                    email: {
-                        $set: newProfile.email
-                    }
-                }
-            });
+            var newState = {
+              data: {
+                  email: "",
+                  password: ""
+              },
+              errors: {
+                  email: "",
+                  password: ""
+              },
+              profile: {
+                email: newProfile.email
+              }
+            }
 
-            this.setState(newState, this.validate);
-            this.setState({profile: newProfile})
+            this.setState(newState);
         });
-        
+
         this.validate = this.validate.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.login = this.login.bind(this);
-        //this.handleSubmit = this.handleSubmit.bind(this);
     }
 
     validate() {
@@ -74,38 +81,21 @@ class SignInPage extends React.Component {
         this.setState(newState, this.validate);
     }
 
-    /*
-    handleSubmit(e) {
-        var self = this;
-        e.preventDefault();
-
-        if(self.state.loggedIn){
-            auth.logout();
-            self.setState({loggedIn: false});
-        } else {
-            var email = this.state.data.email;
-            var password = this.state.data.password;
-            auth.login(email, password, function(userLoggedIn) {
-                if(userLoggedIn) {
-                    toastr.success('SignIn Successful');
-                    self.setState({loggedIn: true});
-                    self.transitionTo('profilePage', {userURL: auth.getUserURL()});
-                } else {
-                    toastr.error('SignIn Unsuccessful');
-                }
-            });
-        }
-    }
-    */
-    
     login(e) {
-      e.preventDefault()
-      toastr.remove()
-      const email = this.state.data.email;
-      const password = this.state.data.password;
-      this.props.auth.login(email, password);
+      e.preventDefault();
+      toastr.remove();
+      const form = this.state.data;
+      this.props.auth.login(form, (err) => {
+        if(err) {
+          toastr.error(err);
+        } else {
+          toastr.remove();
+          toastr.success('Logged in');
+          this.context.router.push('/signin');
+        }
+      });
     }
-    
+
     logout() {
         // destroys the session data
         this.props.auth.logout()
@@ -117,9 +107,9 @@ class SignInPage extends React.Component {
         var header;
         var result;
         //var loggedInUser = auth.getUserDisplayname();
-        
+
         if(this.props.auth.loggedIn()){
-            header = <p>Signed in as <Link to={"user/test"}><strong>{this.state.data.email}</strong></Link></p>;
+            header = <p>Signed in as <Link to={"user/test"}><strong>{this.state.profile.email}</strong></Link></p>;
             result =
             <div>
                 <button onClick={this.logout.bind(this)} className="btn btn-danger btn-block">Logout</button>
@@ -177,5 +167,5 @@ SignInPage.propTypes = {
 SignInPage.contextTypes = {
     router: React.PropTypes.object.isRequired
 };
-  
+
 export default SignInPage;

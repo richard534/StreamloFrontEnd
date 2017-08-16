@@ -70,7 +70,6 @@ class CreateAccountPanel extends React.Component {
         this.validate = this.validate.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.signup = this.signup.bind(this);
-        //this.handleSubmit = this.handleSubmit.bind(this);
     }
 
     handleChange(e) {
@@ -100,36 +99,6 @@ class CreateAccountPanel extends React.Component {
         }
     }
 
-    /*
-    // TODO fix transitionTo function call (mixins not supported by react es6 Classes)
-    handleSubmit(e) {
-        var self = this;
-        e.preventDefault();
-        var data = {
-            email: this.state.data.email,
-            password: this.state.data.password,
-            userURL: this.state.data.profileURL,
-            displayName: this.state.data.dispName,
-            city: this.state.data.city
-        };
-        return $.ajax({
-          type: "post",
-          data: data, // Data to be sent to the server
-          contentType: 'application/x-www-form-urlencoded',
-          url: 'http://localhost:3001/users/',
-          dataType: 'text', // The type of data that you're expecting back from the server
-          success: function(results) {
-              toastr.success('Account Created');
-              browserHistory.push('signin/');
-              //self.transitionTo('signIn');
-          },
-          error: function(jqXHR, textStatus, errorThrown) {
-              toastr.error('Error creating account');
-          }
-        });
-    }
-    */
-
     signup(e) {
       e.preventDefault();
       const form = this.state.data;
@@ -145,8 +114,10 @@ class CreateAccountPanel extends React.Component {
           if(err.errors.userURL) {
             errorMessage += err.errors.userURL;
           }
+          toastr.remove();
           toastr.error(errorMessage);
         } else {
+          toastr.remove();
           toastr.success('Account Created');
           this.context.router.push('/signin');
         }
