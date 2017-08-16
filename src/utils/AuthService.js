@@ -1,55 +1,46 @@
 // To prevent "no-undef" eslint rule firing
-/* global __AUTH0_CLIENT_ID__, __AUTH0_DOMAIN__ */
+/* global __API_DOMAIN__ */
 
 import { EventEmitter } from 'events'
 import { isTokenExpired } from './jwtHelper'
 import { browserHistory } from 'react-router'
-import auth0 from 'auth0-js'
 import axios from 'axios';
 
 export default class AuthService extends EventEmitter {
-    constructor(clientId, domain) {
+    constructor(domain) {
         super()
-        // Configure Auth0
-        /*
-        this.auth0 = new auth0.WebAuth({
-            clientID: __AUTH0_CLIENT_ID__,
-            domain: __AUTH0_DOMAIN__,
-            responseType: 'token id_token', // In this case the response will include both an access token and an ID token. (alt. "token", response will only include access token)
-            redirectUri: 'http://localhost:3000/signin'
-        })
-        */
-
         this.domain = domain;
 
         this.login = this.login.bind(this)
         this.signup = this.signup.bind(this)
     }
 
-    login(username, password) {
+    login(form, cb) {
       // TODO implement login to streamlo web service
-      fetch(__AUTH0_DOMAIN__ , {
-        method: 'get'
-      }).then(function(response) {
-        //
-      }).catch(function(err) {
-        // Error :(
-      });
 
-      /*
-        this.auth0.redirect.loginWithCredentials({
-            connection: 'Username-Password-Authentication',
-            username,
-            password,
-            scope: 'openid'
-        }, err => {
-            if (err) return alert(err.description)
-        })
-      */
+      let data = {
+        email: form.email,
+        password: form.password
+      };
+
+      axios.post(this.domain + "auth/login", data)
+      .then((response) => {
+        const data = response.data;
+        if (data && data.token && data.profile) {
+          this.setToken(data.token);
+          this.setProfile(data.profile);
+          cb();
+        } else {
+          cb("Error logging in");
+        }
+      })
+      .catch(function (error) {
+        cb(error);
+      });
     }
 
     signup(form, cb) {
-      var data = {
+      let data = {
           email: form.email,
           password: form.password,
           userURL: form.profileURL,
@@ -57,7 +48,7 @@ export default class AuthService extends EventEmitter {
           city: form.city
       };
 
-      axios.post(this.domain, data)
+      axios.post(this.domain + "auth/signup", data)
       .then(function (response) {
         cb(response);
       })
@@ -66,37 +57,16 @@ export default class AuthService extends EventEmitter {
       });
     }
 
-    // parseHash method is necessary to get the authentication result from the URL in redirect-based authentication transactions.
-    parseHash(hash) {
-        this.auth0.parseHash({
-            hash,
-            _idTokenVerification: false
-        }, (err, authResult) => {
-            if (authResult && authResult.accessToken && authResult.idToken) {
-                this.setToken(authResult.accessToken, authResult.idToken)
-                this.auth0.client.userInfo(authResult.accessToken, (error, profile) => {
-                    if (error) {
-                        console.log('Error loading the Profile', error)
-                    } else {
-                        this.setProfile(profile)
-                    }
-                })
-            } else if (authResult && authResult.error) {
-                alert('Error: ' + authResult.error)
-            }
-        })
-    }
-
     loggedIn() {
         // Checks if there is a saved token and it's still valid
         const token = this.getToken()
+        console.log(token);
         return !!token && !isTokenExpired(token)
     }
 
-    setToken(accessToken, idToken) {
+    setToken(jwtToken) {
         // Saves user access token and ID token into local storage
-        localStorage.setItem('access_token', accessToken)
-        localStorage.setItem('id_token', idToken)
+        localStorage.setItem('jwtToken', jwtToken);
     }
 
     setProfile(profile) {
@@ -114,14 +84,13 @@ export default class AuthService extends EventEmitter {
 
     getToken() {
         // Retrieves the user token from localStorage
-        return localStorage.getItem('id_token')
+        return localStorage.getItem('jwtToken')
     }
 
     // removes the user's tokens from local storage which effectively logs them out of the application.
     logout() {
         // Clear user token and profile data from localStorage
-        localStorage.removeItem('id_token')
+        localStorage.removeItem('jwtToken')
         localStorage.removeItem('profile')
-        localStorage.removeItem('access_token')
     }
 }
