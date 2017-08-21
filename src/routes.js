@@ -28,15 +28,15 @@ const auth = new AuthService(__API_DOMAIN__);
 
 // onEnter callback to validate authentication in private routes
 const requireAuth = (nextState, replace) => {
-    if (!auth.loggedIn()) {
-        replace({ pathname: '/signin' })
-    }
+  if (!auth.loggedIn()) {
+    replace({ pathname: '/signin' })
+  }
 }
 
 const parseAuthHash = (nextState, replace) => {
-    if (/access_token|id_token|error/.test(nextState.location.hash)) {
-        auth.parseHash(nextState.location.hash)
-    }
+  if (/access_token|id_token|error/.test(nextState.location.hash)) {
+    auth.parseHash(nextState.location.hash)
+  }
 }
 
 export default (

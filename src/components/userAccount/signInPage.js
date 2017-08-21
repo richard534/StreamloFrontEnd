@@ -3,7 +3,6 @@ import { Link } from 'react-router';
 import validate from 'validate.js';
 import toastr from 'toastr';
 import update from 'immutability-helper';
-import AuthService from '../../utils/AuthService';
 var streamloLogo = require('../../images/StreamloWithAlpha.png');
 
 var imgStyle = {
@@ -50,6 +49,16 @@ class SignInPage extends React.Component {
         this.validate = this.validate.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.login = this.login.bind(this);
+    }
+
+    componentWillMount() {
+      let profile = this.props.auth.getProfile();
+      let newState = {
+        profile: {
+          email: profile.email,
+        }
+      };
+      this.setState(newState);
     }
 
     validate() {
@@ -158,11 +167,6 @@ class SignInPage extends React.Component {
         );
     }
 }
-
-SignInPage.propTypes = {
-    location: PropTypes.object,
-    auth: PropTypes.instanceOf(AuthService)
-};
 
 SignInPage.contextTypes = {
     router: React.PropTypes.object.isRequired
