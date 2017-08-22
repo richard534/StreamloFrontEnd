@@ -13,6 +13,7 @@ export default class AuthService extends EventEmitter {
 
         this.login = this.login.bind(this)
         this.signup = this.signup.bind(this)
+        this.getProfile = this.getProfile.bind(this);
     }
 
     login(form, cb) {
@@ -60,7 +61,6 @@ export default class AuthService extends EventEmitter {
     loggedIn() {
         // Checks if there is a saved token and it's still valid
         const token = this.getToken()
-        console.log(token);
         return !!token && !isTokenExpired(token)
     }
 

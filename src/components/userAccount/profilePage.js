@@ -1,6 +1,6 @@
 import React from 'react';
 import EditDetailsModal from './userAccountModals/editDetailsModal';
-import UploadedTracksList from'./userAccountPanels/uploadedTracksList';
+import UploadedTracksList from './userAccountPanels/uploadedTracksList';
 
 var followersStyle = {
     paddingTop: "10px"
@@ -9,7 +9,7 @@ var followersStyle = {
 class ProfilePage extends React.Component {
     constructor(props) {
         super(props);
-        
+
         this.state = {
             userURL: "",
             profileDisplayname: "",
@@ -19,7 +19,7 @@ class ProfilePage extends React.Component {
             followedUsers: [],
             likedTracks: []
         }
-        
+
         this.profileDataSource = this.profileDataSource.bind(this);
         this.tracksUploadedDataSource = this.tracksUploadedDataSource.bind(this);
     }
@@ -62,7 +62,7 @@ class ProfilePage extends React.Component {
             self.setState({ uploadedTracks: result });
           });
     }
-    
+
     render() {
         return (
            <div>
@@ -97,7 +97,7 @@ class ProfilePage extends React.Component {
               </div>
            </div>
         );
-    }  
+    }
 }
 
 export default ProfilePage;

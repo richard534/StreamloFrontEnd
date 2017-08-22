@@ -6,7 +6,7 @@ const fs      = require('fs');
 const path    = require('path'),
       join    = path.join, // joins all given path segments together using the platform specific separator as a delimiter, then normalizes the resulting path.
       resolve = path.resolve; // resolves a sequence of paths or path segments into an absolute path.
-      
+
 const root    = resolve(__dirname);
 const src     = join(root, 'src');
 const modules = join(root, 'node_modules');
@@ -28,6 +28,11 @@ var config = {
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoErrorsPlugin()
   ],
+  resolve: {
+    root: [
+      resolve('./src')
+    ]
+  },
   module: {
     loaders: [
       {test: /\.js$/, include: src, loaders: ['babel']},

@@ -1,7 +1,6 @@
 import React from 'react';
 import {Link} from 'react-router';
 import toastr from 'toastr';
-var auth = require('../../auth/auth.js');
 
 var numCommentsStyle = {
     paddingTop: "12px",
@@ -33,24 +32,25 @@ var commentSubmit = {
 class PostCommentPanel extends React.Component {
     constructor(props) {
         super(props);
-        
+
         this.state = {
             user: "",
             date: "",
             body: ""
         }
-        
-        this.submit = this.submit.bind(this); 
+
+        this.submit = this.submit.bind(this);
         this.postComment = this.postComment.bind(this);
         this.setCommentInputString = this.setCommentInputString.bind(this);
     }
 
     submit(event) {
-        var userId = auth.getUserId();
+        //var userId = auth.getUserId(); //TODO refactor using new auth sysetm
         event.preventDefault();
 
         // Must be logged in to post comment
-        if(auth.loggedIn()){
+        /*
+        if(auth.loggedIn()) { // //TODO refactor using new auth sysetm
             var data = {
                 user: userId,
                 date: Date.now(),
@@ -60,6 +60,7 @@ class PostCommentPanel extends React.Component {
         } else {
             toastr.error('You must be logged in to post a comment');
         }
+        */
     }
 
     postComment(data) {

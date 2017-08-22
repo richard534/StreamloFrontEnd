@@ -1,6 +1,6 @@
 import React from 'react';
 import Track from './uploadedTrack';
-var noResultImg = require('../../../images/noResultsSearch.png');
+var noResultImg = require('images/noResultsSearch.png');
 
 class UploadedTrackList extends React.Component {
    render() {

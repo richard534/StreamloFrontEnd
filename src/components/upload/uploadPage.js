@@ -1,25 +1,22 @@
 import React from 'react';
 import {Link} from 'react-router';
 import UploadPanel from './uploadPagePanels/uploadPanel.js';
-//var auth = require('../auth/auth.js');
 
 var uploadDiv = {
     marginTop: "30px"
 };
 
-// Require auth wrapper prevents this class from being rendered unless user is logged in
-//var UploadPage = auth.requireAuth(React.createClass({
 class UploadPage extends React.Component {
     constructor(props) {
         super(props);
-        
+
         this.state = {
             //loggedIn: auth.loggedIn()
         }
-        
+
         this.updateAuth = this.updateAuth.bind(this);
     }
-    
+
     componentWillMount() {
         /*
       auth.onChange = this.updateAuth;

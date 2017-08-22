@@ -1,7 +1,7 @@
 import React from 'react';
 import {Link} from 'react-router';
-import SearchBox from './searchBox';
-var streamloLogo = require('../../images/StreamloWithAlpha.png');
+import SearchBox from 'components/common/searchBox';
+var streamloLogo = require('images/StreamloWithAlpha.png');
 
 var navbarBrandStyle = {
   paddingTop: "3px"
@@ -10,15 +10,15 @@ var navbarBrandStyle = {
 class Header extends React.Component {
     constructor(props) {
         super(props);
-        
+
         this.state = {
             searchString: ""
         };
-        
+
         this.setSearchStringState = this.setSearchStringState.bind(this);
         this.onSearchSubmit = this.onSearchSubmit.bind(this);
     }
-    
+
     setSearchStringState(e) { // Handles user input, refreshes DOM every key press
         const target = e.target;
         this.setState({searchString: target.value});
