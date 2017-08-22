@@ -7,7 +7,7 @@ import PeopleSearchResultsList from './peopleSearchResultsList';
 import update from 'immutability-helper';
 import _ from 'lodash';
 import toastr from 'toastr';
-import UserApi from 'api/UserApi';
+import TrackApi from 'api/trackApi';
 
 /*
 this.props.params.search // Gives params
@@ -23,7 +23,6 @@ class SearchResultsPage extends React.Component {
             searchString: "",
             trackResults: [],
             peopleResults: [],
-            //isTrackFilterSelected: true,
             numTracks: 0,
             numPeople: 0,
             trackPageNum: 0,
@@ -71,11 +70,14 @@ class SearchResultsPage extends React.Component {
         props = props || this.props;
 
         let trackNameQuery = props.location.query.q;
-        UserApi.getTracksByNameLimitedByPageNum(trackNameQuery, 0, (err, result) => {
+        TrackApi.getTracksByNameLimitedByPageNum(trackNameQuery, 0, (err, result) => {
           if(err) {
             toastr.error(err);
           } else {
-            this.setState({ trackResults: result });
+            this.setState({
+              trackResults: result.tracks,
+              numTracks: result.numMatchingTracks
+            });
           }
         });
     }

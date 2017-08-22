@@ -1,6 +1,6 @@
 import React from 'react';
 import {Link} from 'react-router';
-import SearchBox from 'components/common/searchBox';
+import SearchBox from './searchBox';
 var streamloLogo = require('images/StreamloWithAlpha.png');
 
 var navbarBrandStyle = {

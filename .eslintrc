@@ -29,6 +29,13 @@
     "no-lone-blocks": 0,
     "no-console": 0
   },
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "paths": ["src"]
+      }
+    }
+  },
   "globals": {
     jQuery: true,
     $: true,
