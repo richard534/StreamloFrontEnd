@@ -58,7 +58,6 @@ class Track extends React.Component {
     }
 
     render() {
-
       var self = this;
 
       var TrackUploadDate = function() {

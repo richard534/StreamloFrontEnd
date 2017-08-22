@@ -6,6 +6,8 @@ import TrackSearchResultsList from './trackSearchResultsList';
 import PeopleSearchResultsList from './peopleSearchResultsList';
 import update from 'immutability-helper';
 import _ from 'lodash';
+import toastr from 'toastr';
+import UserApi from 'api/UserApi';
 
 /*
 this.props.params.search // Gives params
@@ -68,15 +70,14 @@ class SearchResultsPage extends React.Component {
     tracksDataSource(props){
         props = props || this.props;
 
-        //getTracksByNameLimitedByPageNum()
-
-        return $.ajax({
-          type: "get",
-          dataType: 'json',
-          url: 'http://localhost:3001/tracks?q=' + props.location.query.q
-        }).done(function(result){
-          this.setState({ trackResults: result });
-        }.bind(this));
+        let trackNameQuery = props.location.query.q;
+        UserApi.getTracksByNameLimitedByPageNum(trackNameQuery, 0, (err, result) => {
+          if(err) {
+            toastr.error(err);
+          } else {
+            this.setState({ trackResults: result });
+          }
+        });
     }
 
     // AJAX helper method thats sets state to returned ajax query
