@@ -4,7 +4,7 @@ import validate from 'validate.js';
 import _ from 'lodash';
 import toastr from 'toastr';
 import update from 'immutability-helper';
-import AuthService from '../../../utils/AuthService';
+import AuthService from 'utils/AuthService';
 
 var profileURLText = {
     paddingTop: "6px",

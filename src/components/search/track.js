@@ -1,6 +1,6 @@
 import React from 'react';
 import {Link} from 'react-router';
-var defaultAlbumArt= require('../../images/altAlbumArtLogo.png');
+var defaultAlbumArt= require('images/altAlbumArtLogo.png');
 
 var ThumbnailStyle = {
     marginBottom: "0px"
@@ -26,12 +26,12 @@ var audioDivStyle = {
 class Track extends React.Component {
     constructor(props) {
         super(props);
-        
+
         this.state = {
             userURL: "",
             numComments: 0
         }
-    
+
         this.userURLDataSource = this.userURLDataSource.bind(this);
     }
 
@@ -58,7 +58,7 @@ class Track extends React.Component {
     }
 
     render() {
-        
+
       var self = this;
 
       var TrackUploadDate = function() {

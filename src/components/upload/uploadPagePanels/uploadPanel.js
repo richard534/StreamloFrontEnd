@@ -4,7 +4,6 @@ import validate from 'validate.js';
 import _ from 'lodash';
 import toastr from 'toastr';
 import update from 'immutability-helper';
-var auth = require('../../auth/auth.js');
 
 var trackURLText = {
     paddingTop: "6px",
@@ -56,7 +55,7 @@ var constraints = {
 class UploadPage extends React.Component {
     constructor(props) {
         super(props);
-        
+
         this.state = {
             uploaderURL: "",
             data: {
@@ -72,15 +71,13 @@ class UploadPage extends React.Component {
                 title: "Enter Track Details"
             }
         }
-        
+
         this.validate = this.validate.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
     componentWillMount() {
-        var uploaderURL = auth.getUserURL();
-        this.setState({ uploaderURL: uploaderURL});
     }
 
     validate() {
@@ -96,17 +93,17 @@ class UploadPage extends React.Component {
     handleChange(e) {
         const target = e.target;
         const name = target.name;
-        
+
         var newState = update(this.state, {
             data: {
                 [name]: { $set: target.value }
             }
         });
-        
+
         this.setState(newState, this.validate);
     }
-    
-    
+
+
     // TODO check if uploading track works with new ref syntax
     // TODO fix transitionTo function call (mixins not supported by react es6 Classes)
     handleSubmit(e) {
@@ -158,7 +155,7 @@ class UploadPage extends React.Component {
                 </div>
             );
         };
-        
+
         var disableduploadTrackButton = function() {
             return (
                 <button type="submit" className="btn btn-primary btn-block" disabled>Upload Track</button>

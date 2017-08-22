@@ -1,6 +1,6 @@
 import React from 'react';
 import Track from './track';
-var noResultImg = require('../../images/noResultsSearch.png');
+var noResultImg = require('images/noResultsSearch.png');
 
 var trackListingStyle = {
     marginBottom: "10px"

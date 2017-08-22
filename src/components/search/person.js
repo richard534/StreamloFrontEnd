@@ -1,6 +1,6 @@
 import React from 'react';
 import {Link} from 'react-router';
-var defaultProfilePic = require('../../images/account-icon.png');
+var defaultProfilePic = require('images/account-icon.png');
 
 var ThumbnailStyle = {
     marginBottom: "0px"

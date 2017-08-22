@@ -2,7 +2,7 @@ import React from 'react';
 import toastr from 'toastr';
 import SearchCity from './searchCity';
 import Chart from './chart';
-import TrackApi from '../../api/trackApi';
+import TrackApi from 'api/trackApi';
 
 class Home extends React.Component {
   constructor(props) {

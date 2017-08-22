@@ -1,7 +1,6 @@
 import React from 'react';
 import {Link} from 'react-router';
 import UploadPanel from './uploadPagePanels/uploadPanel.js';
-//var auth = require('../auth/auth.js');
 
 var uploadDiv = {
     marginTop: "30px"

@@ -1,6 +1,6 @@
 import React from 'react';
 import Person from './person';
-var noResultImg = require('../../images/noResultsSearch.png');
+var noResultImg = require('images/noResultsSearch.png');
 
 var ThumbnailStyle = {
     marginBottom: "0px"

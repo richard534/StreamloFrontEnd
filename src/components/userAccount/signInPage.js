@@ -3,7 +3,7 @@ import { Link } from 'react-router';
 import validate from 'validate.js';
 import toastr from 'toastr';
 import update from 'immutability-helper';
-var streamloLogo = require('../../images/StreamloWithAlpha.png');
+var streamloLogo = require('images/StreamloWithAlpha.png');
 
 var imgStyle = {
   paddingTop: "30px"
@@ -55,7 +55,7 @@ class SignInPage extends React.Component {
       let profile = this.props.auth.getProfile();
       let newState = {
         profile: {
-          email: profile.email,
+          email: profile.email
         }
       };
       this.setState(newState);

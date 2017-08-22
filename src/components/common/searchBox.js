@@ -15,27 +15,27 @@ class SearchBox extends React.Component {
         super(props);
     }
 
-    render() {
-        return (
-            <form className="navbar-form" role="search" style={searchBarStyle} onSubmit={this.props.onSearchSubmit} onChange={this.props.onChange}>
-              <div className="input-group input-group-sm">
-                <input type="text"
-                    className="form-control"
-                    value={this.props.searchString}
-                    placeholder="Search..."
-                    style={searchBoxStyle}
-                    />
+  render() {
+    return (
+      <form className="navbar-form" role="search" style={searchBarStyle} onSubmit={this.props.onSearchSubmit} onChange={this.props.onChange}>
+        <div className="input-group input-group-sm">
+          <input type="text"
+              className="form-control"
+              value={this.props.searchString}
+              placeholder="Search..."
+              style={searchBoxStyle}
+              />
 
-                <span className="input-group-btn">
-                    <Link to={{ pathname: "search", query: { q: this.props.searchString }}}>
-                      <button className="btn btn-default btn-sm" type="submit">
-                        <span className="glyphicon glyphicon-search"></span>
-                    </button>
-                  </Link>
-                </span>
-              </div>
-            </form>
-        );
+          <span className="input-group-btn">
+              <Link to={{ pathname: "search", query: { q: this.props.searchString }}}>
+                <button className="btn btn-default btn-sm" type="submit">
+                  <span className="glyphicon glyphicon-search"></span>
+              </button>
+            </Link>
+          </span>
+        </div>
+      </form>
+    );
   }
 }
 

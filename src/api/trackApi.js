@@ -19,6 +19,10 @@ class TrackApi {
       });
     }
   }
+
+  static getTracksByNameLimitedByPageNum(searchString, pageNum) {
+
+  }
 }
 
 export default TrackApi;

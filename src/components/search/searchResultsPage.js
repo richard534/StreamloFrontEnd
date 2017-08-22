@@ -31,20 +31,20 @@ class SearchResultsPage extends React.Component {
                 people: false
             }
         };
-        
-        this.tracksDataSource = this.tracksDataSource.bind(this); 
-        this.numTracksDataSource = this.numTracksDataSource.bind(this); 
-        this.peopleDatasource = this.peopleDatasource.bind(this); 
-        this.numPeopleDatasource = this.numPeopleDatasource.bind(this); 
-        this.changeSelectedFilter = this.changeSelectedFilter.bind(this); 
-        this.handlePreviousPagerTracks =this.handlePreviousPagerTracks.bind(this); 
-        this.handleNextPagerTracks = this.handleNextPagerTracks.bind(this); 
+
+        this.tracksDataSource = this.tracksDataSource.bind(this);
+        this.numTracksDataSource = this.numTracksDataSource.bind(this);
+        this.peopleDatasource = this.peopleDatasource.bind(this);
+        this.numPeopleDatasource = this.numPeopleDatasource.bind(this);
+        this.changeSelectedFilter = this.changeSelectedFilter.bind(this);
+        this.handlePreviousPagerTracks =this.handlePreviousPagerTracks.bind(this);
+        this.handleNextPagerTracks = this.handleNextPagerTracks.bind(this);
     }
 
     componentWillMount() {
         this.setState({ searchString: this.props.location.query.q });
     }
-    
+
     componentDidMount() {
         this.tracksDataSource();
         this.numTracksDataSource();
@@ -67,6 +67,8 @@ class SearchResultsPage extends React.Component {
     // AJAX helper method thats sets state to returned ajax query
     tracksDataSource(props){
         props = props || this.props;
+
+        //getTracksByNameLimitedByPageNum()
 
         return $.ajax({
           type: "get",
@@ -117,8 +119,8 @@ class SearchResultsPage extends React.Component {
     changeSelectedFilter(e) {
         e.preventDefault();
         const name = e.target.parentNode.getAttribute('name');
-    
-        
+
+
         var newState = update(this.state, {
             selectedFilter: {
                 tracks: { $set: false },
@@ -126,7 +128,7 @@ class SearchResultsPage extends React.Component {
                 [name]: { $set: true }
             }
         });
-        
+
         this.setState(newState);
     }
 
@@ -244,7 +246,7 @@ class SearchResultsPage extends React.Component {
                   handleNextPager={self.handleNextPagerPeople} />
           );
       }();
-      
+
       function determineSelectedFilter() {
           if(self.state.selectedFilter.tracks == true) {
               return "tracks";
@@ -252,9 +254,9 @@ class SearchResultsPage extends React.Component {
               return "people";
           }
       }
-      
+
       let selectedFiler = determineSelectedFilter();
-      
+
       switch(selectedFiler) {
         case "tracks":
             resultsList = trackResultsList;
