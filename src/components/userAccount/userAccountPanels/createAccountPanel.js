@@ -20,32 +20,32 @@ var profileURLInput = {
 };
 
 var constraints = {
-    email: {
-        presence: true,
-        email: true
-    },
-    confEmail: {
-        presence: true,
-        equality: "email"
-    },
-    password: {
-        presence: true,
-        length: { minimum: 8 }
-    },
-    confpassword: {
-        presence: true,
-        equality: "password"
-    },
-    dispName: {
-        presence: true,
-        length: { minimum: 5 }
-    },
-    city: {
-        presence: true
-    },
-    profileURL: {
-        presence: true
-    }
+  email: {
+      presence: true,
+      email: true
+  },
+  confEmail: {
+      presence: true,
+      equality: "email"
+  },
+  password: {
+      presence: true,
+      length: { minimum: 8 }
+  },
+  confpassword: {
+      presence: true,
+      equality: "password"
+  },
+  dispName: {
+      presence: true,
+      length: { minimum: 5 }
+  },
+  city: {
+      presence: true
+  },
+  profileURL: {
+      presence: true
+  }
 };
 
 class CreateAccountPanel extends React.Component {
@@ -53,18 +53,18 @@ class CreateAccountPanel extends React.Component {
         super(props);
 
         this.state = {
-            data: {
-                email: "",
-                confEmail: "",
-                password: "",
-                confpassword: "",
-                dispName: "",
-                city: "Belfast",
-                profileURL: ""
-            },
-            errors: {
-                email: "Enter Account Details"
-            }
+          data: {
+            email: "",
+            confEmail: "",
+            password: "",
+            confpassword: "",
+            dispName: "",
+            city: "Belfast",
+            profileURL: ""
+          },
+          errors: {
+            email: "Enter Account Details"
+          }
         }
 
         this.validate = this.validate.bind(this);
