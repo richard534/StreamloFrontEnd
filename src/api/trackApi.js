@@ -19,7 +19,7 @@ class TrackApi {
         cb(error);
       });
     }
-  };
+  }
 
   static getTracksByNameLimitedByPageNum(searchString, pageNum = 0, cb) {
     axios.get(ApiUrl + 'tracks?q=' + searchString + '&page=' + pageNum)

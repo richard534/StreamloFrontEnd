@@ -4,7 +4,6 @@ import validate from 'validate.js';
 import _ from 'lodash';
 import toastr from 'toastr';
 import update from 'immutability-helper';
-import AuthService from 'utils/AuthService';
 
 var profileURLText = {
     paddingTop: "6px",
@@ -242,10 +241,6 @@ class CreateAccountPanel extends React.Component {
        );
     }
 }
-
-CreateAccountPanel.propTypes = {
-    auth: PropTypes.instanceOf(AuthService)
-};
 
 CreateAccountPanel.contextTypes = {
     router: React.PropTypes.object.isRequired

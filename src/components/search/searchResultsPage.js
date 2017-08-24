@@ -7,7 +7,8 @@ import PeopleSearchResultsList from './peopleSearchResultsList';
 import update from 'immutability-helper';
 import _ from 'lodash';
 import toastr from 'toastr';
-import UserApi from 'api/UserApi';
+import TrackApi from 'api/trackApi';
+import UserApi from 'api/userApi';
 
 /*
 this.props.params.search // Gives params
@@ -16,213 +17,206 @@ this.props.path // Gives full path in url
 */
 
 class SearchResultsPage extends React.Component {
-    constructor(props) {
-        super(props);
+  constructor(props) {
+    super(props);
 
-        this.state = {
-            searchString: "",
-            trackResults: [],
-            peopleResults: [],
-            //isTrackFilterSelected: true,
-            numTracks: 0,
-            numPeople: 0,
-            trackPageNum: 0,
-            peoplePageNum: 0,
-            selectedFilter: {
-                tracks: true,
-                people: false
-            }
-        };
+    this.state = {
+      searchString: "",
+      trackResults: [],
+      peopleResults: [],
+      numTracks: 0,
+      numPeople: 0,
+      trackPageNum: 0,
+      peoplePageNum: 0,
+      selectedFilter: {
+        tracks: true,
+        people: false
+      }
+    };
 
-        this.tracksDataSource = this.tracksDataSource.bind(this);
-        this.numTracksDataSource = this.numTracksDataSource.bind(this);
-        this.peopleDatasource = this.peopleDatasource.bind(this);
-        this.numPeopleDatasource = this.numPeopleDatasource.bind(this);
-        this.changeSelectedFilter = this.changeSelectedFilter.bind(this);
-        this.handlePreviousPagerTracks =this.handlePreviousPagerTracks.bind(this);
-        this.handleNextPagerTracks = this.handleNextPagerTracks.bind(this);
-    }
+    this.tracksDataSource = this.tracksDataSource.bind(this);
+    this.peopleDatasource = this.peopleDatasource.bind(this);
+    this.changeSelectedFilter = this.changeSelectedFilter.bind(this);
+    this.handlePreviousPagerTracks = this.handlePreviousPagerTracks.bind(this);
+    this.handleNextPagerTracks = this.handleNextPagerTracks.bind(this);
+  }
 
-    componentWillMount() {
-        this.setState({ searchString: this.props.location.query.q });
-    }
+  componentWillMount() {
+    this.setState({
+      searchString: this.props.location.query.q
+    });
+  }
 
-    componentDidMount() {
-        this.tracksDataSource();
-        this.numTracksDataSource();
+  componentDidMount() {
+    this.tracksDataSource();
+    this.peopleDatasource();
+  }
 
-        this.peopleDatasource();
-        this.numPeopleDatasource();
-    }
+  // Lifecycle method run when component revieves new props from router (i.e when another search performed)
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      searchString: nextProps.location.query.q
+    });
 
-    // Lifecycle method run when component revieves new props from searchbox
-    componentWillReceiveProps(nextProps) {
-        this.setState({ searchString: nextProps.location.query.q });
+    this.tracksDataSource(nextProps);
+    this.peopleDatasource(nextProps);
+  }
 
-        this.tracksDataSource(nextProps);
-        this.numTracksDataSource(nextProps);
+  tracksDataSource(props) {
+    props = props || this.props;
 
-        this.peopleDatasource(nextProps);
-        this.numPeopleDatasource(nextProps);
-    }
-
-    // AJAX helper method thats sets state to returned ajax query
-    tracksDataSource(props){
-        props = props || this.props;
-
-        let trackNameQuery = props.location.query.q;
-        UserApi.getTracksByNameLimitedByPageNum(trackNameQuery, 0, (err, result) => {
-          if(err) {
-            toastr.error(err);
-          } else {
-            this.setState({ trackResults: result });
-          }
+    let trackNameQuery = props.location.query.q;
+    TrackApi.getTracksByNameLimitedByPageNum(trackNameQuery, 0, (err, result) => {
+      if (err) {
+        toastr.error(err);
+      } else {
+        this.setState({
+          trackResults: result.tracks,
+          numTracks: result.numMatchingTracks
         });
-    }
+      }
+    });
+  }
 
-    // AJAX helper method thats sets state to returned ajax query
-    numTracksDataSource(props){
-        props = props || this.props;
+  peopleDatasource(props) {
+    props = props || this.props;
+    let displayName = props.location.query.q;
 
-        return $.ajax({
-          type: "get",
-          dataType: 'json',
-          url: 'http://localhost:3001/tracks/getNumOfTracks?q=' + props.location.query.q
-        }).done(function(result){
-          this.setState({ numTracks: result });
-        }.bind(this));
-    }
-
-    peopleDatasource(props){
-        props = props || this.props;
-
-        return $.ajax({
-          type: "get",
-          dataType: 'json',
-          url: 'http://localhost:3001/users?q=' + props.location.query.q
-        }).done(function(result){
-          this.setState({ peopleResults: result });
-        }.bind(this));
-    }
-
-    numPeopleDatasource(props){
-        props = props || this.props;
-
-        return $.ajax({
-          type: "get",
-          dataType: 'json',
-          url: 'http://localhost:3001/users/getNumOfPeople?q=' + props.location.query.q
-        }).done(function(result){
-          this.setState({ numPeople: result });
-        }.bind(this));
-    }
-
-    changeSelectedFilter(e) {
-        e.preventDefault();
-        const name = e.target.parentNode.getAttribute('name');
-
-
-        var newState = update(this.state, {
-            selectedFilter: {
-                tracks: { $set: false },
-                people: { $set: false },
-                [name]: { $set: true }
-            }
+    UserApi.getUsersByDisplayname(displayName, (err, result) => {
+      if(err){
+        console.error(err);
+      } else {
+        this.setState({
+          peopleResults: result.users,
+          numPeople: result.numMatchingUsers
         });
+      }
+    });
+  }
 
-        this.setState(newState);
-    }
+  changeSelectedFilter(e) {
+    e.preventDefault();
+    const name = e.target.parentNode.getAttribute('name');
 
-    // Track Pagination handlers
-    handlePreviousPagerTracks(e) {
-        var self = this;
-        e.preventDefault();
-        if(self.state.trackPageNum === 0){ // If first page do nothing
-            return;
+    var newState = update(this.state, {
+      selectedFilter: {
+        tracks: {
+          $set: false
+        },
+        people: {
+          $set: false
+        },
+        [name]: {
+          $set: true
         }
-        var previousPage = this.state.trackPageNum - 1;
+      }
+    });
 
+    this.setState(newState);
+  }
 
-        $.ajax({
-          type: "get",
-          dataType: 'json',
-          url: 'http://localhost:3001/tracks?q=' + self.state.searchString + "&page=" + previousPage,
-          success: function(results) {
-              self.setState({trackResults: results});
-              self.setState({trackPageNum: previousPage});
-          },
-          error: function(jqXHR, textStatus, errorThrown) {
-              // console.log(textStatus + ': ' + errorThrown);
-          }
-        });
+  // Track Pagination handlers
+  handlePreviousPagerTracks(e) {
+    var self = this;
+    e.preventDefault();
+    if (self.state.trackPageNum === 0) { // If first page do nothing
+      return;
     }
+    var previousPage = this.state.trackPageNum - 1;
 
-    handleNextPagerTracks(e) {
-        var self = this;
-        e.preventDefault();
-        var nextPage = this.state.trackPageNum + 1;
 
-        $.ajax({
-          type: "get",
-          dataType: 'json',
-          url: 'http://localhost:3001/tracks?q=' + self.state.searchString + "&page=" + nextPage,
-          success: function(results) {
-              if(_.isEmpty(results)){ // If results object is empty then there are no more pages
-                  return;
-              }
-              self.setState({trackResults: results});
-              self.setState({trackPageNum: nextPage});
-          },
-          error: function(jqXHR, textStatus, errorThrown) {
-              // console.log(textStatus + ': ' + errorThrown);
-          }
+    $.ajax({
+      type: "get",
+      dataType: 'json',
+      url: 'http://localhost:3001/tracks?q=' + self.state.searchString + "&page=" + previousPage,
+      success: function(results) {
+        self.setState({
+          trackResults: results
         });
-    }
+        self.setState({
+          trackPageNum: previousPage
+        });
+      },
+      error: function(jqXHR, textStatus, errorThrown) {
+        // console.log(textStatus + ': ' + errorThrown);
+      }
+    });
+  }
 
-    // People Pagination handlers
-    handlePreviousPagerPeople(e) {
-        var self = this;
-        e.preventDefault();
-        if(self.state.peoplePageNum === 0){ // If first page do nothing
-            return;
+  handleNextPagerTracks(e) {
+    var self = this;
+    e.preventDefault();
+    var nextPage = this.state.trackPageNum + 1;
+
+    $.ajax({
+      type: "get",
+      dataType: 'json',
+      url: 'http://localhost:3001/tracks?q=' + self.state.searchString + "&page=" + nextPage,
+      success: function(results) {
+        if (_.isEmpty(results)) { // If results object is empty then there are no more pages
+          return;
         }
-        var previousPage = this.state.peoplePageNum - 1;
-
-        $.ajax({
-          type: "get",
-          dataType: 'json',
-          url: 'http://localhost:3001/users?q=' + self.state.searchString + "&page=" + previousPage,
-          success: function(results) {
-              self.setState({peopleResults: results});
-              self.setState({peoplePageNum: previousPage});
-          },
-          error: function(jqXHR, textStatus, errorThrown) {
-              // console.log(textStatus + ': ' + errorThrown);
-          }
+        self.setState({
+          trackResults: results
         });
-    }
-
-    handleNextPagerPeople(e) {
-        var self = this;
-        e.preventDefault();
-        var nextPage = this.state.peoplePageNum + 1;
-
-        $.ajax({
-          type: "get",
-          dataType: 'json',
-          url: 'http://localhost:3001/users?q=' + self.state.searchString + "&page=" + nextPage,
-          success: function(results) {
-              if(_.isEmpty(results)) { // If results object is empty then there are no more pages
-                  return;
-              }
-              self.setState({peopleResults: results});
-              self.setState({peoplePageNum: nextPage});
-          },
-          error: function(jqXHR, textStatus, errorThrown) {
-              // console.log(textStatus + ': ' + errorThrown);
-          }
+        self.setState({
+          trackPageNum: nextPage
         });
+      },
+      error: function(jqXHR, textStatus, errorThrown) {
+        // console.log(textStatus + ': ' + errorThrown);
+      }
+    });
+  }
+
+  // People Pagination handlers
+  handlePreviousPagerPeople(e) {
+    var self = this;
+    e.preventDefault();
+    if (self.state.peoplePageNum === 0) { // If first page do nothing
+      return;
     }
+    var previousPage = this.state.peoplePageNum - 1;
+
+    $.ajax({
+      type: "get",
+      dataType: 'json',
+      url: 'http://localhost:3001/users?q=' + self.state.searchString + "&page=" + previousPage,
+      success: function(results) {
+        self.setState({
+          peopleResults: results
+        });
+        self.setState({
+          peoplePageNum: previousPage
+        });
+      },
+      error: function(jqXHR, textStatus, errorThrown) {
+        // console.log(textStatus + ': ' + errorThrown);
+      }
+    });
+  }
+
+  handleNextPagerPeople(e) {
+      var self = this;
+      e.preventDefault();
+      var nextPage = this.state.peoplePageNum + 1;
+
+      $.ajax({
+        type: "get",
+        dataType: 'json',
+        url: 'http://localhost:3001/users?q=' + self.state.searchString + "&page=" + nextPage,
+        success: function(results) {
+            if(_.isEmpty(results)) { // If results object is empty then there are no more pages
+                return;
+            }
+            self.setState({peopleResults: results});
+            self.setState({peoplePageNum: nextPage});
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            // console.log(textStatus + ': ' + errorThrown);
+        }
+      });
+  }
 
   render() {
       var self = this;

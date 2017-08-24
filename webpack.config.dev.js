@@ -30,7 +30,7 @@ var config = {
   ],
   resolve: {
     root: [
-      resolve('./src')
+      resolve(src)
     ]
   },
   module: {
