@@ -12,22 +12,6 @@ class UserApi {
     .catch((error) => {
       cb(error);
     });
-
-
-
-
-    /*
-    return $.ajax({
-      type: "get",
-      dataType: 'json',
-      url: 'http://localhost:3001/users?q=' + displayName
-    }).done(function(result) {
-      this.setState({
-        peopleResults: result.users,
-        numPeople: result.numMatchingUsers
-      });
-    }.bind(this));
-    */
   }
 }
 
