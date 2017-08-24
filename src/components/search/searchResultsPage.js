@@ -8,6 +8,7 @@ import update from 'immutability-helper';
 import _ from 'lodash';
 import toastr from 'toastr';
 import TrackApi from 'api/trackApi';
+import UserApi from 'api/userApi';
 
 /*
 this.props.params.search // Gives params
@@ -51,7 +52,7 @@ class SearchResultsPage extends React.Component {
     this.peopleDatasource();
   }
 
-  // Lifecycle method run when component revieves new props from searchbox
+  // Lifecycle method run when component revieves new props from router (i.e when another search performed)
   componentWillReceiveProps(nextProps) {
     this.setState({
       searchString: nextProps.location.query.q
@@ -79,17 +80,18 @@ class SearchResultsPage extends React.Component {
 
   peopleDatasource(props) {
     props = props || this.props;
+    let displayName = props.location.query.q;
 
-    return $.ajax({
-      type: "get",
-      dataType: 'json',
-      url: 'http://localhost:3001/users?q=' + props.location.query.q
-    }).done(function(result) {
-      this.setState({
-        peopleResults: result.users,
-        numPeople: result.numMatchingUsers
-      });
-    }.bind(this));
+    UserApi.getUsersByDisplayname(displayName, (err, result) => {
+      if(err){
+        console.error(err);
+      } else {
+        this.setState({
+          peopleResults: result.users,
+          numPeople: result.numMatchingUsers
+        });
+      }
+    });
   }
 
   changeSelectedFilter(e) {
