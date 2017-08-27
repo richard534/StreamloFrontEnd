@@ -53,7 +53,7 @@ class Track extends React.Component {
           dataType: 'json',
           url: 'http://localhost:3001/users/id/' + props.uploaderId
         }).done(function(result){
-            self.setState({ userURL: result.userURL });
+            //self.setState({ userURL: result.userURL });
         });
     }
 
