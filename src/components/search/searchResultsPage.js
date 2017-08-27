@@ -44,9 +44,12 @@ class SearchResultsPage extends React.Component {
   }
 
   componentWillMount() {
+    this.resetSearchResults();
+    /*
     this.setState({
       searchString: this.props.location.query.q
     });
+    */
   }
 
   componentDidMount() {
@@ -56,12 +59,26 @@ class SearchResultsPage extends React.Component {
 
   // Lifecycle method run when component revieves new props from router (i.e when another search performed)
   componentWillReceiveProps(nextProps) {
+    this.resetSearchResults(nextProps);
+    /*
     this.setState({
       searchString: nextProps.location.query.q
     });
+    */
 
     this.tracksDataSource(nextProps);
     this.peopleDatasource(nextProps);
+  }
+
+  resetSearchResults(props) {
+    props = props || this.props;
+    this.setState({
+      searchString: props.location.query.q,
+      trackResults: [],
+      peopleResults: [],
+      numTracks: 0,
+      numPeople: 0
+    });
   }
 
   tracksDataSource(props, pagenum = 0) {
