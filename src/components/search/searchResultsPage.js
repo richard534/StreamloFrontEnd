@@ -39,12 +39,12 @@ class SearchResultsPage extends React.Component {
     this.changeSelectedFilter = this.changeSelectedFilter.bind(this);
     this.handlePreviousPagerTracks = this.handlePreviousPagerTracks.bind(this);
     this.handleNextPagerTracks = this.handleNextPagerTracks.bind(this);
+    this.handlePreviousPagerPeople = this.handlePreviousPagerPeople.bind(this);
+    this.handleNextPagerPeople = this.handleNextPagerPeople.bind(this);
   }
 
   componentWillMount() {
-    this.setState({
-      searchString: this.props.location.query.q
-    });
+    this.resetSearchResults();
   }
 
   componentDidMount() {
@@ -54,42 +54,60 @@ class SearchResultsPage extends React.Component {
 
   // Lifecycle method run when component revieves new props from router (i.e when another search performed)
   componentWillReceiveProps(nextProps) {
-    this.setState({
-      searchString: nextProps.location.query.q
-    });
-
+    this.resetSearchResults(nextProps);
     this.tracksDataSource(nextProps);
     this.peopleDatasource(nextProps);
   }
 
-  tracksDataSource(props) {
+  resetSearchResults(props) {
+    props = props || this.props;
+    this.setState({
+      searchString: props.location.query.q,
+      trackResults: [],
+      peopleResults: [],
+      numTracks: 0,
+      numPeople: 0
+    });
+  }
+
+  tracksDataSource(props, pagenum = 0) {
     props = props || this.props;
 
     let trackNameQuery = props.location.query.q;
-    TrackApi.getTracksByNameLimitedByPageNum(trackNameQuery, 0, (err, result) => {
+    let pageNum = pagenum;
+
+    TrackApi.getTracksByNameLimitedByPageNum(trackNameQuery, pageNum, (err, result) => {
       if (err) {
         toastr.error(err);
       } else {
-        this.setState({
-          trackResults: result.tracks,
-          numTracks: result.numMatchingTracks
-        });
+        if (!_.isEmpty(result.tracks)) {
+          this.setState({
+            trackResults: result.tracks,
+            numTracks: result.numMatchingTracks,
+            trackPageNum: pageNum
+          });
+        }
       }
     });
   }
 
-  peopleDatasource(props) {
+  peopleDatasource(props, pagenum = 0) {
     props = props || this.props;
-    let displayName = props.location.query.q;
 
-    UserApi.getUsersByDisplayname(displayName, (err, result) => {
+    let displayName = props.location.query.q;
+    let pageNum = pagenum;
+
+    UserApi.getUsersByDisplaynameLimitedByPageNum(displayName, pageNum, (err, result) => {
       if(err){
         console.error(err);
       } else {
-        this.setState({
-          peopleResults: result.users,
-          numPeople: result.numMatchingUsers
-        });
+        if (!_.isEmpty(result.users)) {
+          this.setState({
+            peopleResults: result.users,
+            numPeople: result.numMatchingUsers,
+            peoplePageNum: pageNum
+          });
+        }
       }
     });
   }
@@ -117,152 +135,77 @@ class SearchResultsPage extends React.Component {
 
   // Track Pagination handlers
   handlePreviousPagerTracks(e) {
-    var self = this;
     e.preventDefault();
-    if (self.state.trackPageNum === 0) { // If first page do nothing
+    if (this.state.trackPageNum === 0) { // If first page do nothing
       return;
     }
-    var previousPage = this.state.trackPageNum - 1;
-
-
-    $.ajax({
-      type: "get",
-      dataType: 'json',
-      url: 'http://localhost:3001/tracks?q=' + self.state.searchString + "&page=" + previousPage,
-      success: function(results) {
-        self.setState({
-          trackResults: results
-        });
-        self.setState({
-          trackPageNum: previousPage
-        });
-      },
-      error: function(jqXHR, textStatus, errorThrown) {
-        // console.log(textStatus + ': ' + errorThrown);
-      }
-    });
+    this.tracksDataSource(null, this.state.trackPageNum - 1);
   }
 
   handleNextPagerTracks(e) {
-    var self = this;
     e.preventDefault();
-    var nextPage = this.state.trackPageNum + 1;
-
-    $.ajax({
-      type: "get",
-      dataType: 'json',
-      url: 'http://localhost:3001/tracks?q=' + self.state.searchString + "&page=" + nextPage,
-      success: function(results) {
-        if (_.isEmpty(results)) { // If results object is empty then there are no more pages
-          return;
-        }
-        self.setState({
-          trackResults: results
-        });
-        self.setState({
-          trackPageNum: nextPage
-        });
-      },
-      error: function(jqXHR, textStatus, errorThrown) {
-        // console.log(textStatus + ': ' + errorThrown);
-      }
-    });
+    this.tracksDataSource(null, this.state.trackPageNum + 1);
   }
 
   // People Pagination handlers
   handlePreviousPagerPeople(e) {
-    var self = this;
     e.preventDefault();
-    if (self.state.peoplePageNum === 0) { // If first page do nothing
+    if (this.state.peoplePageNum === 0) { // If first page do nothing
       return;
     }
-    var previousPage = this.state.peoplePageNum - 1;
-
-    $.ajax({
-      type: "get",
-      dataType: 'json',
-      url: 'http://localhost:3001/users?q=' + self.state.searchString + "&page=" + previousPage,
-      success: function(results) {
-        self.setState({
-          peopleResults: results
-        });
-        self.setState({
-          peoplePageNum: previousPage
-        });
-      },
-      error: function(jqXHR, textStatus, errorThrown) {
-        // console.log(textStatus + ': ' + errorThrown);
-      }
-    });
+    this.peopleDatasource(null, this.state.peoplePageNum - 1);
   }
 
   handleNextPagerPeople(e) {
-      var self = this;
       e.preventDefault();
-      var nextPage = this.state.peoplePageNum + 1;
-
-      $.ajax({
-        type: "get",
-        dataType: 'json',
-        url: 'http://localhost:3001/users?q=' + self.state.searchString + "&page=" + nextPage,
-        success: function(results) {
-            if(_.isEmpty(results)) { // If results object is empty then there are no more pages
-                return;
-            }
-            self.setState({peopleResults: results});
-            self.setState({peoplePageNum: nextPage});
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-            // console.log(textStatus + ': ' + errorThrown);
-        }
-      });
+      this.peopleDatasource(null, this.state.peoplePageNum + 1);
   }
 
   render() {
-      var self = this;
-      var resultsList;
+    var self = this;
+    var resultsList;
 
-      var trackResultsList = function() {
-          return (
-              <TrackSearchResultsList trackResults={self.state.trackResults}
+    var trackResultsList = function() {
+      return (
+        <TrackSearchResultsList trackResults={self.state.trackResults}
                   searchString={self.state.searchString}
                   numTracks={self.state.numTracks}
                   handlePreviousPager={self.handlePreviousPagerTracks}
                   handleNextPager={self.handleNextPagerTracks} />
-          );
-      }();
+      );
+    }();
 
-      var peopleResultsList = function() {
-          return (
-              <PeopleSearchResultsList peopleResults={self.state.peopleResults}
+    var peopleResultsList = function() {
+      return (
+        <PeopleSearchResultsList peopleResults={self.state.peopleResults}
                   searchString={self.state.searchString}
                   numPeople={self.state.numPeople}
                   handlePreviousPager={self.handlePreviousPagerPeople}
                   handleNextPager={self.handleNextPagerPeople} />
-          );
-      }();
+      );
+    }();
 
-      function determineSelectedFilter() {
-          if(self.state.selectedFilter.tracks == true) {
-              return "tracks";
-          } else if (self.state.selectedFilter.people == true) {
-              return "people";
-          }
+    function determineSelectedFilter() {
+      if (self.state.selectedFilter.tracks == true) {
+        return "tracks";
+      } else if (self.state.selectedFilter.people == true) {
+        return "people";
       }
+    }
 
-      let selectedFiler = determineSelectedFilter();
+    let selectedFiler = determineSelectedFilter();
 
-      switch(selectedFiler) {
-        case "tracks":
-            resultsList = trackResultsList;
-            break;
-        case "people":
-            resultsList = peopleResultsList;
-            break;
-      }
+    switch (selectedFiler) {
+      case "tracks":
+        resultsList = trackResultsList;
+        break;
+      case "people":
+        resultsList = peopleResultsList;
+        break;
+    }
 
     return (
-        <div className="container">
+      <div className="container">
             <SearchHeader searchString={this.state.searchString}/>
             <SearchFilter onChangeFilter={this.changeSelectedFilter} filterSelected={selectedFiler}/>
             {resultsList}
