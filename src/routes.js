@@ -3,6 +3,7 @@
 import React from 'react';
 import { Route, IndexRoute } from 'react-router';
 import AuthService from './utils/AuthService';
+import toastr from 'toastr';
 
 import App from './components/app';
 import HomePage from './components/homePage/homePage';
@@ -14,28 +15,14 @@ import CreateAccountPage from './components/userAccount/createAccountPage';
 import ProfilePage from './components/userAccount/profilePage';
 import NotFoundPage from './components/notFoundPage';
 
-
-/*
-var React = require('react');
-var Router = require('react-router');
-var DefaultRoute = Router.DefaultRoute;
-var Route = Router.Route;
-var NotFoundRoute = Router.NotFoundRoute;
-var Redirect = Router.Redirect;
-*/
-
 const auth = new AuthService(__API_DOMAIN__);
 
 // onEnter callback to validate authentication in private routes
 const requireAuth = (nextState, replace) => {
   if (!auth.loggedIn()) {
-    replace({ pathname: '/signin' })
-  }
-}
-
-const parseAuthHash = (nextState, replace) => {
-  if (/access_token|id_token|error/.test(nextState.location.hash)) {
-    auth.parseHash(nextState.location.hash)
+    replace({ pathname: '/signin' });
+    toastr.remove();
+    toastr.error("Please sign in to access this page");
   }
 }
 
@@ -46,7 +33,7 @@ export default (
     <Route path="track/:userURL/:trackURL" component={TrackPage} />
 
     <Route path="upload" component={UploadPage} onEnter={requireAuth} />
-    <Route path="signin" component={SignInPage} onEnter={parseAuthHash} />
+    <Route path="signin" component={SignInPage} />
     <Route path="createAccount" component={CreateAccountPage} />
     <Route path="user/:userURL" component={ProfilePage} />
 

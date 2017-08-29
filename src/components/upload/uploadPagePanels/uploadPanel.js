@@ -77,9 +77,6 @@ class UploadPage extends React.Component {
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-    componentWillMount() {
-    }
-
     validate() {
         var validationErrors = validate(this.state.data, constraints);
 

@@ -7,13 +7,6 @@ import './css/custom.css'; // Importing custom css after bootstrap is important!
 import '../node_modules/toastr/toastr.css';
 
 render (
-    <Router history={ browserHistory } routes={ routes } />,
-    document.getElementById('app')
+  <Router history={ browserHistory } routes={ routes } />,
+  document.getElementById('app')
 );
-
-
-/*
-Router.run(routes, function(Handler) {
-    React.render(<Handler />, document.getElementById('app'));
-});
-*/
