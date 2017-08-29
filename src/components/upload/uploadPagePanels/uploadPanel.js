@@ -101,7 +101,7 @@ class UploadPage extends React.Component {
     }
 
 
-    // TODO check if uploading track works with new ref syntax
+    // TODO check if uploading track works with new ref synta
     // TODO fix transitionTo function call (mixins not supported by react es6 Classes)
     handleSubmit(e) {
         var self = this;
