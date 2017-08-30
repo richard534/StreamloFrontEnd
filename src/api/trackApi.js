@@ -2,6 +2,7 @@
 let ApiUrl = __API_DOMAIN__;
 
 import axios from 'axios';
+import authService from 'utils/AuthService';
 
 class TrackApi {
   static getCityChartByName(cityName, cb) {
@@ -29,6 +30,20 @@ class TrackApi {
     .catch((error) => {
       cb(error);
     });
+  }
+
+  static uploadTrack(formdata, jwtToken, cb) {
+    let instance = axios.create({
+      headers: {'x-access-token': jwtToken}
+    });
+
+    instance.post(ApiUrl + "tracks/", formdata)
+      .then((response) => {
+        cb(null);
+      })
+      .catch(function(error) {
+        cb(error);
+      });
   }
 }
 

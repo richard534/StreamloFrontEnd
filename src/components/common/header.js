@@ -51,10 +51,10 @@ class Header extends React.Component {
                 </ul>
                 <ul className="nav navbar-nav navbar-right">
                   <li className="nav">
-                    <Link to="upload">Upload</Link>
+                    <Link to="/upload">Upload</Link>
                   </li>
                   <li className="nav">
-                    <Link to="signin">Sign In</Link>
+                    <Link to="/signin">Sign In</Link>
                   </li>
                 </ul>
             </nav>

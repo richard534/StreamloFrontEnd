@@ -17,7 +17,6 @@ class UserApi {
   static getUserByUserId(userId, cb) {
     axios.get(ApiUrl + 'users/id/' + userId)
     .then((response) => {
-      console.log(response);
       cb(null, response.data);
     })
     .catch((error) => {
