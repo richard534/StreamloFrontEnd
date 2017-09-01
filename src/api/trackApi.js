@@ -32,6 +32,16 @@ class TrackApi {
     });
   }
 
+  static getTrackByTrackURL(trackURL, cb) {
+    axios.get(ApiUrl + 'tracks/' + trackURL)
+    .then((response) => {
+      cb(null, response.data);
+    })
+    .catch((error) => {
+      cb(error.response);
+    });
+  }
+
   static uploadTrack(formdata, jwtToken, cb) {
     let instance = axios.create({
       headers: {'x-access-token': jwtToken}

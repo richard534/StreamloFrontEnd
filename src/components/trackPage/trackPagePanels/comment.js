@@ -8,12 +8,12 @@ var commentThumbnail = {
 class Comment extends React.Component {
     constructor(props) {
         super(props);
-        
+
         this.state = {
             commentUsername: "",
             commentUserURL: ""
         }
-        
+
         this.userURLDataSource = this.userURLDataSource.bind(this);
     }
 
@@ -42,6 +42,7 @@ class Comment extends React.Component {
         });
     }
 
+    // TODO replace old react router params attribute with this format "to={"profilePage/" + this.state.commentUserURL}"
     render() {
         return (
             <div className="media">
