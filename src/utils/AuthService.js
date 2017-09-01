@@ -34,7 +34,7 @@ export default class AuthService extends EventEmitter {
         }
       })
       .catch(function(error) {
-        cb(error);
+        cb(error.response.data.message);
       });
   }
 
