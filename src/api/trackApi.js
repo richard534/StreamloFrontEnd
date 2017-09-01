@@ -17,7 +17,7 @@ class TrackApi {
         }
       })
       .catch((error) => {
-        cb(error);
+        cb(error.response);
       });
     }
   }
@@ -28,7 +28,7 @@ class TrackApi {
       cb(null, response.data);
     })
     .catch((error) => {
-      cb(error);
+      cb(error.response);
     });
   }
 
@@ -52,7 +52,7 @@ class TrackApi {
         cb(null);
       })
       .catch(function(error) {
-        cb(error);
+        cb(error.response);
       });
   }
 }

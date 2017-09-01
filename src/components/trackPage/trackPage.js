@@ -7,7 +7,9 @@ import DescriptionPanel from './trackPagePanels/descriptionPanel';
 import TrackApi from 'api/trackApi';
 
 var commentsPanelStyle = {
-  marginTop: "10px"
+  marginTop: "10px",
+  padding: "0px",
+  paddingTop: "10px"
 };
 
 class TrackPage extends React.Component {
@@ -74,6 +76,7 @@ class TrackPage extends React.Component {
             numComments={this.state.numComments}
             trackBinaryURL={this.state.trackBinaryURL}
             userURL={this.state.userURL} />
+            
         <div className="col-md-12" style={commentsPanelStyle}>
           <div className="col-md-8">
             <PostCommentPanel numComments={this.state.numComments}

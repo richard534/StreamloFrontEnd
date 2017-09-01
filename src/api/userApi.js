@@ -10,7 +10,7 @@ class UserApi {
       cb(null, response.data);
     })
     .catch((error) => {
-      cb(error);
+      cb(error.response);
     });
   }
 
@@ -20,7 +20,7 @@ class UserApi {
       cb(null, response.data);
     })
     .catch((error) => {
-      cb(error);
+      cb(error.response);
     });
   }
 }
