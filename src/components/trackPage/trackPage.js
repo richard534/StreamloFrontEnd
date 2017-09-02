@@ -1,5 +1,7 @@
 import React from 'react';
 import toastr from 'toastr';
+import update from 'immutability-helper';
+
 import TrackJumbotron from './trackPagePanels/trackJumbotron';
 import CommentsPanel from './trackPagePanels/commentsPanel';
 import PostCommentPanel from './trackPagePanels/postCommentPanel';
@@ -32,6 +34,8 @@ class TrackPage extends React.Component {
     }
 
     this.tracksDataSource = this.tracksDataSource.bind(this);
+    this.postComment = this.postComment.bind(this);
+    this.handleChange = this.handleChange.bind(this);
   }
 
   componentWillMount() {
@@ -50,18 +54,61 @@ class TrackPage extends React.Component {
       if (err) {
         toastr.error(err);
       } else {
-        this.setState({ title: result.title });
-        this.setState({ artist: result.artist });
-        this.setState({ genre: result.genre });
-        this.setState({ description: result.description });
-        this.setState({ uploadDate: result.dateUploaded });
-        this.setState({ numPlays: result.numPlays });
-        this.setState({ numLikes: result.numLikes });
-        this.setState({ numComments: result.numComments });
-        this.setState({ trackBinaryURL: "http://localhost:3001/tracks/" + result.trackBinary + "/stream" });
-        this.setState({ comments: result.comments });
+        let newState = { 
+          title: result.title,
+          artist: result.artist,
+          genre: result.genre,
+          description: result.description,
+          uploadDate: result.dateUploaded,
+          numPlays: result.numPlays,
+          numLikes: result.numLikes,
+          numComments: result.numComments,
+          trackBinaryURL: "http://localhost:3001/tracks/" + result.trackBinary + "/stream",
+          comments: result.comments
+        };
+        this.setState(newState);
       }
     })
+  }
+  
+  postComment(e) {
+    e.preventDefault();
+    //var trackURL = this.props.trackURL;
+    //var self = this;
+    
+    if(this.props.auth.loggedIn()) {
+      console.log("Logged In");
+    }
+    
+    /*
+    return $.ajax({
+      type: "post",
+      data: data,
+      url: 'http://localhost:3001/tracks/' + trackURL + '/addComment',
+      dataType: 'text',
+      success: function(results) {
+        toastr.success('Comment Added To Track');
+        self.props.requestComments();
+      },
+      error: function(jqXHR, textStatus, errorThrown) {
+        // console.log(textStatus + ': ' + errorThrown);
+        toastr.error('Error Uploading Track');
+      }
+    });
+    */
+  }
+  
+  handleChange(e) {
+    const target = e.target;
+    const name = target.name;
+
+    var newState = update(this.state, {
+      [name]: {
+        $set: target.value
+      }
+    });
+
+    this.setState(newState);
   }
 
   render() {
@@ -80,8 +127,9 @@ class TrackPage extends React.Component {
         <div className="col-md-12" style={commentsPanelStyle}>
           <div className="col-md-8">
             <PostCommentPanel numComments={this.state.numComments}
-              trackURL={this.state.trackURL}
-              requestComments={this.tracksDataSource} />
+              trackURL={this.state.trackURL} 
+              postComment={this.postComment} 
+              handleChange={this.handleChange} />
             <CommentsPanel comments={this.state.comments} />
           </div>
           <DescriptionPanel description={this.state.description} />
