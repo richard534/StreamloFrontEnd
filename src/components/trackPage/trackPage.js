@@ -78,6 +78,8 @@ class TrackPage extends React.Component {
     
     if(this.props.auth.loggedIn()) {
       console.log("Logged In");
+    } else {
+      console.log("Please Log in before commenting");
     }
     
     /*
@@ -129,7 +131,8 @@ class TrackPage extends React.Component {
             <PostCommentPanel numComments={this.state.numComments}
               trackURL={this.state.trackURL} 
               postComment={this.postComment} 
-              handleChange={this.handleChange} />
+              handleChange={this.handleChange} 
+              loggedIn={this.props.auth.loggedIn()}/>
             <CommentsPanel comments={this.state.comments} />
           </div>
           <DescriptionPanel description={this.state.description} />

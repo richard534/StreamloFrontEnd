@@ -39,8 +39,19 @@ class PostCommentPanel extends React.Component {
     }
   }
 
-  // TODO add signed in user to form sumbission
   render() {
+    let postCommentButton = 
+    <div className="col-md-3" style={commentSubmit}>
+      <button type="submit" className="btn btn-primary btn-block" disabled>Post Comment</button>
+    </div>;
+    
+    if(this.props.loggedIn) {
+      postCommentButton =
+      <div className="col-md-3" style={commentSubmit}>
+        <button type="submit" className="btn btn-primary btn-block">Post Comment</button>
+      </div>;
+    }
+      
     return (
       <div className="col-md-12">
         <div className="panel panel-default">
@@ -60,9 +71,7 @@ class PostCommentPanel extends React.Component {
                     <div className="col-md-6" style={commentInput}>
                       <input rows="4" className="form-control" placeholder="Enter Comment..." />
                     </div>
-                    <div className="col-md-3" style={commentSubmit}>
-                      <button type="submit" className="btn btn-primary btn-block">Post Comment</button>
-                    </div>
+                    {postCommentButton}
                   </div>
                 </div>
             </form>
