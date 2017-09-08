@@ -30,12 +30,10 @@ class TrackPage extends React.Component {
       numComments: 0,
       description: "",
       trackBinaryURL: "",
-      comments: [],
-      postCommentBody: ""
+      comments: []
     }
 
     this.tracksDataSource = this.tracksDataSource.bind(this);
-    this.postComment = this.postComment.bind(this);
     this.handleChange = this.handleChange.bind(this);
   }
 
@@ -72,28 +70,6 @@ class TrackPage extends React.Component {
     })
   }
 
-  postComment(e) {
-    e.preventDefault();
-
-    if (this.props.auth.loggedIn()) {
-      let trackURL = this.state.trackURL;
-      let userId = this.props.auth.getProfile().id;
-      let jwtToken = this.props.auth.getToken();
-
-      let data = {
-        user: userId,
-        date: Date.now(),
-        body: this.state.postCommentBody
-      };
-
-      TrackApi.postCommentToTrack(trackURL, data, jwtToken, (err, result) => {
-        toastr.success("Comment Added");
-      });
-    } else {
-      toastr.error("Please Log in before commenting");
-    }
-  }
-
   handleChange(e) {
     const target = e.target;
     const name = target.name;
@@ -124,10 +100,9 @@ class TrackPage extends React.Component {
           <div className="col-md-8">
             <PostCommentPanel numComments={this.state.numComments}
               trackURL={this.state.trackURL} 
-              postComment={this.postComment} 
-              handleChange={this.handleChange} 
-              postCommentBody={this.state.postCommentBody}
-              loggedIn={this.props.auth.loggedIn()}/>
+              loggedIn={this.props.auth.loggedIn()}
+              profile={this.props.auth.getProfile()}
+              jwtToken={this.props.auth.getToken()}/>
             <CommentsPanel comments={this.state.comments} />
           </div>
           <DescriptionPanel description={this.state.description} />
