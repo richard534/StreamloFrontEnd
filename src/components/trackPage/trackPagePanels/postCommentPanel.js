@@ -35,18 +35,18 @@ class PostCommentPanel extends React.Component {
   }
 
   render() {
-    let postCommentButton = 
-    <div className="col-md-3" style={commentSubmit}>
+    let postCommentButton =
+      <div className="col-md-3" style={commentSubmit}>
       <button type="submit" className="btn btn-primary btn-block" disabled>Post Comment</button>
     </div>;
-    
-    if(this.props.loggedIn) {
+
+    if (this.props.loggedIn) {
       postCommentButton =
-      <div className="col-md-3" style={commentSubmit}>
+        <div className="col-md-3" style={commentSubmit}>
         <button type="submit" className="btn btn-primary btn-block">Post Comment</button>
       </div>;
     }
-      
+
     return (
       <div className="col-md-12">
         <div className="panel panel-default">

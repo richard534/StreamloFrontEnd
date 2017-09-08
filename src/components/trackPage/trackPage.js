@@ -55,7 +55,7 @@ class TrackPage extends React.Component {
       if (err) {
         toastr.error(err);
       } else {
-        let newState = { 
+        let newState = {
           title: result.title,
           artist: result.artist,
           genre: result.genre,
@@ -71,21 +71,21 @@ class TrackPage extends React.Component {
       }
     })
   }
-  
+
   postComment(e) {
     e.preventDefault();
 
-    if(this.props.auth.loggedIn()) {
+    if (this.props.auth.loggedIn()) {
       let trackURL = this.state.trackURL;
       let userId = this.props.auth.getProfile().id;
       let jwtToken = this.props.auth.getToken();
-      
+
       let data = {
         user: userId,
         date: Date.now(),
         body: this.state.postCommentBody
       };
-      
+
       TrackApi.postCommentToTrack(trackURL, data, jwtToken, (err, result) => {
         toastr.success("Comment Added");
       });
@@ -93,11 +93,11 @@ class TrackPage extends React.Component {
       toastr.error("Please Log in before commenting");
     }
   }
-  
+
   handleChange(e) {
     const target = e.target;
     const name = target.name;
-    
+
     var newState = update(this.state, {
       [name]: {
         $set: target.value
