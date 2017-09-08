@@ -42,12 +42,26 @@ class TrackApi {
     });
   }
 
-  static uploadTrack(formdata, jwtToken, cb) {
+  static postTrack(formdata, jwtToken, cb) {
     let instance = axios.create({
       headers: {'x-access-token': jwtToken}
     });
 
     instance.post(ApiUrl + "tracks/", formdata)
+      .then((response) => {
+        cb(null);
+      })
+      .catch(function(error) {
+        cb(error.response);
+      });
+  }
+  
+  static postCommentToTrack(trackURL, data, jwtToken, cb) {
+    let instance = axios.create({
+      headers: {'x-access-token': jwtToken}
+    });
+    
+    instance.post(ApiUrl + "tracks/" + trackURL + "/addComment", data)
       .then((response) => {
         cb(null);
       })

@@ -111,7 +111,7 @@ class UploadPage extends React.Component {
     fd.append('description', this.state.data.description);
     fd.append('track', this.state.data.track);
 
-    TrackApi.uploadTrack(fd, jwtToken, (err) => {
+    TrackApi.postTrack(fd, jwtToken, (err) => {
       if(err) {
         toastr.remove();
         toastr.error('Error Uploading Track');

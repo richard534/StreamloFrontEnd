@@ -32,11 +32,6 @@ var commentSubmit = {
 class PostCommentPanel extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      user: "",
-      date: "",
-      body: ""
-    }
   }
 
   render() {
@@ -69,7 +64,7 @@ class PostCommentPanel extends React.Component {
                       <p className="text-muted">Add a comment</p>
                     </div>
                     <div className="col-md-6" style={commentInput}>
-                      <input rows="4" className="form-control" placeholder="Enter Comment..." />
+                      <input value={this.props.postCommentBody} name="postCommentBody" rows="4" className="form-control" placeholder="Enter Comment..." />
                     </div>
                     {postCommentButton}
                   </div>

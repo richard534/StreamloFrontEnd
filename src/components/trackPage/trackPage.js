@@ -30,7 +30,8 @@ class TrackPage extends React.Component {
       numComments: 0,
       description: "",
       trackBinaryURL: "",
-      comments: []
+      comments: [],
+      postCommentBody: ""
     }
 
     this.tracksDataSource = this.tracksDataSource.bind(this);
@@ -73,37 +74,30 @@ class TrackPage extends React.Component {
   
   postComment(e) {
     e.preventDefault();
-    //var trackURL = this.props.trackURL;
-    //var self = this;
-    
+
     if(this.props.auth.loggedIn()) {
-      console.log("Logged In");
+      let trackURL = this.state.trackURL;
+      let userId = this.props.auth.getProfile().id;
+      let jwtToken = this.props.auth.getToken();
+      
+      let data = {
+        user: userId,
+        date: Date.now(),
+        body: this.state.postCommentBody
+      };
+      
+      TrackApi.postCommentToTrack(trackURL, data, jwtToken, (err, result) => {
+        toastr.success("Comment Added");
+      });
     } else {
-      console.log("Please Log in before commenting");
+      toastr.error("Please Log in before commenting");
     }
-    
-    /*
-    return $.ajax({
-      type: "post",
-      data: data,
-      url: 'http://localhost:3001/tracks/' + trackURL + '/addComment',
-      dataType: 'text',
-      success: function(results) {
-        toastr.success('Comment Added To Track');
-        self.props.requestComments();
-      },
-      error: function(jqXHR, textStatus, errorThrown) {
-        // console.log(textStatus + ': ' + errorThrown);
-        toastr.error('Error Uploading Track');
-      }
-    });
-    */
   }
   
   handleChange(e) {
     const target = e.target;
     const name = target.name;
-
+    
     var newState = update(this.state, {
       [name]: {
         $set: target.value
@@ -132,6 +126,7 @@ class TrackPage extends React.Component {
               trackURL={this.state.trackURL} 
               postComment={this.postComment} 
               handleChange={this.handleChange} 
+              postCommentBody={this.state.postCommentBody}
               loggedIn={this.props.auth.loggedIn()}/>
             <CommentsPanel comments={this.state.comments} />
           </div>
