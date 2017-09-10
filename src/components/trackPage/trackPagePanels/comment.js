@@ -1,7 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router';
 import toastr from 'toastr';
+
 import UserApi from 'api/userApi';
+var accountIcon= require('images/account-icon.png');
 
 var commentThumbnail = {
   padding: 0
@@ -42,7 +44,7 @@ class Comment extends React.Component {
     return (
       <div className="media">
         <div className="col-md-1" style={commentThumbnail}>
-            <img className="img-circle" src="/images/account-icon.png" width="50" height="50"></img>
+            <img className="img-circle" src={accountIcon} width="50" height="50"></img>
         </div>
         <div className="col-md-11">
             <div className="col-md-6">
