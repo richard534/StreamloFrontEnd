@@ -23,6 +23,16 @@ class UserApi {
       cb(error.response);
     });
   }
+  
+  static getUserByUserURL(userURL, cb) {
+    axios.get(ApiUrl + 'users/' + userURL)
+    .then((response) => {
+      cb(null, response.data);
+    })
+    .catch((error) => {
+      cb(error.response);
+    });
+  }
 }
 
 export default UserApi;
