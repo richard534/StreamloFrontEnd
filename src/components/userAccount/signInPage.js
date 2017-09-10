@@ -106,22 +106,19 @@ class SignInPage extends React.Component {
   }
 
   logout() {
-    // destroys the session data
     this.props.auth.logout()
-    // redirects to login page
     this.context.router.push('/signin');
   }
 
   render() {
     var header;
     var result;
-    //var loggedInUser = auth.getUserDisplayname();
 
     if(this.props.auth.loggedIn()){
         header = <p>Signed in as <Link to={"user/test"}><strong>{this.state.profile.email}</strong></Link></p>;
         result =
         <div>
-          <button onClick={this.logout.bind(this)} className="btn btn-danger btn-block">Logout</button>
+          <button onClick={this.logout} className="btn btn-danger btn-block">Logout</button>
         </div>;
 
     } else {
