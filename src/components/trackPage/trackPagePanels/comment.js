@@ -16,18 +16,18 @@ class Comment extends React.Component {
       commentUserURL: ""
     }
 
-    this.userURLDataSource = this.userURLDataSource.bind(this);
+    this.commentUserDataSource = this.commentUserDataSource.bind(this);
   }
 
   componentDidMount() {
-    this.userURLDataSource();
+    this.commentUserDataSource();
   }
 
   componentWillReceiveProps() {
-    this.userURLDataSource();
+    this.commentUserDataSource();
   }
 
-  userURLDataSource() {
+  commentUserDataSource() {
     UserApi.getUserByUserId(this.props.commentUserId, (err, result) => {
       if (err) {
         toastr.error(err);
@@ -36,24 +36,8 @@ class Comment extends React.Component {
         this.setState({ commentUserURL: result.userURL });
       }
     });
-
-    /*
-    return $.ajax({
-      type: "get",
-      dataType: 'json',
-      url: 'http://localhost:3001/users/id/' + self.props.commentUserId,
-      success: function(result) {
-        self.setState({ commentUsername: result.displayName });
-        self.setState({ commentUserURL: result.userURL });
-      },
-      error: function(jqXHR, textStatus, errorThrown) {
-        // console.log(textStatus + ': ' + errorThrown);
-      }
-    });
-    */
   }
 
-  // TODO replace old react router params attribute with this format "to={"profilePage/" + this.state.commentUserURL}"
   render() {
     return (
       <div className="media">
@@ -62,7 +46,7 @@ class Comment extends React.Component {
         </div>
         <div className="col-md-11">
             <div className="col-md-6">
-                <Link to='profilePage' params={{userURL: this.state.commentUserURL}}><p className="text-muted">{this.state.commentUsername}</p></Link>
+                <Link to={'user/' + this.state.commentUserURL}><p className="text-muted">{this.state.commentUsername}</p></Link>
             </div>
             <div className="col-md-6">
                 <p className="text-muted pull-right">{this.props.datePosted}</p>
