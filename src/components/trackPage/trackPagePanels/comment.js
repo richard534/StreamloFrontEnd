@@ -46,7 +46,7 @@ class Comment extends React.Component {
         </div>
         <div className="col-md-11">
             <div className="col-md-6">
-                <Link to={'user/' + this.state.commentUserURL}><p className="text-muted">{this.state.commentUsername}</p></Link>
+                <Link to={'/user/' + this.state.commentUserURL}><p className="text-muted">{this.state.commentUsername}</p></Link>
             </div>
             <div className="col-md-6">
                 <p className="text-muted pull-right">{this.props.datePosted}</p>

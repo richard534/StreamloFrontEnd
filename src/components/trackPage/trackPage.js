@@ -7,6 +7,7 @@ import CommentsPanel from './trackPagePanels/commentsPanel';
 import PostCommentPanel from './trackPagePanels/postCommentPanel';
 import DescriptionPanel from './trackPagePanels/descriptionPanel';
 import TrackApi from 'api/trackApi';
+import UserApi from 'api/userApi';
 
 var commentsPanelStyle = {
   marginTop: "10px",
@@ -35,6 +36,7 @@ class TrackPage extends React.Component {
 
     this.tracksDataSource = this.tracksDataSource.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.uploaderNameDataSource = this.uploaderNameDataSource.bind(this);
   }
 
   componentWillMount() {
@@ -53,9 +55,9 @@ class TrackPage extends React.Component {
       if (err) {
         toastr.error(err);
       } else {
+        let uploaderId = result.uploaderId;
         let newState = {
           title: result.title,
-          artist: result.artist,
           genre: result.genre,
           description: result.description,
           uploadDate: result.dateUploaded,
@@ -65,7 +67,24 @@ class TrackPage extends React.Component {
           trackBinaryURL: "http://localhost:3001/tracks/" + result.trackBinary + "/stream",
           comments: result.comments
         };
-        this.setState(newState);
+        this.uploaderNameDataSource(uploaderId, (err, result) => {
+          if(err) {
+            toastr.error('Unable to retrieve artist name');
+          } else {
+            newState.artist = result.displayName;
+            this.setState(newState);
+          }
+        });
+      }
+    });
+  }
+  
+  uploaderNameDataSource(userId, cb) {
+    UserApi.getUserByUserId(userId, (err, result) => {
+      if (err) {
+        cb(err);
+      } else {
+        cb(null, result);
       }
     })
   }

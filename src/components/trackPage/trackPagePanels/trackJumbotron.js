@@ -1,6 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router';
 
+var altAlbumArtLogo = require('images/altAlbumArtLogo.png');
+
 var trackNameStyle = {
   marginTop: "0px"
 };
@@ -45,7 +47,7 @@ class TrackJumbotron extends React.Component {
       <div className="jumbotron text-center" id="userJumbotron">
            <div className="col-md-9" style={colHeight}>
                <div className="col-md-6" style={detailsColStyle}>
-                   <Link to="profilePage" params={{userURL: this.props.userURL}}><p className="text-muted" style={artistStyle}>{this.props.artist}</p></Link>
+                   <Link to={'/user/' + this.props.userURL}><p className="text-muted" style={artistStyle}>{this.props.artist}</p></Link>
                    <h3 style={trackNameStyle}>{this.props.title}</h3>
                    <p>Genre: {this.props.genre}</p>
                    <h5><span className="glyphicon glyphicon-play"></span> {this.props.numPlays}</h5>
@@ -67,7 +69,7 @@ class TrackJumbotron extends React.Component {
 
            </div>
                <div className="col-md-3">
-                   <img className="img-responsive pull-right" src="/images/altAlbumArtLogo.png" alt="" width="215" height="215" />
+                   <img className="img-responsive pull-right" src={altAlbumArtLogo} alt="" width="215" height="215" />
                </div>
            </div>
     );
