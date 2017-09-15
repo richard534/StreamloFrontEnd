@@ -193,9 +193,9 @@ class SearchResultsPage extends React.Component {
       }
     }
 
-    let selectedFiler = determineSelectedFilter();
+    let selectedFilter = determineSelectedFilter();
 
-    switch (selectedFiler) {
+    switch (selectedFilter) {
       case "tracks":
         resultsList = trackResultsList;
         break;
@@ -207,7 +207,7 @@ class SearchResultsPage extends React.Component {
     return (
       <div className="container">
             <SearchHeader searchString={this.state.searchString}/>
-            <SearchFilter onChangeFilter={this.changeSelectedFilter} filterSelected={selectedFiler}/>
+            <SearchFilter onChangeFilter={this.changeSelectedFilter} filterSelected={selectedFilter}/>
             {resultsList}
         </div>
     );

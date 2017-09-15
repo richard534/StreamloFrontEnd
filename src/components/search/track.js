@@ -1,6 +1,7 @@
 import React from 'react';
 import {Link} from 'react-router';
 var defaultAlbumArt= require('images/altAlbumArtLogo.png');
+import UserApi from 'api/userApi';
 
 var ThumbnailStyle = {
     marginBottom: "0px"
@@ -24,99 +25,98 @@ var audioDivStyle = {
 };
 
 class Track extends React.Component {
-    constructor(props) {
-        super(props);
+  constructor(props) {
+    super(props);
 
-        this.state = {
-            userURL: "",
-            numComments: 0
-        }
-
-        this.userURLDataSource = this.userURLDataSource.bind(this);
+    this.state = {
+        userURL: "",
+        numComments: 0
     }
 
-    componentDidMount() {
-        this.userURLDataSource();
-    }
+    this.userURLDataSource = this.userURLDataSource.bind(this);
+  }
 
-    componentWillReceiveProps(nextProps) {
-        this.userURLDataSource(nextProps);
-    }
+  componentDidMount() {
+    this.userURLDataSource();
+  }
 
-    // AJAX helper method thats sets state to returned ajax query
-    userURLDataSource(props) {
-        props = props || this.props;
-        var self = this;
+  componentWillReceiveProps(nextProps) {
+    this.userURLDataSource(nextProps);
+  }
 
-        return $.ajax({
-          type: "get",
-          dataType: 'json',
-          url: 'http://localhost:3001/users/id/' + props.uploaderId
-        }).done(function(result){
-            //self.setState({ userURL: result.userURL });
-        });
-    }
+  userURLDataSource(props) {
+    props = props || this.props;
+    let uploaderId = props.uploaderId;
 
-    render() {
-      var self = this;
+    UserApi.getUserByUserId(uploaderId, (err, result) => {
+      if(err){
+        console.error(err);
+      } else {
+        this.setState({ userURL: result.userURL });
+      }
+    });
+  }
 
-      var TrackUploadDate = function() {
-           var date = new Date(self.props.uploadDate);
-           var dateString = date.toDateString();
-           return (dateString);
-      }();
+  render() {
+    var self = this;
 
-      var TrackBinaryURL = function() {
-          var trackBinaryURL = "http://localhost:3001/tracks/" + self.props.trackBinaryId + "/stream";
-          return trackBinaryURL;
-      }();
+    var TrackUploadDate = function() {
+         var date = new Date(self.props.uploadDate);
+         var dateString = date.toDateString();
+         return (dateString);
+    }();
+
+    var TrackBinaryURL = function() {
+        var trackBinaryURL = "http://localhost:3001/tracks/" + self.props.trackBinaryId + "/stream";
+        return trackBinaryURL;
+    }();
 
     return (
-        <div className="media">
-            <div className="media-left">
-                <a>
-                    <img className="media-object thumbnail trackThumbnail" src={defaultAlbumArt} width="160" height="160" style={ThumbnailStyle} />
-                </a>
-            </div>
-            <div className="media-body">
-                <div className="col-md-12" style={mediaDivStyle}>
-                    <div className="col-md-8" style={mediaDivStyle}>
-                        <p className="text-muted">{this.props.artist}</p>
-                            <Link to={'track/' + this.state.userURL + '/' + this.props.trackURL}><h4 className="media-heading">{this.props.title}</h4></Link>
-                        <p>Genre: {this.props.genre}</p>
-                    </div>
+      <div className="media">
+          <div className="media-left">
+              <a>
+                  <img className="media-object thumbnail trackThumbnail" src={defaultAlbumArt} width="160" height="160" style={ThumbnailStyle} />
+              </a>
+          </div>
+          <div className="media-body">
+              <div className="col-md-12" style={mediaDivStyle}>
+                  <div className="col-md-8" style={mediaDivStyle}>
+                      <p className="text-muted">{this.props.artist}</p>
+                          <Link to={'track/' + this.state.userURL + '/' + this.props.trackURL}><h4 className="media-heading">{this.props.title}</h4></Link>
+                      <p>Genre: {this.props.genre}</p>
+                  </div>
 
-                    <div className="col-md-4 pull-right">
-                        <p className="pull-right">{TrackUploadDate}</p>
-                    </div>
+                  <div className="col-md-4 pull-right">
+                      <p className="pull-right">{TrackUploadDate}</p>
+                  </div>
 
-                    <div className="col-md-12" style={audioDivStyle}>
-                        <audio id={this.props.trackId} style={audioTagStyle} controls>
-                          <source src={TrackBinaryURL} type="audio/mp3"/>
-                        </audio>
-                    </div>
+                  <div className="col-md-12" style={audioDivStyle}>
+                      <audio id={this.props.trackId} style={audioTagStyle} controls>
+                        <source src={TrackBinaryURL} type="audio/mp3"/>
+                      </audio>
+                  </div>
 
-                    <div className="col-md-12" style={likesRowstyle}>
-                        <div className="col-md-7" >
-                            <div className="btn-toolbar" role="toolbar">
-                                <div className="btn-group-xs" role="group">
-                                    <p><span className="glyphicon glyphicon-thumbs-up"></span> {this.props.numLikes}</p>
-                                </div>
-                            </div>
-                        </div>
+                  <div className="col-md-12" style={likesRowstyle}>
+                      <div className="col-md-4" >
+                          <div className="btn-toolbar" role="toolbar">
+                              <div className="btn-group-xs" role="group">
+                                  <p><span className="glyphicon glyphicon-thumbs-up"></span> {this.props.numLikes}</p>
+                              </div>
+                          </div>
+                      </div>
 
-                        <div className="col-md-4 pull-right">
-                            <div className="col-md-8">
-                                <p className="pull-right"><span className="glyphicon glyphicon-play"></span> {this.props.numPlays}</p>
-                            </div>
-                            <div className="col-md-4">
-                                <p className="pull-right"><span className="glyphicon glyphicon-comment"></span> {this.props.numPlays}</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+                      <div className="col-md-8 pull-right">
+                          <div className="col-md-9">
+                              <p className="pull-right"><span className="glyphicon glyphicon-play"></span>  {this.props.numPlays}</p>
+                          </div>
+                          <div className="col-md-3">
+                              <p className="pull-right"><span className="glyphicon glyphicon-comment"></span>  {this.props.numPlays}</p>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
     );
   }
 }

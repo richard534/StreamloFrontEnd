@@ -1,6 +1,5 @@
 import React from 'react';
 
-// TODO possibly add html5 geolocation and google maps get administrative_area_level_1 to get city
 class SearchCity extends React.Component {
    render() {
        return (

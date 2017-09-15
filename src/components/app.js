@@ -11,12 +11,12 @@ class App extends React.Component {
     if (this.props.children) {
       children = React.cloneElement(this.props.children, {
         auth: this.props.route.auth // sends auth instance to children
-      })
+      });
     }
 
     return (
     <div>
-        <Header />
+        <Header auth={this.props.route.auth} />
             {children}
         <Footer />
     </div>

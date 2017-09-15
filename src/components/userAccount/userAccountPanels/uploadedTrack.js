@@ -1,5 +1,9 @@
 import React from 'react';
 import {Link} from 'react-router';
+import toastr from 'toastr';
+
+var altAlbumArtLogo = require('images/altAlbumArtLogo.png');
+import UserApi from 'api/userApi';
 
 var ThumbnailStyle = {
     marginBottom: "0px"
@@ -40,25 +44,23 @@ class UploadedTrack extends React.Component {
         this.userURLDataSource();
     }
 
-    // AJAX helper method thats sets state to returned ajax query
     userURLDataSource(){
-        var self = this;
-
-        return $.ajax({
-          type: "get",
-          dataType: 'json',
-          url: 'http://localhost:3001/users/id/' + self.props.uploaderId,
-          success: function(result) {
-              self.setState({ userURL: result.userURL });
-          },
-          error: function(jqXHR, textStatus, errorThrown) {
-              // console.log(textStatus + ': ' + errorThrown);
+        UserApi.getUserByUserId(this.props.uploaderId, (err, result) => {
+          if(err) {
+            toastr.error('Error retrieving uploaded file');
+          } else {
+            this.setState({ userURL: result.userURL });
           }
         });
     }
 
     render() {
         var self = this;
+        
+        var albumArt;
+        if(!this.props.albumArtURL) {
+          albumArt = altAlbumArtLogo;
+        }
 
         var TrackUploadDate = function() {
            var date = new Date(self.props.uploadDate);
@@ -75,14 +77,14 @@ class UploadedTrack extends React.Component {
             <div className="media">
                 <div className="media-left">
                     <a>
-                        <img className="media-object thumbnail trackThumbnail" src={this.props.albumArtURL} width="160" height="160" style={ThumbnailStyle} />
+                        <img className="media-object thumbnail trackThumbnail" src={albumArt} width="160" height="160" style={ThumbnailStyle} />
                     </a>
                 </div>
                 <div className="media-body">
                     <div className="col-md-12" style={mediaDivStyle}>
                         <div className="col-md-8" style={mediaDivStyle}>
                             <p className="text-muted">{this.props.artist}</p>
-                            <Link to="track" params={{userURL: this.state.userURL, trackURL: this.props.trackURL}}><h4 className="media-heading">{this.props.title}</h4></Link>
+                            <Link to={'track/' + this.state.userURL + '/' + this.props.trackURL}><h4 className="media-heading">{this.props.title}</h4></Link>
                             <p>Genre: {this.props.genre}</p>
                         </div>
 

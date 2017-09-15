@@ -10,7 +10,27 @@ class UserApi {
       cb(null, response.data);
     })
     .catch((error) => {
-      cb(error);
+      cb(error.response);
+    });
+  }
+
+  static getUserByUserId(userId, cb) {
+    axios.get(ApiUrl + 'users/id/' + userId)
+    .then((response) => {
+      cb(null, response.data);
+    })
+    .catch((error) => {
+      cb(error.response);
+    });
+  }
+  
+  static getUserByUserURL(userURL, cb) {
+    axios.get(ApiUrl + 'users/' + userURL)
+    .then((response) => {
+      cb(null, response.data);
+    })
+    .catch((error) => {
+      cb(error.response);
     });
   }
 }

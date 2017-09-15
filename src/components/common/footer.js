@@ -2,6 +2,7 @@ import React from 'react';
 
 class Footer extends React.Component {
    render() {
+     let currentYear = new Date().getFullYear();
        return (
            <footer>
                <div className="container">
@@ -9,7 +10,7 @@ class Footer extends React.Component {
                      <div className='col-md-5'>
                        <br />
                        <p>Powered by <strong>Node.js</strong>, <strong>Express.js</strong>, <strong>MongoDB</strong> and <strong>React</strong></p>
-                       <p>2016 Richard Taylor</p>
+                       <p>{currentYear} Richard Taylor</p>
                      </div>
                  </div>
                </div>
