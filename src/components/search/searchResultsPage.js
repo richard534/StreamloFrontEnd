@@ -78,7 +78,7 @@ class SearchResultsPage extends React.Component {
 
     TrackApi.getTracksByNameLimitedByPageNum(trackNameQuery, pageNum, (err, result) => {
       if (err) {
-        toastr.error(err);
+        // Do Nothing
       } else {
         if (!_.isEmpty(result.tracks)) {
           this.setState({
@@ -99,7 +99,7 @@ class SearchResultsPage extends React.Component {
 
     UserApi.getUsersByDisplaynameLimitedByPageNum(displayName, pageNum, (err, result) => {
       if(err){
-        console.error(err);
+        // Do Nothing
       } else {
         if (!_.isEmpty(result.users)) {
           this.setState({

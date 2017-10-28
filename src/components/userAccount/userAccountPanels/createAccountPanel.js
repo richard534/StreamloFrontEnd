@@ -1,4 +1,4 @@
-import React, {PropTypes} from 'react';
+import React, { PropTypes } from 'react';
 import { Link, browserHistory } from 'react-router';
 import validate from 'validate.js';
 import _ from 'lodash';
@@ -6,163 +6,163 @@ import toastr from 'toastr';
 import update from 'immutability-helper';
 
 var profileURLText = {
-    paddingTop: "6px",
-    paddingRight: "0px"
+  paddingTop: "6px",
+  paddingRight: "0px"
 };
 
 var profURLLabel = {
-    paddingLeft: "0px"
+  paddingLeft: "0px"
 };
 
 var profileURLInput = {
-    padding: "0px"
+  padding: "0px"
 };
 
 var constraints = {
   email: {
-      presence: true,
-      email: true
+    presence: true,
+    email: true
   },
   confEmail: {
-      presence: true,
-      equality: "email"
+    presence: true,
+    equality: "email"
   },
   password: {
-      presence: true,
-      length: { minimum: 8 }
+    presence: true,
+    length: { minimum: 8 }
   },
   confpassword: {
-      presence: true,
-      equality: "password"
+    presence: true,
+    equality: "password"
   },
   dispName: {
-      presence: true,
-      length: { minimum: 5 }
+    presence: true,
+    length: { minimum: 5 }
   },
   city: {
-      presence: true
+    presence: true
   },
   profileURL: {
-      presence: true
+    presence: true
   }
 };
 
 class CreateAccountPanel extends React.Component {
-    constructor(props) {
-        super(props);
+  constructor(props) {
+    super(props);
 
-        this.state = {
-          data: {
-            email: "",
-            confEmail: "",
-            password: "",
-            confpassword: "",
-            dispName: "",
-            city: "Belfast",
-            profileURL: ""
-          },
-          errors: {
-            email: "Enter Account Details"
-          }
-        }
-
-        this.validate = this.validate.bind(this);
-        this.handleChange = this.handleChange.bind(this);
-        this.signup = this.signup.bind(this);
+    this.state = {
+      data: {
+        email: "",
+        confEmail: "",
+        password: "",
+        confpassword: "",
+        dispName: "",
+        city: "Belfast",
+        profileURL: ""
+      },
+      errors: {
+        email: "Enter Account Details"
+      }
     }
 
-    handleChange(e) {
-        const target = e.target;
-        const name = target.name;
+    this.validate = this.validate.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+    this.signup = this.signup.bind(this);
+  }
 
-        var newState = update(this.state, {
-            data: {
-                [name]: {
-                    $set: target.value
-                }
-            }
-        });
-        this.setState(newState, this.validate);
-    }
+  handleChange(e) {
+    const target = e.target;
+    const name = target.name;
 
-    validate() {
-        var validationErrors = validate(this.state.data, constraints);
-        if (validationErrors) {
-            this.setState({
-                errors: validationErrors
-            });
-        } else {
-            this.setState({
-                errors: {}
-            });
+    var newState = update(this.state, {
+      data: {
+        [name]: {
+          $set: target.value
         }
-    }
+      }
+    });
+    this.setState(newState, this.validate);
+  }
 
-    signup(e) {
-      e.preventDefault();
-      const form = this.state.data;
-      this.props.auth.signup(form, (response, err) => {
-        if(err) {
-          let errorMessage = "";
-          if(err.errors.email) {
-            errorMessage += err.errors.email;
-          }
-          if(err.errors.password) {
-            errorMessage += err.errors.password;
-          }
-          if(err.errors.userURL) {
-            errorMessage += err.errors.userURL;
-          }
-          toastr.remove();
-          toastr.error(errorMessage);
-        } else {
-          toastr.remove();
-          toastr.success('Account Created');
-          this.context.router.push('/signin');
-        }
+  validate() {
+    var validationErrors = validate(this.state.data, constraints);
+    if (validationErrors) {
+      this.setState({
+        errors: validationErrors
+      });
+    } else {
+      this.setState({
+        errors: {}
       });
     }
+  }
 
-    render() {
-        var self = this;
-        var errorsList;
-        var createAccountButton;
-
-        var populateErrorsList = function() {
-            return (
-               <div className="div-md-12 alert alert-danger" id="dangerDiv">
-                   <div>{self.state.errors.email}</div>
-                   <div>{self.state.errors.confEmail}</div>
-                   <div>{self.state.errors.password}</div>
-                   <div>{self.state.errors.confpassword}</div>
-                   <div>{self.state.errors.dispName}</div>
-                   <div>{self.state.errors.city}</div>
-                   <div>{self.state.errors.profileURL}</div>
-               </div>
-            );
-        };
-
-       var disabledCreateAccountButton = function() {
-           return (
-               <button type="submit" className="btn btn-primary btn-block disabled" disabled>Create Account</button>
-           );
-       };
-
-       var enabledCreateAccountButton = function() {
-           return (
-               <button type="submit" className="btn btn-primary btn-block">Create Account</button>
-           );
-       };
-
-        if(!_.isEmpty(self.state.errors)) {
-            errorsList = populateErrorsList();
-            createAccountButton = disabledCreateAccountButton();
-        } else {
-            createAccountButton = enabledCreateAccountButton();
+  signup(e) {
+    e.preventDefault();
+    const form = this.state.data;
+    this.props.auth.signup(form, (response, err) => {
+      if (err) {
+        let errorMessage = "";
+        if (err.errors.email) {
+          errorMessage += err.errors.email;
         }
+        if (err.errors.password) {
+          errorMessage += err.errors.password;
+        }
+        if (err.errors.userURL) {
+          errorMessage += err.errors.userURL;
+        }
+        toastr.remove();
+        toastr.error(errorMessage);
+      } else {
+        toastr.remove();
+        toastr.success('Account Created');
+        this.context.router.push('/signin');
+      }
+    });
+  }
 
-       return (
-           <div className="col-md-8 col-md-offset-2">
+  render() {
+    var self = this;
+    var errorsList;
+    var createAccountButton;
+
+    var populateErrorsList = function() {
+      return (
+        <div className="div-md-12 alert alert-danger" id="dangerDiv">
+          <div>{self.state.errors.email}</div>
+          <div>{self.state.errors.confEmail}</div>
+          <div>{self.state.errors.password}</div>
+          <div>{self.state.errors.confpassword}</div>
+          <div>{self.state.errors.dispName}</div>
+          <div>{self.state.errors.city}</div>
+          <div>{self.state.errors.profileURL}</div>
+        </div>
+      );
+    };
+
+    var disabledCreateAccountButton = function() {
+      return (
+        <button type="submit" className="btn btn-primary btn-block disabled" disabled>Create Account</button>
+      );
+    };
+
+    var enabledCreateAccountButton = function() {
+      return (
+        <button type="submit" className="btn btn-primary btn-block">Create Account</button>
+      );
+    };
+
+    if (!_.isEmpty(self.state.errors)) {
+      errorsList = populateErrorsList();
+      createAccountButton = disabledCreateAccountButton();
+    } else {
+      createAccountButton = enabledCreateAccountButton();
+    }
+
+    return (
+      <div className="col-md-8 col-md-offset-2">
                <div className="panel panel-default">
                     <div className="panel-body">
                     <h4>Sign In Details</h4>
@@ -238,12 +238,12 @@ class CreateAccountPanel extends React.Component {
                    </div>
                </div>
            </div>
-       );
-    }
+    );
+  }
 }
 
 CreateAccountPanel.contextTypes = {
-    router: React.PropTypes.object.isRequired
+  router: React.PropTypes.object.isRequired
 };
 
 export default CreateAccountPanel;

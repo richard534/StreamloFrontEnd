@@ -70,6 +70,8 @@ class TrackApi {
     let instance = axios.create({
       headers: { 'x-access-token': jwtToken }
     });
+    
+    console.log(ApiUrl + "tracks/" + trackURL + "/addComment")
 
     instance.post(ApiUrl + "tracks/" + trackURL + "/addComment", data)
       .then((response) => {

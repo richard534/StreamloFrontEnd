@@ -49,6 +49,7 @@ class SignInPage extends React.Component {
     this.validate = this.validate.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.login = this.login.bind(this);
+    this.logout = this.logout.bind(this);
   }
 
   componentWillMount() {
