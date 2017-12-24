@@ -17,7 +17,7 @@ class TrackSearchResultsList extends React.Component {
               <Track
                   trackId={track._id}
                   uploaderId={track.uploaderId}
-                  trackBinaryId={track.trackBinary}
+                  trackBinaryId={track.trackBinaryId}
                   title={track.title}
                   artist={track.artist}
                   genre={track.genre}

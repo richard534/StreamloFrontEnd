@@ -77,16 +77,12 @@ class SearchResultsPage extends React.Component {
     let pageNum = pagenum;
 
     TrackApi.getTracksByNameLimitedByPageNum(trackNameQuery, pageNum, (err, result) => {
-      if (err) {
-        // Do Nothing
-      } else {
-        if (!_.isEmpty(result.tracks)) {
-          this.setState({
-            trackResults: result.tracks,
-            numTracks: result.numMatchingTracks,
-            trackPageNum: pageNum
-          });
-        }
+      if (!err) {
+        this.setState({
+          trackResults: result.tracks,
+          numTracks: result.numMatchingTracks,
+          trackPageNum: pageNum
+        });
       }
     });
   }

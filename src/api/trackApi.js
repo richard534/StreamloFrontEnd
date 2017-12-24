@@ -11,13 +11,14 @@ class TrackApi {
         .then((response) => {
           if (response.data.length > 0) {
             cb(null, response.data);
-          } else {
-            let err = 'Enter Valid City (Belfast or Derry)';
-            cb(err);
           }
         })
         .catch((error) => {
-          cb(error.response);
+          if(error.response) {
+            // The request was made and the server responded with a status code that falls out of the range of 2xx
+            let err = 'Enter Valid City (Belfast or Derry)';
+            cb(err);
+          }
         });
     }
   }
@@ -28,7 +29,17 @@ class TrackApi {
         cb(null, response.data);
       })
       .catch((error) => {
-        cb(error.response);
+        if (error.response) {
+          // The request was made and the server responded with a status code
+          // that falls out of the range of 2xx
+          switch (error.response.status) {
+            case "404":
+              cb(error.response.data);
+              break;
+          }
+        } else {
+          cb(error);
+        }
       });
   }
 
@@ -70,8 +81,6 @@ class TrackApi {
     let instance = axios.create({
       headers: { 'x-access-token': jwtToken }
     });
-    
-    console.log(ApiUrl + "tracks/" + trackURL + "/addComment")
 
     instance.post(ApiUrl + "tracks/" + trackURL + "/addComment", data)
       .then((response) => {

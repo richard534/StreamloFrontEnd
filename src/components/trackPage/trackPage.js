@@ -64,7 +64,7 @@ class TrackPage extends React.Component {
           numPlays: result.numPlays,
           numLikes: result.numLikes,
           numComments: result.numComments,
-          trackBinaryURL: "http://localhost:3001/tracks/" + result.trackBinary + "/stream",
+          trackBinaryURL: "http://localhost:3001/tracks/" + result.trackBinaryId + "/stream",
           comments: result.comments
         };
         this.uploaderNameDataSource(uploaderId, (err, result) => {
