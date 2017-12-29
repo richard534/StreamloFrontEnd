@@ -3,6 +3,7 @@ import { Link } from 'react-router';
 import validate from 'validate.js';
 import update from 'immutability-helper';
 import toastr from 'toastr';
+import moment from 'moment';
 import UploadPanel from './uploadPagePanels/uploadPanel.js';
 import TrackApi from 'api/trackApi';
 
@@ -106,7 +107,7 @@ class UploadPage extends React.Component {
     fd.append('genre', this.state.data.genre);
     fd.append('city', this.state.data.city);
     fd.append('trackURL', this.state.data.trackURL);
-    fd.append('dateUploaded', Date.now());
+    fd.append('dateUploaded', moment().toISOString());
     fd.append('uploaderId', uploaderId);
     fd.append('description', this.state.data.description);
     fd.append('track', this.state.data.track);
