@@ -49,11 +49,7 @@ class Track extends React.Component {
     let uploaderId = props.uploaderId;
 
     UserApi.getUserByUserId(uploaderId, (err, result) => {
-      if(err){
-        console.error(err);
-      } else {
-        this.setState({ userURL: result.userURL });
-      }
+      this.setState({ userURL: result.userURL });
     });
   }
 
