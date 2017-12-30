@@ -4,6 +4,7 @@ import validate from 'validate.js';
 import update from 'immutability-helper';
 import toastr from 'toastr';
 import moment from 'moment';
+import validator from 'validator';
 import UploadPanel from './uploadPagePanels/uploadPanel.js';
 import TrackApi from 'api/trackApi';
 
@@ -11,12 +12,21 @@ var uploadDiv = {
   marginTop: "30px"
 };
 
+validate.validators.trackURLValidator = function(value, options, key, attributes) {
+  if (validator.isURL(value, { require_tld: false })) {
+    return undefined;
+  } else {
+    return 'is invalid';
+  }
+};
+
 var constraints = {
     title: {
         presence: true
     },
     trackURL: {
-        presence: true
+        presence: {message: "can't be blank "},
+        trackURLValidator: true
     },
     genre: {
         presence: true
@@ -133,7 +143,7 @@ class UploadPage extends React.Component {
           <UploadPanel handleChange={this.handleChange}
             onTrackSelected={this.onTrackSelected}
             handleSubmit={this.handleSubmit}
-            uploaderURL={this.uploaderURL}
+            uploaderURL={this.props.auth.getProfile().userURL}
             data={this.state.data}
             errors={this.state.errors}
            />

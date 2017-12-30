@@ -27,7 +27,6 @@ var uploadLabelDivStyle = {
     paddingRight: "0px"
 };
 
-// TODO "artist" property of data post object needs to be set to displayname of logged in user
 class UploadPanel extends React.Component {
   constructor(props) {
     super(props);
@@ -86,10 +85,10 @@ class UploadPanel extends React.Component {
                               <label>Track URL</label>
                           </div>
                           <div className="col-md-5" style={trackURLText}>
-                              <p className="text-muted">streamlo.com/{this.props.uploaderURL}/</p>
+                              <p className="text-muted">streamlo.com/{this.props.uploaderURL}/{this.props.data.trackURL}</p>
                           </div>
                           <div className="col-md-6 pull-right" style={trackURLInput}>
-                              <input className="form-control" name="trackURL" value={this.props.data.trackURL} placeholder="Enter Track URL..." />
+                              <input maxLength="18" className="form-control" name="trackURL" value={this.props.data.trackURL} placeholder="Enter Track URL..." />
                           </div>
                       </div>
                       <br />
