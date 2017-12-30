@@ -80,7 +80,7 @@ class SearchResultsPage extends React.Component {
       if (!err) {
         this.setState({
           trackResults: result.tracks,
-          numTracks: result.numMatchingTracks,
+          numTracks: result.total,
           trackPageNum: pageNum
         });
       }
@@ -94,16 +94,13 @@ class SearchResultsPage extends React.Component {
     let pageNum = pagenum;
 
     UserApi.getUsersByDisplaynameLimitedByPageNum(displayName, pageNum, (err, result) => {
-      if(err){
-        // Do Nothing
-      } else {
-        if (!_.isEmpty(result.users)) {
-          this.setState({
-            peopleResults: result.users,
-            numPeople: result.numMatchingUsers,
-            peoplePageNum: pageNum
-          });
-        }
+      if(err) return;
+      else if (!_.isEmpty(result.users)) {
+        this.setState({
+          peopleResults: result.users,
+          numPeople: result.total,
+          peoplePageNum: pageNum
+        });
       }
     });
   }
