@@ -29,6 +29,7 @@ class SearchResultsPage extends React.Component {
       trackPageNum: 0,
       peoplePageNum: 0,
       hasMoreTracks: false,
+      hasMorePeople: false,
       selectedFilter: {
         tracks: true,
         people: false
@@ -91,7 +92,7 @@ class SearchResultsPage extends React.Component {
     });
   }
 
-  peopleDatasource(props, pagenum = 0) {
+  peopleDatasource(props, pagenum = 1) {
     props = props || this.props;
 
     let displayName = props.location.query.q;
@@ -100,10 +101,13 @@ class SearchResultsPage extends React.Component {
     UserApi.getUsersByDisplaynameLimitedByPageNum(displayName, pageNum, (err, result) => {
       if(err) return;
       else if (!_.isEmpty(result.users)) {
+        let hasMorePeople = true;
+        if(result.page == result.pageCount) hasMorePeople = false;
         this.setState({
           peopleResults: result.users,
           numPeople: result.total,
-          peoplePageNum: pageNum
+          peoplePageNum: pageNum,
+          hasMorePeople: hasMorePeople
         });
       }
     });
@@ -177,7 +181,8 @@ class SearchResultsPage extends React.Component {
                   numPeople={self.state.numPeople}
                   handlePreviousPager={self.handlePreviousPagerPeople}
                   handleNextPager={self.handleNextPagerPeople} 
-                  peoplePageNum={self.state.peoplePageNum} />
+                  peoplePageNum={self.state.peoplePageNum} 
+                  hasMorePeople={self.state.hasMorePeople} />
       );
     }();
 
