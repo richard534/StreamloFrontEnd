@@ -71,3 +71,7 @@ footer {
     border-width: 1px;
     border-color: #333;
 }
+
+.disableClick{
+    pointer-events: none;
+}

@@ -35,6 +35,8 @@ class PeopleSearchResultsList extends React.Component {
           );
       }();
 
+      let previousButtonClass = self.props.peoplePageNum == 0 ? "previous disabled disableClick" : "previous";
+
       var results;
       var numPeople;
       if (self.props.peopleResults.length > 0) {
@@ -44,7 +46,7 @@ class PeopleSearchResultsList extends React.Component {
                   <ul className="list-group">{people.map(createPersonResultRow)}</ul>
                   <nav>
                       <ul className="pager">
-                          <li className="previous" onClick={this.props.handlePreviousPager}><a href=""><span aria-hidden="true">&larr;</span> Previous</a></li>
+                          <li className={previousButtonClass} onClick={this.props.handlePreviousPager}><a href=""><span aria-hidden="true">&larr;</span> Previous</a></li>
                           <li className="next" onClick={this.props.handleNextPager}><a href="">Next <span aria-hidden="true">&rarr;</span></a></li>
                        </ul>
                   </nav>

@@ -164,7 +164,8 @@ class SearchResultsPage extends React.Component {
                   searchString={self.state.searchString}
                   numTracks={self.state.numTracks}
                   handlePreviousPager={self.handlePreviousPagerTracks}
-                  handleNextPager={self.handleNextPagerTracks} />
+                  handleNextPager={self.handleNextPagerTracks} 
+                  trackPageNum={self.state.trackPageNum} />
       );
     }();
 
@@ -174,7 +175,8 @@ class SearchResultsPage extends React.Component {
                   searchString={self.state.searchString}
                   numPeople={self.state.numPeople}
                   handlePreviousPager={self.handlePreviousPagerPeople}
-                  handleNextPager={self.handleNextPagerPeople} />
+                  handleNextPager={self.handleNextPagerPeople} 
+                  peoplePageNum={self.state.peoplePageNum} />
       );
     }();
 
@@ -199,10 +201,10 @@ class SearchResultsPage extends React.Component {
 
     return (
       <div className="container">
-            <SearchHeader searchString={this.state.searchString}/>
-            <SearchFilter onChangeFilter={this.changeSelectedFilter} filterSelected={selectedFilter}/>
-            {resultsList}
-        </div>
+        <SearchHeader searchString={this.state.searchString}/>
+        <SearchFilter onChangeFilter={this.changeSelectedFilter} filterSelected={selectedFilter}/>
+        {resultsList}
+      </div>
     );
   }
 }

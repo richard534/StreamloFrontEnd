@@ -40,7 +40,9 @@ class TrackSearchResultsList extends React.Component {
           </div>
       );
     }();
-
+    
+    let previousButtonClass = self.props.trackPageNum == 0 ? "previous disabled disableClick" : "previous";
+    
     var results;
     var numTracks;
     if (self.props.trackResults.length > 0) {
@@ -50,8 +52,8 @@ class TrackSearchResultsList extends React.Component {
           <ul className="list-group">{tracks.map(createTrackResultRow)}</ul>
           <nav>
               <ul className="pager">
-                  <li className="previous" onClick={this.props.handlePreviousPager}><a href=""><span aria-hidden="true">&larr;</span> Previous</a></li>
-                  <li className="next" onClick={this.props.handleNextPager}><a href="">Next <span aria-hidden="true">&rarr;</span></a></li>
+                  <li className={previousButtonClass} onClick={this.props.handlePreviousPager}><a href="" ><span aria-hidden="true">&larr;</span> Previous</a></li>
+                  <li className="next" onClick={this.props.handleNextPager}><a href="" >Next <span aria-hidden="true">&rarr;</span></a></li>
                </ul>
           </nav>
       </div>;
