@@ -28,6 +28,7 @@ class SearchResultsPage extends React.Component {
       numPeople: 0,
       trackPageNum: 0,
       peoplePageNum: 0,
+      hasMoreTracks: false,
       selectedFilter: {
         tracks: true,
         people: false
@@ -70,7 +71,7 @@ class SearchResultsPage extends React.Component {
     });
   }
 
-  tracksDataSource(props, pagenum = 0) {
+  tracksDataSource(props, pagenum = 1) {
     props = props || this.props;
 
     let trackNameQuery = props.location.query.q;
@@ -78,10 +79,13 @@ class SearchResultsPage extends React.Component {
 
     TrackApi.getTracksByNameLimitedByPageNum(trackNameQuery, pageNum, (err, result) => {
       if (!err) {
+        let hasMoreTracks = true;
+        if(result.page == result.pageCount) hasMoreTracks = false;
         this.setState({
           trackResults: result.tracks,
           numTracks: result.total,
-          trackPageNum: pageNum
+          trackPageNum: pageNum,
+          hasMoreTracks: hasMoreTracks
         });
       }
     });
@@ -129,9 +133,7 @@ class SearchResultsPage extends React.Component {
   // Track Pagination handlers
   handlePreviousPagerTracks(e) {
     e.preventDefault();
-    if (this.state.trackPageNum === 0) { // If first page do nothing
-      return;
-    }
+    if (this.state.trackPageNum === 0) return; // If first page do nothing
     this.tracksDataSource(null, this.state.trackPageNum - 1);
   }
 
@@ -143,9 +145,7 @@ class SearchResultsPage extends React.Component {
   // People Pagination handlers
   handlePreviousPagerPeople(e) {
     e.preventDefault();
-    if (this.state.peoplePageNum === 0) { // If first page do nothing
-      return;
-    }
+    if (this.state.peoplePageNum === 0) return; // If first page do nothing
     this.peopleDatasource(null, this.state.peoplePageNum - 1);
   }
 
@@ -165,7 +165,8 @@ class SearchResultsPage extends React.Component {
                   numTracks={self.state.numTracks}
                   handlePreviousPager={self.handlePreviousPagerTracks}
                   handleNextPager={self.handleNextPagerTracks} 
-                  trackPageNum={self.state.trackPageNum} />
+                  trackPageNum={self.state.trackPageNum}
+                  hasMoreTracks={self.state.hasMoreTracks}/>
       );
     }();
 
