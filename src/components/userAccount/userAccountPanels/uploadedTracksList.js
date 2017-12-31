@@ -13,7 +13,7 @@ class UploadedTrackList extends React.Component {
                <li key={track._id} className="list-group-item">
                    <Track trackId={track._id}
                    uploaderId={track.uploaderId}
-                   trackBinaryId={track.trackBinary}
+                   trackBinaryId={track.trackBinaryId}
                    title={track.title}
                    artist={track.artist}
                    genre={track.genre}

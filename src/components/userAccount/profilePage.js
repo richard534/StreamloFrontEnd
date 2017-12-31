@@ -41,16 +41,17 @@ class ProfilePage extends React.Component {
       if (err) {
         toastr.error('Error retrieving profile');
       } else {
+        let returnedUser = result.users[0];
         let newState = {
-          uploaderId: result._id,
-          profileDisplayname: result.displayName,
-          numFollowers: result.numberOfFollowers,
-          numFollowing: result.numberOfFollowedUsers,
-          followedUsers: result.followedUsers,
-          likedTracks: result.likedTracks
+          uploaderId: returnedUser._id,
+          profileDisplayname: returnedUser.displayName,
+          numFollowers: returnedUser.numberOfFollowers,
+          numFollowing: returnedUser.numberOfFollowedUsers,
+          followedUsers: returnedUser.followedUsers,
+          likedTracks: returnedUser.likedTracks
         };
         this.setState(newState);
-        this.tracksUploadedDataSource(result._id);
+        this.tracksUploadedDataSource(returnedUser._id);
       }
     });
   }
@@ -58,7 +59,7 @@ class ProfilePage extends React.Component {
   tracksUploadedDataSource(uploaderId) {
     TrackApi.getTrackByUserId(uploaderId, (err, result) => {
       if (err) {
-        toastr.error('Error retireving uploaded tracks list')
+        toastr.error('Error retrieving uploaded tracks list')
       } else {
         this.setState({ uploadedTracks: result });
       }

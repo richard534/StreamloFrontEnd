@@ -25,7 +25,7 @@ class UserApi {
   }
   
   static getUserByUserURL(userURL, cb) {
-    axios.get(ApiUrl + 'users/' + userURL)
+    axios.get(ApiUrl + 'users?userURL=' + userURL)
     .then((response) => {
       cb(null, response.data);
     })
