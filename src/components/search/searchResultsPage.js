@@ -165,24 +165,24 @@ class SearchResultsPage extends React.Component {
     var trackResultsList = function() {
       return (
         <TrackSearchResultsList trackResults={self.state.trackResults}
-                  searchString={self.state.searchString}
-                  numTracks={self.state.numTracks}
-                  handlePreviousPager={self.handlePreviousPagerTracks}
-                  handleNextPager={self.handleNextPagerTracks} 
-                  trackPageNum={self.state.trackPageNum}
-                  hasMoreTracks={self.state.hasMoreTracks}/>
+          searchString={self.state.searchString}
+          numTracks={self.state.numTracks}
+          handlePreviousPager={self.handlePreviousPagerTracks}
+          handleNextPager={self.handleNextPagerTracks} 
+          trackPageNum={self.state.trackPageNum}
+          hasMoreTracks={self.state.hasMoreTracks}/>
       );
     }();
 
     var peopleResultsList = function() {
       return (
         <PeopleSearchResultsList peopleResults={self.state.peopleResults}
-                  searchString={self.state.searchString}
-                  numPeople={self.state.numPeople}
-                  handlePreviousPager={self.handlePreviousPagerPeople}
-                  handleNextPager={self.handleNextPagerPeople} 
-                  peoplePageNum={self.state.peoplePageNum} 
-                  hasMorePeople={self.state.hasMorePeople} />
+          searchString={self.state.searchString}
+          numPeople={self.state.numPeople}
+          handlePreviousPager={self.handlePreviousPagerPeople}
+          handleNextPager={self.handleNextPagerPeople} 
+          peoplePageNum={self.state.peoplePageNum} 
+          hasMorePeople={self.state.hasMorePeople} />
       );
     }();
 

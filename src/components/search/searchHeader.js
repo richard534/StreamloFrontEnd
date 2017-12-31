@@ -8,10 +8,9 @@ var searchResultsHeaderStyle = {
 class SearchHeader extends React.Component {
   render() {
     return (
-        <div className="container">
-            <h3 style={searchResultsHeaderStyle} >Search results for "{this.props.searchString}"</h3>
-        </div>
-    );
+      <div className="container">
+        <h3 style={searchResultsHeaderStyle}>Search results for "{this.props.searchString}"</h3>
+      </div>);
   }
 }
 
