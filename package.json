@@ -5,10 +5,9 @@
   "main": "index.js",
   "scripts": {
     "prestart": "babel-node tools/startmessage.js",
-    "start": "npm-run-all --parallel open lint:watch",
+    "start": "npm-run-all --parallel open lint",
     "open": "cross-env NODE_ENV=development babel-node tools/srcServer.js",
-    "lint": "node_modules/.bin/esw webpack.config.* src tools",
-    "lint:watch": "npm run lint --watch"
+    "lint": "echo 'Starting ESLint 🐙' && node_modules/.bin/esw webpack.config.* src tools && echo 'Finished ESLint 🐙'"
   },
   "repository": {
     "type": "git",
