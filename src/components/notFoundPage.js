@@ -1,5 +1,5 @@
-import React from 'react';
-import {Link} from 'react-router';
+import React from "react";
+import { Link } from "react-router";
 
 var NotFoundPage = React.createClass({
   render: function() {
@@ -7,7 +7,9 @@ var NotFoundPage = React.createClass({
       <div className="col-md-8">
         <h1>Page not found</h1>
         <p>Whoops! nothing found here!</p>
-        <p><Link to="/">Back to home</Link></p>
+        <p>
+          <Link to="/">Back to home</Link>
+        </p>
       </div>
     );
   }

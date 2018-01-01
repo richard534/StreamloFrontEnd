@@ -1,6 +1,6 @@
-import React from 'react';
-import {Link} from 'react-router';
-var defaultProfilePic = require('images/account-icon.png');
+import React from "react";
+import { Link } from "react-router";
+var defaultProfilePic = require("images/account-icon.png");
 
 var ThumbnailStyle = {
   marginBottom: "0px"
@@ -15,15 +15,21 @@ class Person extends React.Component {
   render() {
     var self = this;
 
-    var TrackUploadDate = function() {
+    var TrackUploadDate = (function() {
       var date = new Date(self.props.uploadDate);
-      return (date.toString());
-    }();
+      return date.toString();
+    })();
 
     return (
       <div className="media">
         <div className="media-left">
-          <img className="media-object thumbnail img-circle accountThumbnail" src={defaultProfilePic} width="160" height="160" style={ThumbnailStyle}/>
+          <img
+            className="media-object thumbnail img-circle accountThumbnail"
+            src={defaultProfilePic}
+            width="160"
+            height="160"
+            style={ThumbnailStyle}
+          />
         </div>
         <div className="media-body">
           <div className="col-md-12">
@@ -32,11 +38,12 @@ class Person extends React.Component {
             </Link>
             <div className="col-md-12">
               <span className="text-center">
-                <span className="glyphicon glyphicon-user"></span>
+                <span className="glyphicon glyphicon-user" />
                 {this.props.numFollowers}
               </span>
-              <span className="text-center">|
-                <span className="glyphicon glyphicon-upload"></span>
+              <span className="text-center">
+                |
+                <span className="glyphicon glyphicon-upload" />
                 {this.props.numUploadedTracks}
               </span>
             </div>

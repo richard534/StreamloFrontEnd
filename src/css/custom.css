@@ -17,9 +17,9 @@ footer {
   padding-bottom: 10px;
 }
 
-.navbar{
+.navbar {
   padding-left: 100px;
-  padding-right:100px;
+  padding-right: 100px;
 }
 
 .container-full {
@@ -36,42 +36,42 @@ footer {
 }
 
 #userJumbotron {
-    background-image: url("/profileBanner.png");
-    background-repeat: repeat;
-    height: 315px;
-    margin-bottom: 0px;
+  background-image: url("/profileBanner.png");
+  background-repeat: repeat;
+  height: 315px;
+  margin-bottom: 0px;
 }
 
 #profileNav {
-    height: 100%;
-    width: 100%;
-    margin: 0;
-    padding: 0;
-    position: relative;
-    background: #e2e2e2;
-    margin-bottom: 20px;
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  position: relative;
+  background: #e2e2e2;
+  margin-bottom: 20px;
 }
 
 .list-group-item {
-    border: none;
-    box-shadow: none;
+  border: none;
+  box-shadow: none;
 }
 
 .list-group {
-    box-shadow: none;
+  box-shadow: none;
 }
 
 .search-result-image {
-    padding-top: 15px;
-    padding-bottom: 20px;
+  padding-top: 15px;
+  padding-bottom: 20px;
 }
 
 #uploadImage {
-    border-style: solid;
-    border-width: 1px;
-    border-color: #333;
+  border-style: solid;
+  border-width: 1px;
+  border-color: #333;
 }
 
-.disableClick{
-    pointer-events: none;
+.disableClick {
+  pointer-events: none;
 }

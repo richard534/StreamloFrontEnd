@@ -1,14 +1,14 @@
-import React from 'react';
-import {Link} from 'react-router';
-import SearchHeader from './searchHeader';
-import SearchFilter from './searchFilter';
-import TrackSearchResultsList from './trackSearchResultsList';
-import PeopleSearchResultsList from './peopleSearchResultsList';
-import update from 'immutability-helper';
-import _ from 'lodash';
-import toastr from 'toastr';
-import TrackApi from 'api/trackApi';
-import UserApi from 'api/userApi';
+import React from "react";
+import { Link } from "react-router";
+import SearchHeader from "./searchHeader";
+import SearchFilter from "./searchFilter";
+import TrackSearchResultsList from "./trackSearchResultsList";
+import PeopleSearchResultsList from "./peopleSearchResultsList";
+import update from "immutability-helper";
+import _ from "lodash";
+import toastr from "toastr";
+import TrackApi from "api/trackApi";
+import UserApi from "api/userApi";
 
 /*
 this.props.params.search // Gives params
@@ -81,7 +81,7 @@ class SearchResultsPage extends React.Component {
     TrackApi.getTracksByNameLimitedByPageNum(trackNameQuery, pageNum, (err, result) => {
       if (!err) {
         let hasMoreTracks = true;
-        if(result.page == result.pageCount) hasMoreTracks = false;
+        if (result.page == result.pageCount) hasMoreTracks = false;
         this.setState({
           trackResults: result.tracks,
           numTracks: result.total,
@@ -99,10 +99,10 @@ class SearchResultsPage extends React.Component {
     let pageNum = pagenum;
 
     UserApi.getUsersByDisplaynameLimitedByPageNum(displayName, pageNum, (err, result) => {
-      if(err) return;
+      if (err) return;
       else if (!_.isEmpty(result.users)) {
         let hasMorePeople = true;
-        if(result.page == result.pageCount) hasMorePeople = false;
+        if (result.page == result.pageCount) hasMorePeople = false;
         this.setState({
           peopleResults: result.users,
           numPeople: result.total,
@@ -115,7 +115,7 @@ class SearchResultsPage extends React.Component {
 
   changeSelectedFilter(e) {
     e.preventDefault();
-    const name = e.target.parentNode.getAttribute('name');
+    const name = e.target.parentNode.getAttribute("name");
 
     var newState = update(this.state, {
       selectedFilter: {
@@ -154,37 +154,41 @@ class SearchResultsPage extends React.Component {
   }
 
   handleNextPagerPeople(e) {
-      e.preventDefault();
-      this.peopleDatasource(null, this.state.peoplePageNum + 1);
+    e.preventDefault();
+    this.peopleDatasource(null, this.state.peoplePageNum + 1);
   }
 
   render() {
     var self = this;
     var resultsList;
 
-    var trackResultsList = function() {
+    var trackResultsList = (function() {
       return (
-        <TrackSearchResultsList trackResults={self.state.trackResults}
+        <TrackSearchResultsList
+          trackResults={self.state.trackResults}
           searchString={self.state.searchString}
           numTracks={self.state.numTracks}
           handlePreviousPager={self.handlePreviousPagerTracks}
-          handleNextPager={self.handleNextPagerTracks} 
+          handleNextPager={self.handleNextPagerTracks}
           trackPageNum={self.state.trackPageNum}
-          hasMoreTracks={self.state.hasMoreTracks}/>
+          hasMoreTracks={self.state.hasMoreTracks}
+        />
       );
-    }();
+    })();
 
-    var peopleResultsList = function() {
+    var peopleResultsList = (function() {
       return (
-        <PeopleSearchResultsList peopleResults={self.state.peopleResults}
+        <PeopleSearchResultsList
+          peopleResults={self.state.peopleResults}
           searchString={self.state.searchString}
           numPeople={self.state.numPeople}
           handlePreviousPager={self.handlePreviousPagerPeople}
-          handleNextPager={self.handleNextPagerPeople} 
-          peoplePageNum={self.state.peoplePageNum} 
-          hasMorePeople={self.state.hasMorePeople} />
+          handleNextPager={self.handleNextPagerPeople}
+          peoplePageNum={self.state.peoplePageNum}
+          hasMorePeople={self.state.hasMorePeople}
+        />
       );
-    }();
+    })();
 
     function determineSelectedFilter() {
       if (self.state.selectedFilter.tracks == true) {
@@ -207,8 +211,8 @@ class SearchResultsPage extends React.Component {
 
     return (
       <div className="container">
-        <SearchHeader searchString={this.state.searchString}/>
-        <SearchFilter onChangeFilter={this.changeSelectedFilter} filterSelected={selectedFilter}/>
+        <SearchHeader searchString={this.state.searchString} />
+        <SearchFilter onChangeFilter={this.changeSelectedFilter} filterSelected={selectedFilter} />
         {resultsList}
       </div>
     );

@@ -1,7 +1,7 @@
-import React from 'react';
-import {Link} from 'react-router';
-import SearchBox from './searchBox';
-var streamloLogo = require('images/StreamloWithAlpha.png');
+import React from "react";
+import { Link } from "react-router";
+import SearchBox from "./searchBox";
+var streamloLogo = require("images/StreamloWithAlpha.png");
 
 var navbarBrandStyle = {
   paddingTop: "3px"
@@ -9,51 +9,55 @@ var navbarBrandStyle = {
 
 class Header extends React.Component {
   constructor(props) {
-      super(props);
+    super(props);
 
-      this.state = {
-          searchString: ""
-      };
+    this.state = {
+      searchString: ""
+    };
 
-      this.setSearchStringState = this.setSearchStringState.bind(this);
-      this.onSearchSubmit = this.onSearchSubmit.bind(this);
-      this.logout = this.logout.bind(this);
+    this.setSearchStringState = this.setSearchStringState.bind(this);
+    this.onSearchSubmit = this.onSearchSubmit.bind(this);
+    this.logout = this.logout.bind(this);
   }
 
-  setSearchStringState(e) { // Handles user input, refreshes DOM every key press
-      const target = e.target;
-      this.setState({searchString: target.value});
+  setSearchStringState(e) {
+    // Handles user input, refreshes DOM every key press
+    const target = e.target;
+    this.setState({ searchString: target.value });
   }
 
   onSearchSubmit(e) {
-      e.preventDefault();
+    e.preventDefault();
   }
-  
+
   logout() {
-    this.props.auth.logout()
-    this.context.router.push('/signin');
+    this.props.auth.logout();
+    this.context.router.push("/signin");
   }
-  
+
   render() {
     let loggedIn = this.props.auth.loggedIn();
     let leftNav;
 
     if (loggedIn) {
       let userProfile = this.props.auth.getProfile();
-      leftNav =
-      <ul className="nav navbar-nav navbar-right">
-        <li className="nav">
-          <Link to="/upload">Upload</Link>
-        </li>
-        <li className="nav">
-          <Link to={'/user/' + userProfile.userURL}>Signed in as {userProfile.displayName}</Link>
-        </li>
-        <li className="nav">
-          <button onClick={this.logout} className="btn btn-default navbar-btn">Logout</button>
-        </li>
-      </ul>
+      leftNav = (
+        <ul className="nav navbar-nav navbar-right">
+          <li className="nav">
+            <Link to="/upload">Upload</Link>
+          </li>
+          <li className="nav">
+            <Link to={"/user/" + userProfile.userURL}>Signed in as {userProfile.displayName}</Link>
+          </li>
+          <li className="nav">
+            <button onClick={this.logout} className="btn btn-default navbar-btn">
+              Logout
+            </button>
+          </li>
+        </ul>
+      );
     } else {
-      leftNav =
+      leftNav = (
         <ul className="nav navbar-nav navbar-right">
           <li className="nav">
             <Link to="/upload">Upload</Link>
@@ -62,29 +66,31 @@ class Header extends React.Component {
             <Link to="signin">Sign In</Link>
           </li>
         </ul>
+      );
     }
-      
+
     return (
       <div className="container">
         <nav className="navbar navbar-default navbar-fixed-top">
-
           <div className="navbar-header">
             <Link to="/" className="navbar-brand" style={navbarBrandStyle}>
-              <img src={streamloLogo} className="img-responsive pull-left" width="125"/>
+              <img src={streamloLogo} className="img-responsive pull-left" width="125" />
             </Link>
           </div>
 
-            <ul className="nav navbar-nav navbar-left col-md-5 pull-left">
-              <li className="nav">
-                <Link to="/">Home</Link>
-              </li>
-              <li>
-                <SearchBox searchString={this.state.searchString}
-                    onChange={this.setSearchStringState}
-                    onSearchSubmit={this.onSearchSubmit} />
-              </li>
-            </ul>
-            {leftNav}
+          <ul className="nav navbar-nav navbar-left col-md-5 pull-left">
+            <li className="nav">
+              <Link to="/">Home</Link>
+            </li>
+            <li>
+              <SearchBox
+                searchString={this.state.searchString}
+                onChange={this.setSearchStringState}
+                onSearchSubmit={this.onSearchSubmit}
+              />
+            </li>
+          </ul>
+          {leftNav}
         </nav>
       </div>
     );
@@ -92,7 +98,7 @@ class Header extends React.Component {
 }
 
 Header.contextTypes = {
-    router: React.PropTypes.object.isRequired
+  router: React.PropTypes.object.isRequired
 };
 
 export default Header;

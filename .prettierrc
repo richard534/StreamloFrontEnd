@@ -1,0 +1,16 @@
+{
+  "printWidth": 120,
+  "tabWidth": 2,
+  "useTabs": false,
+  "noSemi": true,
+  "singleQuote": false,
+  "trailingComma": "none",
+  "bracketSpacing": true,
+  "jsxBracketSameLine": false,
+  "arrowParens": "avoid",
+  "parser": "babylon",
+  "filepath": "None",
+  "requirePragma": false,
+  "insertPragma": false,
+  "proseWrap": "preserve"
+}

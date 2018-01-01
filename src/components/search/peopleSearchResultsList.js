@@ -1,6 +1,6 @@
-import React from 'react';
-import Person from './person';
-var noResultImg = require('images/noResultsSearch.png');
+import React from "react";
+import Person from "./person";
+var noResultImg = require("images/noResultsSearch.png");
 
 var ThumbnailStyle = {
   marginBottom: "0px"
@@ -18,22 +18,21 @@ class PeopleSearchResultsList extends React.Component {
     var createPersonResultRow = function(person) {
       return (
         <li key={person._id} className="list-group-item" style={PersonListingStyle}>
-          <Person displayName={person.displayName}
-            userURL={person.userURL}/>
+          <Person displayName={person.displayName} userURL={person.userURL} />
           <hr />
         </li>
       );
     };
 
-    var resultsNotFound = function() {
+    var resultsNotFound = (function() {
       return (
         <div>
-          <img src={noResultImg} className="center-block search-result-image"></img>
+          <img src={noResultImg} className="center-block search-result-image" />
           <p className="text-center text-muted">Sorry we didn't find any results for "{self.props.searchString}".</p>
           <p className="text-center text-muted">Check the spelling, or try a different search.</p>
         </div>
       );
-    }();
+    })();
 
     let previousButtonClass = self.props.peoplePageNum == 1 ? "previous disabled disableClick" : "previous";
     let nextButtonClass = self.props.hasMorePeople == false ? "next disabled disableClick" : "next";
@@ -42,17 +41,25 @@ class PeopleSearchResultsList extends React.Component {
     var numPeople;
     if (self.props.peopleResults.length > 0) {
       numPeople = <p className="text-muted">Found {self.props.numPeople} people</p>;
-      results =
+      results = (
         <div>
           <ul className="list-group">{people.map(createPersonResultRow)}</ul>
           <nav>
             <ul className="pager">
-              <li className={previousButtonClass} onClick={this.props.handlePreviousPager}><a href=""><span aria-hidden="true">&larr;</span> Previous</a></li>
-              <li className={nextButtonClass} onClick={this.props.handleNextPager}><a href="">Next <span aria-hidden="true">&rarr;</span></a></li>
-             </ul>
+              <li className={previousButtonClass} onClick={this.props.handlePreviousPager}>
+                <a href="">
+                  <span aria-hidden="true">&larr;</span> Previous
+                </a>
+              </li>
+              <li className={nextButtonClass} onClick={this.props.handleNextPager}>
+                <a href="">
+                  Next <span aria-hidden="true">&rarr;</span>
+                </a>
+              </li>
+            </ul>
           </nav>
-        </div>;
-
+        </div>
+      );
     } else {
       results = <div>{resultsNotFound}</div>;
     }

@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 var searchResultsHeaderStyle = {
   borderBottom: "solid 1px #f2f2f2",
@@ -10,7 +10,8 @@ class SearchHeader extends React.Component {
     return (
       <div className="container">
         <h3 style={searchResultsHeaderStyle}>Search results for "{this.props.searchString}"</h3>
-      </div>);
+      </div>
+    );
   }
 }
 
