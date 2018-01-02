@@ -1,9 +1,9 @@
-import React from 'react';
-import { Link } from 'react-router';
-import toastr from 'toastr';
+import React from "react";
+import { Link } from "react-router";
+import toastr from "toastr";
 
-import UserApi from 'api/userApi';
-var accountIcon= require('images/account-icon.png');
+import UserApi from "api/userApi";
+var accountIcon = require("images/account-icon.png");
 
 var commentThumbnail = {
   padding: 0
@@ -16,7 +16,7 @@ class Comment extends React.Component {
     this.state = {
       commentUsername: "",
       commentUserURL: ""
-    }
+    };
 
     this.commentUserDataSource = this.commentUserDataSource.bind(this);
   }
@@ -44,24 +44,25 @@ class Comment extends React.Component {
     return (
       <div className="media">
         <div className="col-md-1" style={commentThumbnail}>
-            <img className="img-circle" src={accountIcon} width="50" height="50"></img>
+          <img className="img-circle" src={accountIcon} width="50" height="50" />
         </div>
         <div className="col-md-11">
-            <div className="col-md-6">
-                <Link to={'/user/' + this.state.commentUserURL}><p className="text-muted">{this.state.commentUsername}</p></Link>
-            </div>
-            <div className="col-md-6">
-                <p className="text-muted pull-right">{this.props.datePosted}</p>
-            </div>
-            <div className="col-md-12">
-                <p>{this.props.commentBody}</p>
-            </div>
-
+          <div className="col-md-6">
+            <Link to={"/user/" + this.state.commentUserURL}>
+              <p className="text-muted">{this.state.commentUsername}</p>
+            </Link>
+          </div>
+          <div className="col-md-6">
+            <p className="text-muted pull-right">{this.props.datePosted}</p>
+          </div>
+          <div className="col-md-12">
+            <p>{this.props.commentBody}</p>
+          </div>
         </div>
         <div className="col-md-12">
-            <hr />
+          <hr />
         </div>
-    </div>
+      </div>
     );
   }
 }

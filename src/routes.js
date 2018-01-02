@@ -1,30 +1,30 @@
 /* global __API_DOMAIN__ */
 
-import React from 'react';
-import { Route, IndexRoute } from 'react-router';
-import AuthService from './utils/AuthService';
-import toastr from 'toastr';
+import React from "react";
+import { Route, IndexRoute } from "react-router";
+import AuthService from "./utils/AuthService";
+import toastr from "toastr";
 
-import App from './components/app';
-import HomePage from './components/homePage/homePage';
-import SearchResultsPage from './components/search/searchResultsPage';
-import TrackPage from './components/trackPage/trackPage';
-import UploadPage from './components/upload/uploadPage';
-import SignInPage from './components/userAccount/signInPage';
-import CreateAccountPage from './components/userAccount/createAccountPage';
-import ProfilePage from './components/userAccount/profilePage';
-import NotFoundPage from './components/notFoundPage';
+import App from "./components/app";
+import HomePage from "./components/homePage/homePage";
+import SearchResultsPage from "./components/search/searchResultsPage";
+import TrackPage from "./components/trackPage/trackPage";
+import UploadPage from "./components/upload/uploadPage";
+import SignInPage from "./components/userAccount/signInPage";
+import CreateAccountPage from "./components/userAccount/createAccountPage";
+import ProfilePage from "./components/userAccount/profilePage";
+import NotFoundPage from "./components/notFoundPage";
 
 const auth = new AuthService(__API_DOMAIN__);
 
 // onEnter callback to validate authentication in private routes
 const requireAuth = (nextState, replace) => {
   if (!auth.loggedIn()) {
-    replace({ pathname: '/signin' });
+    replace({ pathname: "/signin" });
     toastr.remove();
     toastr.error("Please sign in to access this page");
   }
-}
+};
 
 export default (
   <Route path="/" component={App} auth={auth}>

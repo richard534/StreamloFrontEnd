@@ -5,10 +5,9 @@
   "main": "index.js",
   "scripts": {
     "prestart": "babel-node tools/startmessage.js",
-    "start": "npm-run-all --parallel open lint:watch",
+    "start": "npm-run-all --parallel open lint",
     "open": "cross-env NODE_ENV=development babel-node tools/srcServer.js",
-    "lint": "node_modules/.bin/esw webpack.config.* src tools",
-    "lint:watch": "npm run lint --watch"
+    "lint": "echo 'Starting ESLint 🐙' && node_modules/.bin/esw webpack.config.* src tools && echo 'Finished ESLint 🐙'"
   },
   "repository": {
     "type": "git",
@@ -21,7 +20,6 @@
   },
   "homepage": "https://github.com/richard534/MusicSteamWebsite#readme",
   "dependencies": {
-    "auth0-js": "^8.4.0",
     "axios": "0.16.2",
     "babelify": "7.3.0",
     "bootstrap": "3.3.6",
@@ -30,11 +28,13 @@
     "jquery": "2.2.0",
     "jwt-decode": "^2.2.0",
     "lodash": "4.9.0",
+    "moment": "^2.20.1",
     "react": "15.4.2",
     "react-dom": "15.4.2",
     "react-router": "2.8.1",
     "toastr": "2.1.0",
-    "validate.js": "0.9.0"
+    "validate.js": "0.9.0",
+    "validator": "^9.2.0"
   },
   "devDependencies": {
     "babel-cli": "6.8.0",

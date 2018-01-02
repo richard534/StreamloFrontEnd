@@ -1,5 +1,5 @@
-import React from 'react';
-import Comment from './comment';
+import React from "react";
+import Comment from "./comment";
 
 class CommentsPanel extends React.Component {
   render() {
@@ -9,22 +9,18 @@ class CommentsPanel extends React.Component {
     var createCommentRow = function(comment) {
       return (
         <li key={comment._id} className="list-group-item">
-          <Comment
-            commentUserId={comment.user}
-            commentDate={comment.datePosted}
-            commentBody={comment.body}
-          />
+          <Comment commentUserId={comment.user} commentDate={comment.datePosted} commentBody={comment.body} />
         </li>
       );
     };
 
-    var noComments = function() {
+    var noComments = (function() {
       return (
         <div>
           <p>No Comments</p>
         </div>
       );
-    }();
+    })();
 
     var results;
     var numcomments;
@@ -37,9 +33,7 @@ class CommentsPanel extends React.Component {
     return (
       <div className="col-md-12">
         <div className="panel panel-default">
-          <div className="panel-body">
-            {results}
-          </div>
+          <div className="panel-body">{results}</div>
         </div>
       </div>
     );

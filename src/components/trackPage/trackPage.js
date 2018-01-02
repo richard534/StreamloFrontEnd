@@ -1,13 +1,13 @@
-import React from 'react';
-import toastr from 'toastr';
-import update from 'immutability-helper';
+import React from "react";
+import toastr from "toastr";
+import update from "immutability-helper";
 
-import TrackJumbotron from './trackPagePanels/trackJumbotron';
-import CommentsPanel from './trackPagePanels/commentsPanel';
-import PostCommentPanel from './trackPagePanels/postCommentPanel';
-import DescriptionPanel from './trackPagePanels/descriptionPanel';
-import TrackApi from 'api/trackApi';
-import UserApi from 'api/userApi';
+import TrackJumbotron from "./trackPagePanels/trackJumbotron";
+import CommentsPanel from "./trackPagePanels/commentsPanel";
+import PostCommentPanel from "./trackPagePanels/postCommentPanel";
+import DescriptionPanel from "./trackPagePanels/descriptionPanel";
+import TrackApi from "api/trackApi";
+import UserApi from "api/userApi";
 
 var commentsPanelStyle = {
   marginTop: "10px",
@@ -32,7 +32,7 @@ class TrackPage extends React.Component {
       description: "",
       trackBinaryURL: "",
       comments: []
-    }
+    };
 
     this.tracksDataSource = this.tracksDataSource.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -64,12 +64,12 @@ class TrackPage extends React.Component {
           numPlays: result.numPlays,
           numLikes: result.numLikes,
           numComments: result.numComments,
-          trackBinaryURL: "http://localhost:3001/tracks/" + result.trackBinary + "/stream",
+          trackBinaryURL: "http://localhost:3001/tracks/" + result.trackBinaryId + "/stream",
           comments: result.comments
         };
         this.uploaderNameDataSource(uploaderId, (err, result) => {
-          if(err) {
-            toastr.error('Unable to retrieve artist name');
+          if (err) {
+            toastr.error("Unable to retrieve artist name");
           } else {
             newState.artist = result.displayName;
             this.setState(newState);
@@ -78,7 +78,7 @@ class TrackPage extends React.Component {
       }
     });
   }
-  
+
   uploaderNameDataSource(userId, cb) {
     UserApi.getUserByUserId(userId, (err, result) => {
       if (err) {
@@ -86,7 +86,7 @@ class TrackPage extends React.Component {
       } else {
         cb(null, result);
       }
-    })
+    });
   }
 
   handleChange(e) {
@@ -105,28 +105,32 @@ class TrackPage extends React.Component {
   render() {
     return (
       <div className="container">
-        <TrackJumbotron title={this.state.title}
-            artist={this.state.artist}
-            genre={this.state.genre}
-            uploadDate={this.state.uploadDate}
-            numPlays={this.state.numPlays}
-            numLikes={this.state.numLikes}
-            numComments={this.state.numComments}
-            trackBinaryURL={this.state.trackBinaryURL}
-            userURL={this.state.userURL} />
-            
+        <TrackJumbotron
+          title={this.state.title}
+          artist={this.state.artist}
+          genre={this.state.genre}
+          uploadDate={this.state.uploadDate}
+          numPlays={this.state.numPlays}
+          numLikes={this.state.numLikes}
+          numComments={this.state.numComments}
+          trackBinaryURL={this.state.trackBinaryURL}
+          userURL={this.state.userURL}
+        />
+
         <div className="col-md-12" style={commentsPanelStyle}>
           <div className="col-md-8">
-            <PostCommentPanel numComments={this.state.numComments}
-              trackURL={this.state.trackURL} 
+            <PostCommentPanel
+              numComments={this.state.numComments}
+              trackURL={this.state.trackURL}
               loggedIn={this.props.auth.loggedIn()}
               profile={this.props.auth.getProfile()}
-              jwtToken={this.props.auth.getToken()}/>
+              jwtToken={this.props.auth.getToken()}
+            />
             <CommentsPanel comments={this.state.comments} />
           </div>
           <DescriptionPanel description={this.state.description} />
         </div>
-    </div>
+      </div>
     );
   }
 }
