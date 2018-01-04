@@ -101,37 +101,35 @@ class PostCommentPanel extends React.Component {
     }
 
     return (
-      <div className="col-md-12">
-        <div className="panel panel-default">
-          <div className="panel-body">
-            <div className="col-md-3" style={commentsHeaderStyle}>
-              <h4>
-                <span className="glyphicon glyphicon-comment" /> Comments
-              </h4>
-            </div>
-            <div className="col-md-9" style={numCommentsStyle}>
-              <p className="text-muted">Number of comments: {this.props.numComments}</p>
-            </div>
-            <form onSubmit={this.postComment} onChange={this.handleChange}>
-              <div className="col-md-12" style={addCommentInputDiv}>
-                <div className="form-group">
-                  <div className="col-md-3" style={CommentLabelStyle}>
-                    <p className="text-muted">Add a comment</p>
-                  </div>
-                  <div className="col-md-6" style={commentInput}>
-                    <input
-                      value={this.state.postCommentBody}
-                      name="postCommentBody"
-                      rows="4"
-                      className="form-control"
-                      placeholder="Enter Comment..."
-                    />
-                  </div>
-                  {postCommentButton}
-                </div>
-              </div>
-            </form>
+      <div className="panel panel-default">
+        <div className="panel-body">
+          <div className="col-md-3" style={commentsHeaderStyle}>
+            <h4>
+              <span className="glyphicon glyphicon-comment" /> Comments
+            </h4>
           </div>
+          <div className="col-md-9" style={numCommentsStyle}>
+            <p className="text-muted">Number of comments: {this.props.numComments}</p>
+          </div>
+          <form onSubmit={this.postComment} onChange={this.handleChange}>
+            <div className="col-md-12" style={addCommentInputDiv}>
+              <div className="form-group">
+                <div className="col-md-3" style={CommentLabelStyle}>
+                  <p className="text-muted">Add a comment</p>
+                </div>
+                <div className="col-md-6" style={commentInput}>
+                  <input
+                    value={this.state.postCommentBody}
+                    name="postCommentBody"
+                    rows="4"
+                    className="form-control"
+                    placeholder="Enter Comment..."
+                  />
+                </div>
+                {postCommentButton}
+              </div>
+            </div>
+          </form>
         </div>
       </div>
     );

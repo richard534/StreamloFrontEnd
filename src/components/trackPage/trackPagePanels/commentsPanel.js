@@ -31,10 +31,8 @@ class CommentsPanel extends React.Component {
     }
 
     return (
-      <div className="col-md-12">
-        <div className="panel panel-default">
-          <div className="panel-body">{results}</div>
-        </div>
+      <div className="panel panel-default">
+        <div className="panel-body">{results}</div>
       </div>
     );
   }

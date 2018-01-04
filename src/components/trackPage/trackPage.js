@@ -9,10 +9,18 @@ import DescriptionPanel from "./trackPagePanels/descriptionPanel";
 import TrackApi from "api/trackApi";
 import UserApi from "api/userApi";
 
-var commentsPanelStyle = {
+var commentsAndDescriptionStyle = {
   marginTop: "10px",
   padding: "0px",
   paddingTop: "10px"
+};
+
+var descriptionDivStyle = {
+  paddingRight: "0px"
+};
+
+var commentsDivStyle = {
+  paddingLeft: "0px"
 };
 
 class TrackPage extends React.Component {
@@ -117,8 +125,8 @@ class TrackPage extends React.Component {
           userURL={this.state.userURL}
         />
 
-        <div className="col-md-12" style={commentsPanelStyle}>
-          <div className="col-md-8">
+        <div className="col-md-12" style={commentsAndDescriptionStyle}>
+          <div className="col-md-8" style={commentsDivStyle}>
             <PostCommentPanel
               numComments={this.state.numComments}
               trackURL={this.state.trackURL}
@@ -128,7 +136,9 @@ class TrackPage extends React.Component {
             />
             <CommentsPanel comments={this.state.comments} />
           </div>
-          <DescriptionPanel description={this.state.description} />
+          <div className="col-md-4" style={descriptionDivStyle}>
+            <DescriptionPanel description={this.state.description} />
+          </div>
         </div>
       </div>
     );
