@@ -88,7 +88,7 @@ class TrackApi {
     });
 
     instance
-      .post(ApiUrl + "tracks/" + trackURL + "/addComment", data)
+      .post(ApiUrl + "tracks/" + trackURL + "/comments", data)
       .then(response => {
         cb(null);
       })
