@@ -6,11 +6,31 @@ class CommentsPanel extends React.Component {
     var self = this;
     var comments = self.props.comments;
 
+    let renderedCommentCounter = 0;
     var createCommentRow = function(comment) {
+      let lastComment = false;
+      if (renderedCommentCounter >= commentsLength - 1) {
+        lastComment = true;
+      }
+      renderedCommentCounter++;
+
+      let postCommentSeperator;
+      // if not last comment on comment page render comment seperator
+      if (!lastComment) {
+        postCommentSeperator = (
+          <div className="col-md-12">
+            <hr />
+          </div>
+        );
+      }
+
       return (
-        <li key={comment._id} className="list-group-item">
-          <Comment commentUserId={comment.user} commentDate={comment.datePosted} commentBody={comment.body} />
-        </li>
+        <div key={comment._id} className="col-md-12">
+          <li key={comment._id} className="list-group-item">
+            <Comment commentUserId={comment.user} commentDate={comment.datePosted} commentBody={comment.body} />
+          </li>
+          {postCommentSeperator}
+        </div>
       );
     };
 
@@ -23,8 +43,8 @@ class CommentsPanel extends React.Component {
     })();
 
     var results;
-    var numcomments;
-    if (self.props.comments.length > 0) {
+    let commentsLength = self.props.comments.length;
+    if (commentsLength > 0) {
       results = <ul className="list-group">{comments.map(createCommentRow)}</ul>;
     } else {
       results = <div className="text-center">{noComments}</div>;

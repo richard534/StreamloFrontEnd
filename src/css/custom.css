@@ -9,6 +9,10 @@ body {
   margin-bottom: 160px;
 }
 
+p.wrap {
+  word-wrap:break-word;
+}
+
 footer {
   position: absolute;
   bottom: 0;
