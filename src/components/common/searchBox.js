@@ -34,7 +34,7 @@ class SearchBox extends React.Component {
           />
 
           <span className="input-group-btn">
-            <Link to={{ pathname: "/search", query: { q: this.props.searchString } }}>
+            <Link to={{ pathname: "/search", query: { q: this.props.searchString, page: 1, per_page: 5 } }}>
               <button className="btn btn-default btn-sm" type="submit">
                 <span className="glyphicon glyphicon-search" />
               </button>

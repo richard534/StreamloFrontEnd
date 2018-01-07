@@ -24,9 +24,9 @@ class TrackApi {
     }
   }
 
-  static getTracksByNameLimitedByPageNum(searchString, pageNum = 0, cb) {
+  static getTracksByName(searchString, pageNum = 0, perPage = 5, cb) {
     axios
-      .get(ApiUrl + "tracks?q=" + searchString + "&page=" + pageNum)
+      .get(ApiUrl + "tracks?q=" + searchString + "&page=" + pageNum + "&per_page=" + perPage)
       .then(response => {
         cb(null, response.data);
       })

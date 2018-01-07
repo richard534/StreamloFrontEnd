@@ -28,6 +28,7 @@ class SearchResultsPage extends React.Component {
       numPeople: 0,
       trackPageNum: 0,
       peoplePageNum: 0,
+      per_page: 0,
       hasMoreTracks: false,
       hasMorePeople: false,
       selectedFilter: {
@@ -77,8 +78,9 @@ class SearchResultsPage extends React.Component {
 
     let trackNameQuery = props.location.query.q;
     let pageNum = pagenum;
+    let perPage = props.location.query.per_page;
 
-    TrackApi.getTracksByNameLimitedByPageNum(trackNameQuery, pageNum, (err, result) => {
+    TrackApi.getTracksByName(trackNameQuery, pageNum, perPage, (err, result) => {
       if (!err) {
         let hasMoreTracks = true;
         if (result.page == result.pageCount) hasMoreTracks = false;
@@ -97,8 +99,9 @@ class SearchResultsPage extends React.Component {
 
     let displayName = props.location.query.q;
     let pageNum = pagenum;
+    let perPage = props.location.query.per_page;
 
-    UserApi.getUsersByDisplaynameLimitedByPageNum(displayName, pageNum, (err, result) => {
+    UserApi.getUsersByDisplayname(displayName, pageNum, perPage, (err, result) => {
       if (err) return;
       else if (!_.isEmpty(result.users)) {
         let hasMorePeople = true;
@@ -138,24 +141,28 @@ class SearchResultsPage extends React.Component {
   handlePreviousPagerTracks(e) {
     e.preventDefault();
     if (this.state.trackPageNum === 0) return; // If first page do nothing
-    this.tracksDataSource(null, this.state.trackPageNum - 1);
+    let previousTrackPageNumber = this.state.trackPageNum - 1;
+    this.tracksDataSource(null, previousTrackPageNumber);
   }
 
   handleNextPagerTracks(e) {
     e.preventDefault();
-    this.tracksDataSource(null, this.state.trackPageNum + 1);
+    let nextTrackPageNumber = this.state.trackPageNum + 1;
+    this.tracksDataSource(null, nextTrackPageNumber);
   }
 
   // People Pagination handlers
   handlePreviousPagerPeople(e) {
     e.preventDefault();
     if (this.state.peoplePageNum === 0) return; // If first page do nothing
-    this.peopleDatasource(null, this.state.peoplePageNum - 1);
+    let previousPeoplePageNumber = this.state.peoplePageNum - 1;
+    this.peopleDatasource(null, previousPeoplePageNumber);
   }
 
   handleNextPagerPeople(e) {
     e.preventDefault();
-    this.peopleDatasource(null, this.state.peoplePageNum + 1);
+    let nextPeoplePageNumber = this.state.peoplePageNum + 1;
+    this.peopleDatasource(null, nextPeoplePageNumber);
   }
 
   render() {
