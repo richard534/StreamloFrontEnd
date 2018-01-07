@@ -28,6 +28,7 @@ class SearchResultsPage extends React.Component {
       numPeople: 0,
       peoplePageNum: 0,
       pageNum: 0,
+      perPage: 0,
       hasMoreTracks: false,
       hasMorePeople: false,
       selectedFilter: {
@@ -43,39 +44,36 @@ class SearchResultsPage extends React.Component {
     this.handleNextPagerPeople = this.handleNextPagerPeople.bind(this);
   }
 
-  componentWillMount() {
-    this.resetSearchResults();
-  }
-
   componentDidMount() {
-    this.tracksDataSource();
-    this.peopleDatasource();
+    this.setInitialResultsPageState();
   }
 
   // Lifecycle method run when component revieves new props from router (i.e when another search performed)
   componentWillReceiveProps(nextProps) {
-    this.resetSearchResults(nextProps);
-    this.tracksDataSource(nextProps);
-    this.peopleDatasource(nextProps);
+    this.setInitialResultsPageState(nextProps);
   }
 
-  resetSearchResults(props) {
-    props = props || this.props;
-    this.setState({
-      searchString: props.location.query.q,
-      trackResults: [],
-      peopleResults: [],
-      numTracks: 0,
-      numPeople: 0
-    });
+  setInitialResultsPageState(props) {
+    props = props || this.props; // if props variable passed to this method then use it
+    this.setState(
+      {
+        searchString: props.location.query.q,
+        pageNum: props.location.query.page,
+        perPage: props.location.query.per_page,
+        trackResults: [],
+        peopleResults: []
+      },
+      () => {
+        this.tracksDataSource();
+        this.peopleDatasource();
+      }
+    );
   }
 
-  tracksDataSource(props, pagenum = 1) {
-    props = props || this.props;
-
-    let trackNameQuery = props.location.query.q;
-    let pageNum = props.location.query.page;
-    let perPage = props.location.query.per_page;
+  tracksDataSource(pagenum = 1) {
+    let trackNameQuery = this.state.searchString;
+    let pageNum = this.state.pageNum;
+    let perPage = this.state.perPage;
 
     TrackApi.getTracksByName(trackNameQuery, pageNum, perPage, (err, result) => {
       if (!err) {
@@ -84,8 +82,6 @@ class SearchResultsPage extends React.Component {
         this.setState({
           trackResults: result.tracks,
           numTracks: result.total,
-          pageNum: pageNum,
-          perPage: perPage,
           hasMoreTracks: hasMoreTracks
         });
       }
@@ -93,6 +89,7 @@ class SearchResultsPage extends React.Component {
   }
 
   peopleDatasource(props, pagenum = 1) {
+    if (this.state.selectedFilter.people == false) return;
     props = props || this.props;
 
     let displayName = props.location.query.q;
@@ -132,7 +129,13 @@ class SearchResultsPage extends React.Component {
       }
     });
 
-    this.setState(newState);
+    this.setState(newState, () => {
+      if (this.state.selectedFilter.tracks) {
+        this.tracksDataSource();
+      } else {
+        this.peopleDatasource();
+      }
+    });
   }
 
   // People Pagination handlers
