@@ -26,9 +26,8 @@ class SearchResultsPage extends React.Component {
       peopleResults: [],
       numTracks: 0,
       numPeople: 0,
-      trackPageNum: 0,
       peoplePageNum: 0,
-      per_page: 0,
+      pageNum: 0,
       hasMoreTracks: false,
       hasMorePeople: false,
       selectedFilter: {
@@ -40,8 +39,6 @@ class SearchResultsPage extends React.Component {
     this.tracksDataSource = this.tracksDataSource.bind(this);
     this.peopleDatasource = this.peopleDatasource.bind(this);
     this.changeSelectedFilter = this.changeSelectedFilter.bind(this);
-    this.handlePreviousPagerTracks = this.handlePreviousPagerTracks.bind(this);
-    this.handleNextPagerTracks = this.handleNextPagerTracks.bind(this);
     this.handlePreviousPagerPeople = this.handlePreviousPagerPeople.bind(this);
     this.handleNextPagerPeople = this.handleNextPagerPeople.bind(this);
   }
@@ -77,7 +74,7 @@ class SearchResultsPage extends React.Component {
     props = props || this.props;
 
     let trackNameQuery = props.location.query.q;
-    let pageNum = pagenum;
+    let pageNum = props.location.query.page;
     let perPage = props.location.query.per_page;
 
     TrackApi.getTracksByName(trackNameQuery, pageNum, perPage, (err, result) => {
@@ -87,7 +84,8 @@ class SearchResultsPage extends React.Component {
         this.setState({
           trackResults: result.tracks,
           numTracks: result.total,
-          trackPageNum: pageNum,
+          pageNum: pageNum,
+          perPage: perPage,
           hasMoreTracks: hasMoreTracks
         });
       }
@@ -137,20 +135,6 @@ class SearchResultsPage extends React.Component {
     this.setState(newState);
   }
 
-  // Track Pagination handlers
-  handlePreviousPagerTracks(e) {
-    e.preventDefault();
-    if (this.state.trackPageNum === 0) return; // If first page do nothing
-    let previousTrackPageNumber = this.state.trackPageNum - 1;
-    this.tracksDataSource(null, previousTrackPageNumber);
-  }
-
-  handleNextPagerTracks(e) {
-    e.preventDefault();
-    let nextTrackPageNumber = this.state.trackPageNum + 1;
-    this.tracksDataSource(null, nextTrackPageNumber);
-  }
-
   // People Pagination handlers
   handlePreviousPagerPeople(e) {
     e.preventDefault();
@@ -175,9 +159,8 @@ class SearchResultsPage extends React.Component {
           trackResults={self.state.trackResults}
           searchString={self.state.searchString}
           numTracks={self.state.numTracks}
-          handlePreviousPager={self.handlePreviousPagerTracks}
-          handleNextPager={self.handleNextPagerTracks}
-          trackPageNum={self.state.trackPageNum}
+          pageNum={self.state.pageNum}
+          perPage={self.state.perPage}
           hasMoreTracks={self.state.hasMoreTracks}
         />
       );

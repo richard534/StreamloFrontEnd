@@ -1,5 +1,7 @@
 import React from "react";
 import Track from "./track";
+import { Link } from "react-router";
+
 var noResultImg = require("images/noResultsSearch.png");
 
 var trackListingStyle = {
@@ -8,8 +10,7 @@ var trackListingStyle = {
 
 class TrackSearchResultsList extends React.Component {
   render() {
-    var self = this;
-    var tracks = self.props.trackResults;
+    var tracks = this.props.trackResults;
 
     var createTrackResultRow = function(track) {
       return (
@@ -31,37 +32,59 @@ class TrackSearchResultsList extends React.Component {
       );
     };
 
-    var resultsNotFound = (function() {
+    var resultsNotFound = (() => {
       return (
         <div>
           <img src={noResultImg} className="center-block search-result-image" />
-          <p className="text-center text-muted">Sorry we didn't find any results for "{self.props.searchString}".</p>
+          <p className="text-center text-muted">Sorry we didn't find any results for "{this.props.searchString}".</p>
           <p className="text-center text-muted">Check the spelling, or try a different search.</p>
         </div>
       );
     })();
 
-    let previousButtonClass = self.props.trackPageNum == 1 ? "previous disabled disableClick" : "previous";
-    let nextButtonClass = self.props.hasMoreTracks == false ? "next disabled disableClick" : "next";
+    let previousButtonClass = this.props.pageNum == 1 ? "previous disabled disableClick" : "previous";
+    let nextButtonClass = this.props.hasMoreTracks == false ? "next disabled disableClick" : "next";
 
     var results;
     var numTracks;
-    if (self.props.trackResults.length > 0) {
-      numTracks = <p className="text-muted">Found {self.props.numTracks} tracks</p>;
+    let nextTrackPageNumber = parseInt(this.props.pageNum) + 1;
+    let previousTrackPageNumber = parseInt(this.props.pageNum) - 1;
+    let perPage = this.props.perPage;
+
+    if (this.props.trackResults.length > 0) {
+      numTracks = <p className="text-muted">Found {this.props.numTracks} tracks</p>;
       results = (
         <div>
           <ul className="list-group">{tracks.map(createTrackResultRow)}</ul>
           <nav>
             <ul className="pager">
-              <li className={previousButtonClass} onClick={this.props.handlePreviousPager}>
-                <a href="">
+              <li className={previousButtonClass}>
+                <Link
+                  to={{
+                    pathname: "/search",
+                    query: {
+                      q: this.props.searchString,
+                      page: previousTrackPageNumber,
+                      per_page: perPage
+                    }
+                  }}
+                >
                   <span aria-hidden="true">&larr;</span> Previous
-                </a>
+                </Link>
               </li>
-              <li className={nextButtonClass} onClick={this.props.handleNextPager}>
-                <a href="">
+              <li className={nextButtonClass}>
+                <Link
+                  to={{
+                    pathname: "/search",
+                    query: {
+                      q: this.props.searchString,
+                      page: nextTrackPageNumber,
+                      per_page: perPage
+                    }
+                  }}
+                >
                   Next <span aria-hidden="true">&rarr;</span>
-                </a>
+                </Link>
               </li>
             </ul>
           </nav>
