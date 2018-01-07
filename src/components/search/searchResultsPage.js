@@ -89,7 +89,6 @@ class SearchResultsPage extends React.Component {
   }
 
   peopleDatasource(props, pagenum = 1) {
-    if (this.state.selectedFilter.people == false) return;
     props = props || this.props;
 
     let displayName = props.location.query.q;
