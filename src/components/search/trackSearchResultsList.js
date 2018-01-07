@@ -11,6 +11,7 @@ var trackListingStyle = {
 class TrackSearchResultsList extends React.Component {
   render() {
     var tracks = this.props.trackResults;
+    let searchString = this.props.searchString;
 
     var createTrackResultRow = function(track) {
       return (
@@ -36,7 +37,7 @@ class TrackSearchResultsList extends React.Component {
       return (
         <div>
           <img src={noResultImg} className="center-block search-result-image" />
-          <p className="text-center text-muted">Sorry we didn't find any results for "{this.props.searchString}".</p>
+          <p className="text-center text-muted">Sorry we didn't find any results for "{searchString}".</p>
           <p className="text-center text-muted">Check the spelling, or try a different search.</p>
         </div>
       );
@@ -47,6 +48,7 @@ class TrackSearchResultsList extends React.Component {
 
     var results;
     var numTracks;
+
     let nextTrackPageNumber = parseInt(this.props.pageNum) + 1;
     let previousTrackPageNumber = parseInt(this.props.pageNum) - 1;
     let perPage = this.props.perPage;
@@ -63,7 +65,7 @@ class TrackSearchResultsList extends React.Component {
                   to={{
                     pathname: "/search",
                     query: {
-                      q: this.props.searchString,
+                      q: searchString,
                       page: previousTrackPageNumber,
                       per_page: perPage
                     }
@@ -77,7 +79,7 @@ class TrackSearchResultsList extends React.Component {
                   to={{
                     pathname: "/search",
                     query: {
-                      q: this.props.searchString,
+                      q: searchString,
                       page: nextTrackPageNumber,
                       per_page: perPage
                     }

@@ -26,7 +26,6 @@ class SearchResultsPage extends React.Component {
       peopleResults: [],
       numTracks: 0,
       numPeople: 0,
-      peoplePageNum: 0,
       pageNum: 0,
       perPage: 0,
       hasMoreTracks: false,
@@ -40,8 +39,6 @@ class SearchResultsPage extends React.Component {
     this.tracksDataSource = this.tracksDataSource.bind(this);
     this.peopleDatasource = this.peopleDatasource.bind(this);
     this.changeSelectedFilter = this.changeSelectedFilter.bind(this);
-    this.handlePreviousPagerPeople = this.handlePreviousPagerPeople.bind(this);
-    this.handleNextPagerPeople = this.handleNextPagerPeople.bind(this);
   }
 
   componentDidMount() {
@@ -71,6 +68,8 @@ class SearchResultsPage extends React.Component {
   }
 
   tracksDataSource(pagenum = 1) {
+    if (!this.state.selectedFilter.tracks) return;
+
     let trackNameQuery = this.state.searchString;
     let pageNum = this.state.pageNum;
     let perPage = this.state.perPage;
@@ -88,14 +87,14 @@ class SearchResultsPage extends React.Component {
     });
   }
 
-  peopleDatasource(props, pagenum = 1) {
-    props = props || this.props;
+  peopleDatasource(pagenum = 1) {
+    if (!this.state.selectedFilter.people) return;
 
-    let displayName = props.location.query.q;
-    let pageNum = pagenum;
-    let perPage = props.location.query.per_page;
+    let displayNameQuery = this.state.searchString;
+    let pageNum = this.state.pageNum;
+    let perPage = this.state.perPage;
 
-    UserApi.getUsersByDisplayname(displayName, pageNum, perPage, (err, result) => {
+    UserApi.getUsersByDisplayname(displayNameQuery, pageNum, perPage, (err, result) => {
       if (err) return;
       else if (!_.isEmpty(result.users)) {
         let hasMorePeople = true;
@@ -103,7 +102,6 @@ class SearchResultsPage extends React.Component {
         this.setState({
           peopleResults: result.users,
           numPeople: result.total,
-          peoplePageNum: pageNum,
           hasMorePeople: hasMorePeople
         });
       }
@@ -137,20 +135,6 @@ class SearchResultsPage extends React.Component {
     });
   }
 
-  // People Pagination handlers
-  handlePreviousPagerPeople(e) {
-    e.preventDefault();
-    if (this.state.peoplePageNum === 0) return; // If first page do nothing
-    let previousPeoplePageNumber = this.state.peoplePageNum - 1;
-    this.peopleDatasource(null, previousPeoplePageNumber);
-  }
-
-  handleNextPagerPeople(e) {
-    e.preventDefault();
-    let nextPeoplePageNumber = this.state.peoplePageNum + 1;
-    this.peopleDatasource(null, nextPeoplePageNumber);
-  }
-
   render() {
     var self = this;
     var resultsList;
@@ -174,9 +158,8 @@ class SearchResultsPage extends React.Component {
           peopleResults={self.state.peopleResults}
           searchString={self.state.searchString}
           numPeople={self.state.numPeople}
-          handlePreviousPager={self.handlePreviousPagerPeople}
-          handleNextPager={self.handleNextPagerPeople}
-          peoplePageNum={self.state.peoplePageNum}
+          pageNum={self.state.pageNum}
+          perPage={self.state.perPage}
           hasMorePeople={self.state.hasMorePeople}
         />
       );

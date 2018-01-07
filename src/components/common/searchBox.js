@@ -18,11 +18,10 @@ class SearchBox extends React.Component {
     let searchString = this.props.searchString;
 
     let searchButton = (
-      <Link
-        className="btn btn-default btn-sm"
-        to={{ pathname: "/search", query: { q: searchString, page: 1, per_page: 5 } }}
-      >
-        <span className="glyphicon glyphicon-search" />
+      <Link to={{ pathname: "/search", query: { q: searchString, page: 1, per_page: 5 } }}>
+        <button className="btn btn-default btn-sm" type="submit">
+          <span className="glyphicon glyphicon-search" />
+        </button>
       </Link>
     );
 
