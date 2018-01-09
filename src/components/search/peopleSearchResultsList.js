@@ -60,7 +60,8 @@ class PeopleSearchResultsList extends React.Component {
                     query: {
                       q: this.props.searchString,
                       page: previousTrackPageNumber,
-                      per_page: perPage
+                      per_page: perPage,
+                      filter: "people"
                     }
                   }}
                 >
@@ -74,7 +75,8 @@ class PeopleSearchResultsList extends React.Component {
                     query: {
                       q: this.props.searchString,
                       page: nextPeoplePageNumber,
-                      per_page: perPage
+                      per_page: perPage,
+                      filter: "people"
                     }
                   }}
                 >

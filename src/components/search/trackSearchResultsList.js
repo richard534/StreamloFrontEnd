@@ -67,7 +67,8 @@ class TrackSearchResultsList extends React.Component {
                     query: {
                       q: searchString,
                       page: previousTrackPageNumber,
-                      per_page: perPage
+                      per_page: perPage,
+                      filter: "tracks"
                     }
                   }}
                 >
@@ -81,7 +82,8 @@ class TrackSearchResultsList extends React.Component {
                     query: {
                       q: searchString,
                       page: nextTrackPageNumber,
-                      per_page: perPage
+                      per_page: perPage,
+                      filter: "tracks"
                     }
                   }}
                 >

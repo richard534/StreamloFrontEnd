@@ -1,12 +1,11 @@
 import React from "react";
-import { Link } from "react-router";
+import { Link, browserHistory } from "react-router";
 import SearchHeader from "./searchHeader";
 import SearchFilter from "./searchFilter";
 import TrackSearchResultsList from "./trackSearchResultsList";
 import PeopleSearchResultsList from "./peopleSearchResultsList";
 import update from "immutability-helper";
 import _ from "lodash";
-import toastr from "toastr";
 import TrackApi from "api/trackApi";
 import UserApi from "api/userApi";
 
@@ -52,11 +51,14 @@ class SearchResultsPage extends React.Component {
 
   setInitialResultsPageState(props) {
     props = props || this.props; // if props variable passed to this method then use it
+
+    let currentFilterState = this.determineFilterStateFromURI(props.location.query.filter);
     this.setState(
       {
         searchString: props.location.query.q,
         pageNum: props.location.query.page,
         perPage: props.location.query.per_page,
+        selectedFilter: currentFilterState,
         trackResults: [],
         peopleResults: []
       },
@@ -108,31 +110,34 @@ class SearchResultsPage extends React.Component {
     });
   }
 
+  determineFilterStateFromURI(selectedFilterString) {
+    let selectedFilterState = {
+      tracks: false,
+      people: false
+    };
+
+    if (selectedFilterString == "tracks") {
+      selectedFilterState.tracks = true;
+    } else {
+      selectedFilterState.people = true;
+    }
+    return selectedFilterState;
+  }
+
   changeSelectedFilter(e) {
     e.preventDefault();
-    const name = e.target.parentNode.getAttribute("name");
+    const filterString = e.target.parentNode.getAttribute("name");
 
-    var newState = update(this.state, {
-      selectedFilter: {
-        tracks: {
-          $set: false
-        },
-        people: {
-          $set: false
-        },
-        [name]: {
-          $set: true
-        }
-      }
-    });
-
-    this.setState(newState, () => {
-      if (this.state.selectedFilter.tracks) {
-        this.tracksDataSource();
-      } else {
-        this.peopleDatasource();
-      }
-    });
+    browserHistory.push(
+      "/search?filter=" +
+        filterString +
+        "&page=" +
+        "1" +
+        "&per_page=" +
+        this.state.perPage +
+        "&q=" +
+        this.state.searchString
+    );
   }
 
   render() {
