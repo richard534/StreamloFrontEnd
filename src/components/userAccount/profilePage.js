@@ -57,7 +57,7 @@ class ProfilePage extends React.Component {
   }
 
   tracksUploadedDataSource(uploaderId) {
-    TrackApi.getTrackByUserId(uploaderId, (err, result) => {
+    TrackApi.getTracksByUserId(uploaderId, (err, result) => {
       if (err) {
         toastr.error("Error retrieving uploaded tracks list");
       } else {
@@ -99,7 +99,7 @@ class ProfilePage extends React.Component {
                   <a>Liked</a>
                 </li>
                 <li role="presentation" className="active">
-                  <a href="#">Uploaded</a>
+                  <a>Uploaded</a>
                 </li>
                 <li role="presentation">
                   <a>Playlists</a>
