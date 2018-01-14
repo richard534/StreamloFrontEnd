@@ -45,7 +45,7 @@ class TrackApi {
       });
   }
 
-  static getTrackByTrackURL(trackURL, cb, pageNum = 1, perPage = 5) {
+  static getTrackByTrackURL(trackURL, pageNum = 1, perPage = 5, cb) {
     axios
       .get(ApiUrl + "tracks?trackURL=" + trackURL + "&page=" + pageNum + "&per_page=" + perPage)
       .then(response => {
@@ -56,11 +56,11 @@ class TrackApi {
       });
   }
 
-  static getTracksByUploaderId(uploaderId, cb, pageNum = 1, perPage = 5) {
+  static getTracksByUploaderId(uploaderId, pageNum = 1, perPage = 5, cb) {
     axios
       .get(ApiUrl + "tracks?uploaderId=" + uploaderId + "&page=" + pageNum + "&per_page=" + perPage)
       .then(response => {
-        cb(null, response.data.tracks);
+        cb(null, response.data);
       })
       .catch(error => {
         cb(error.response);

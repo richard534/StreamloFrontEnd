@@ -13,6 +13,17 @@ class TrackSearchResultsList extends React.Component {
     var tracks = this.props.trackResults;
     let searchString = this.props.searchString;
 
+    let linkPathName;
+    let linkFilter;
+    // If userURL is passed down as props then assume user is on profile page
+    // and set react router path names accordingly
+    if (this.props.userURL) {
+      linkPathName = "/user/" + this.props.userURL;
+    } else {
+      linkPathName = "/search";
+      linkFilter = "tracks";
+    }
+
     var createTrackResultRow = function(track) {
       return (
         <li key={track._id} className="list-group-item" style={trackListingStyle}>
@@ -63,12 +74,12 @@ class TrackSearchResultsList extends React.Component {
               <li className={previousButtonClass}>
                 <Link
                   to={{
-                    pathname: "/search",
+                    pathname: linkPathName,
                     query: {
                       q: searchString,
                       page: previousTrackPageNumber,
                       per_page: perPage,
-                      filter: "tracks"
+                      filter: linkFilter
                     }
                   }}
                 >
@@ -78,12 +89,12 @@ class TrackSearchResultsList extends React.Component {
               <li className={nextButtonClass}>
                 <Link
                   to={{
-                    pathname: "/search",
+                    pathname: linkPathName,
                     query: {
                       q: searchString,
                       page: nextTrackPageNumber,
                       per_page: perPage,
-                      filter: "tracks"
+                      filter: linkFilter
                     }
                   }}
                 >
@@ -99,7 +110,7 @@ class TrackSearchResultsList extends React.Component {
     }
 
     return (
-      <div className="col-md-10">
+      <div className="col-md-12">
         {numTracks}
         {results}
       </div>

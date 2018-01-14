@@ -1,7 +1,7 @@
 import React from "react";
 import toastr from "toastr";
 import EditDetailsModal from "./userAccountModals/editDetailsModal";
-import UploadedTracksList from "./userAccountPanels/uploadedTracksList";
+import UploadedTracksList from "components/search/trackSearchResultsList.js";
 import UserApi from "api/userApi";
 import TrackApi from "api/trackApi";
 var accountIcon = require("images/account-icon.png");
@@ -17,8 +17,16 @@ class ProfilePage extends React.Component {
     this.state = {
       userURL: "",
       profileDisplayname: "",
-      numFollowers: "0",
-      numFollowing: "0",
+      numFollowers: 0,
+      numFollowing: 0,
+      pageData: {
+        pageNum: 0,
+        perPage: 0
+      },
+      uploadedTracksMetadata: {
+        hasMoreTracks: false,
+        numTracks: 0
+      },
       uploadedTracks: [],
       followedUsers: [],
       likedTracks: []
@@ -28,12 +36,31 @@ class ProfilePage extends React.Component {
     this.tracksUploadedDataSource = this.tracksUploadedDataSource.bind(this);
   }
 
-  componentWillMount() {
-    this.setState({ userURL: this.props.params.userURL });
+  componentDidMount() {
+    this.setInitialPageStateFromURI();
   }
 
-  componentDidMount() {
-    this.profileDataSource();
+  // lifecycle hook called when profile page component recieves props from react router (on next/previous page naviagation)
+  componentWillReceiveProps(nextProps) {
+    console.log("Iran");
+    this.setInitialPageStateFromURI(nextProps);
+  }
+
+  setInitialPageStateFromURI(props) {
+    props = props || this.props; // if props variable passed to this method then use it
+
+    this.setState(
+      {
+        userURL: props.params.userURL,
+        pageData: {
+          pageNum: props.location.query.page,
+          perPage: props.location.query.per_page
+        }
+      },
+      () => {
+        this.profileDataSource();
+      }
+    );
   }
 
   profileDataSource(props) {
@@ -57,11 +84,22 @@ class ProfilePage extends React.Component {
   }
 
   tracksUploadedDataSource(uploaderId) {
-    TrackApi.getTracksByUploaderId(uploaderId, (err, result) => {
+    let pageNum = this.state.pageData.pageNum;
+    let perPage = this.state.pageData.perPage;
+
+    TrackApi.getTracksByUploaderId(uploaderId, pageNum, perPage, (err, result) => {
       if (err) {
         toastr.error("Error retrieving uploaded tracks list");
       } else {
-        this.setState({ uploadedTracks: result });
+        let hasMoreTracks = true;
+        if (result.page == result.pageCount) hasMoreTracks = false;
+        this.setState({
+          uploadedTracks: result.tracks,
+          uploadedTracksMetadata: {
+            numTracks: result.total,
+            hasMoreTracks: hasMoreTracks
+          }
+        });
       }
     });
   }
@@ -102,14 +140,21 @@ class ProfilePage extends React.Component {
                   <a>Uploaded</a>
                 </li>
                 <li role="presentation">
-                  <a>Playlists</a>
+                  <a>Following</a>
                 </li>
               </ul>
             </div>
           </div>
         </div>
         <div className="container">
-          <UploadedTracksList uploadedTracks={this.state.uploadedTracks} />
+          <UploadedTracksList
+            trackResults={this.state.uploadedTracks}
+            numTracks={this.state.uploadedTracksMetadata.numTracks}
+            pageNum={this.state.pageData.pageNum}
+            perPage={this.state.pageData.perPage}
+            hasMoreTracks={this.state.uploadedTracksMetadata.hasMoreTracks}
+            userURL={this.state.userURL}
+          />
           <EditDetailsModal />
         </div>
       </div>

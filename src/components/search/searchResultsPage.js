@@ -192,8 +192,11 @@ class SearchResultsPage extends React.Component {
     return (
       <div className="container">
         <SearchHeader searchString={this.state.searchString} />
-        <SearchFilter onChangeFilter={this.changeSelectedFilter} filterSelected={selectedFilter} />
-        {resultsList}
+        <div className="col-md-2">
+          <h4>Filters</h4>
+          <SearchFilter onChangeFilter={this.changeSelectedFilter} filterSelected={selectedFilter} />
+        </div>
+        <div className="col-md-10">{resultsList}</div>
       </div>
     );
   }
