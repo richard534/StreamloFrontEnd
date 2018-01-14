@@ -10,7 +10,7 @@ class DescriptionPanel extends React.Component {
               <span className="glyphicon glyphicon-book" /> Description
             </h4>
             <hr />
-            {this.props.description}
+            <p className="wrap">{this.props.description}</p>
           </div>
         </div>
       </div>

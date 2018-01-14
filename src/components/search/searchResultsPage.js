@@ -4,7 +4,6 @@ import SearchHeader from "./searchHeader";
 import SearchFilter from "./searchFilter";
 import TrackSearchResultsList from "./trackSearchResultsList";
 import PeopleSearchResultsList from "./peopleSearchResultsList";
-import update from "immutability-helper";
 import _ from "lodash";
 import TrackApi from "api/trackApi";
 import UserApi from "api/userApi";
