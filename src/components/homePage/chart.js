@@ -1,64 +1,50 @@
 import React from "react";
+import ChartListing from "./chartListing";
+let noResultImg = require("images/noResultsSearch.png");
 
 class Chart extends React.Component {
   render() {
-    var self = this;
-    var tracks = self.props.trackResults;
-    var results;
-    var trackNum = 0;
+    let tracks = this.props.trackResults;
+    let results = (
+      <div>
+        <img src={noResultImg} className="center-block search-result-image" />
+        <p className="text-center text-muted">No Tracks found for this city, unable to produce chart.</p>
+      </div>
+    );
 
-    var createChartRow = function(track) {
+    let trackNum = 0;
+    let createChartListing = function(track) {
       trackNum++;
       return (
-        <tr key={track._id}>
-          <td>{trackNum}</td>
-          <td>{track.title}</td>
-          <td>{track.numPlays}</td>
-        </tr>
+        <ChartListing
+          key={track._id}
+          chartNumber={trackNum}
+          title={track.title}
+          genre={track.genre}
+          numComments={track.numComments}
+          numLikes={track.numLikes}
+          numPlays={track.numPlays}
+        />
       );
     };
 
-    var resultsNotFound = function() {
-      return <p>Select a city</p>;
-    };
-
-    if (self.props.trackResults.length > 0) {
-      results = <tbody>{tracks.map(createChartRow)}</tbody>;
-    } else {
+    if (tracks) {
+      let trackListing = tracks.map(createChartListing);
       results = (
-        <tbody>
-          <tr>
-            <td />
-            <td />
-            <td />
-          </tr>
-        </tbody>
+        <div className="container">
+          <div className="row>">
+            <h2 className="text-center">
+              Top 10 Tracks for "<strong>{this.props.resultsHeader}</strong>"
+            </h2>
+          </div>
+          <br />
+          <hr />
+          {trackListing}
+        </div>
       );
     }
 
-    return (
-      <div className="container">
-        <div className="row>">
-          <h2 className="text-center">
-            Top 10 Tracks for "<strong>{this.props.resultsHeader}</strong>"
-          </h2>
-        </div>
-        <br />
-        <hr />
-        <div className="row">
-          <table className="table table-striped table-hover">
-            <thead>
-              <tr>
-                <th>Track #</th>
-                <th>Track Name</th>
-                <th>Plays(All Time)</th>
-              </tr>
-            </thead>
-            {results}
-          </table>
-        </div>
-      </div>
-    );
+    return <div>{results}</div>;
   }
 }
 

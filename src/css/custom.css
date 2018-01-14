@@ -56,6 +56,23 @@ footer {
   margin-bottom: 20px;
 }
 
+.col-centered {
+  float: none;
+  margin: 0 auto;
+}
+
+.ThumbnailStyle {
+  marginBottom: "0px";
+}
+
+.chartMediaBody {
+  vertical-align: middle;
+}
+
+.chartLikesBarSeperator {
+  margin-top:15px;
+}
+
 .list-group-item {
   border: none;
   box-shadow: none;

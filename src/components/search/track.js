@@ -71,13 +71,7 @@ class Track extends React.Component {
       <div className="media">
         <div className="media-left">
           <a>
-            <img
-              className="media-object thumbnail trackThumbnail"
-              src={defaultAlbumArt}
-              width="160"
-              height="160"
-              style={ThumbnailStyle}
-            />
+            <img className="media-object thumbnail ThumbnailStyle" src={defaultAlbumArt} width="160" height="160" />
           </a>
         </div>
         <div className="media-body">
