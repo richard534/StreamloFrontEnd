@@ -57,7 +57,7 @@ class ProfilePage extends React.Component {
   }
 
   tracksUploadedDataSource(uploaderId) {
-    TrackApi.getTracksByUserId(uploaderId, (err, result) => {
+    TrackApi.getTracksByUploaderId(uploaderId, (err, result) => {
       if (err) {
         toastr.error("Error retrieving uploaded tracks list");
       } else {

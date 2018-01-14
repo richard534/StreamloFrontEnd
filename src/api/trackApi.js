@@ -56,11 +56,11 @@ class TrackApi {
       });
   }
 
-  static getTracksByUserId(userId, cb) {
+  static getTracksByUploaderId(uploaderId, cb, pageNum = 1, perPage = 5) {
     axios
-      .get(ApiUrl + "tracks/uploaderId/" + userId)
+      .get(ApiUrl + "tracks?uploaderId=" + uploaderId + "&page=" + pageNum + "&per_page=" + perPage)
       .then(response => {
-        cb(null, response.data);
+        cb(null, response.data.tracks);
       })
       .catch(error => {
         cb(error.response);
