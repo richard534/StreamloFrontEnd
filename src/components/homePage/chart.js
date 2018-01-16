@@ -5,6 +5,7 @@ let noResultImg = require("images/noResultsSearch.png");
 class Chart extends React.Component {
   render() {
     let tracks = this.props.trackResults;
+
     let results = (
       <div>
         <img src={noResultImg} className="center-block search-result-image" />
@@ -21,6 +22,7 @@ class Chart extends React.Component {
           chartNumber={trackNum}
           title={track.title}
           genre={track.genre}
+          fullURL={track.fullURL}
           numComments={track.numComments}
           numLikes={track.numLikes}
           numPlays={track.numPlays}

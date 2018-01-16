@@ -12,9 +12,10 @@ class SearchCity extends React.Component {
             <div className="input-group input-group-sm">
               <input
                 type="text"
+                name="citySearchString"
                 className="form-control"
                 value={this.props.searchString}
-                onChange={this.props.onChange}
+                onChange={this.props.handleChange}
                 placeholder="Enter name of city..."
               />
               <span className="input-group-btn">

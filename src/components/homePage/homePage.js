@@ -1,8 +1,11 @@
 import React from "react";
 import toastr from "toastr";
+import update from "immutability-helper";
+
 import SearchCity from "./searchCity";
 import Chart from "./chart";
 import TrackApi from "api/trackApi";
+import UserApi from "api/userApi";
 
 class Home extends React.Component {
   constructor(props) {
@@ -14,23 +17,26 @@ class Home extends React.Component {
       resultsCityHeader: "Belfast"
     };
 
-    this.setCitySearchStringState = this.setCitySearchStringState.bind(this);
+    this.handleChange = this.handleChange.bind(this);
     this.onSearchSubmit = this.onSearchSubmit.bind(this);
-
     this.onSearchSubmit();
   }
 
-  setCitySearchStringState(event) {
-    // Handles user input, refreshes DOM every key press
-    var value = event.target.value;
-    this.state.citySearchString = value;
-    return this.setState({ searchString: this.state.searchString });
+  handleChange(e) {
+    const target = e.target;
+    const name = target.name;
+
+    var newState = update(this.state, {
+      [name]: {
+        $set: target.value
+      }
+    });
+
+    this.setState(newState);
   }
 
   onSearchSubmit(e) {
-    if (e) {
-      e.preventDefault();
-    }
+    if (e) e.preventDefault();
 
     let cityName = this.state.citySearchString;
 
@@ -39,8 +45,15 @@ class Home extends React.Component {
         toastr.error(err);
         return;
       }
-      this.setState({ trackResults: result });
-      this.setState({ resultsCityHeader: cityName });
+      result.map(track => {
+        UserApi.getUserByUserId(track.uploaderId, (err, user) => {
+          track.fullURL = "track/" + user.userURL + "/" + track.trackURL;
+          this.setState({
+            trackResults: result,
+            resultsCityHeader: cityName
+          });
+        });
+      });
     });
   }
 
@@ -48,7 +61,7 @@ class Home extends React.Component {
     return (
       <div>
         <SearchCity
-          onChange={this.setCitySearchStringState}
+          handleChange={this.handleChange}
           searchString={this.state.citySearchString}
           onSearchSubmit={this.onSearchSubmit}
         />

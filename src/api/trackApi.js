@@ -8,10 +8,10 @@ class TrackApi {
   static getCityChartByName(cityName, cb) {
     if (cityName.length > 0) {
       axios
-        .get(ApiUrl + "tracks/" + cityName + "/chart")
+        .get(ApiUrl + "tracks?page=1&per_page=10&city=" + cityName)
         .then(response => {
-          if (response.data.length > 0) {
-            cb(null, response.data);
+          if (response.data.tracks.length > 0) {
+            cb(null, response.data.tracks);
           }
         })
         .catch(error => {

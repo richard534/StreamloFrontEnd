@@ -17,7 +17,7 @@ class ChartListing extends React.Component {
             <div className="media-body chartMediaBody">
               <div className="col-md-12">
                 <strong>#{this.props.chartNumber}</strong>
-                <Link to={"track/"}>
+                <Link to={this.props.fullURL}>
                   <h4 className="media-heading">{this.props.title}</h4>
                 </Link>
                 <div className="text-muted">{this.props.genre}</div>
