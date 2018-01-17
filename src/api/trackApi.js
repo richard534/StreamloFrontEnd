@@ -17,7 +17,7 @@ class TrackApi {
         .catch(error => {
           if (error.response) {
             // The request was made and the server responded with a status code that falls out of the range of 2xx
-            let err = "Enter Valid City (Belfast or Derry)";
+            let err = "No tracks found for this city";
             cb(err);
           }
         });
