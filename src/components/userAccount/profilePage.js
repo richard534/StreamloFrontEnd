@@ -42,7 +42,6 @@ class ProfilePage extends React.Component {
 
   // lifecycle hook called when profile page component recieves props from react router (on next/previous page naviagation)
   componentWillReceiveProps(nextProps) {
-    console.log("Iran");
     this.setInitialPageStateFromURI(nextProps);
   }
 

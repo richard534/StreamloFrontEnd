@@ -26,7 +26,7 @@ class TrackApi {
 
   static getTracksByName(searchString, pageNum = 1, perPage = 5, cb) {
     axios
-      .get(ApiUrl + "tracks?q=" + searchString + "&page=" + pageNum + "&per_page=" + perPage)
+      .get(ApiUrl + "tracks?title=" + searchString + "&page=" + pageNum + "&per_page=" + perPage)
       .then(response => {
         cb(null, response.data);
       })

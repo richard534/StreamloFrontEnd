@@ -38,6 +38,7 @@ class TrackSearchResultsList extends React.Component {
             uploadDate={track.dateUploaded}
             numLikes={track.numLikes}
             numPlays={track.numPlays}
+            numComments={track.numComments}
           />
           <hr />
         </li>

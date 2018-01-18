@@ -116,7 +116,7 @@ class Track extends React.Component {
                 <div className="col-md-3">
                   <p className="pull-right">
                     <span className="glyphicon glyphicon-comment" />
-                    {" " + this.props.numPlays}
+                    {" " + this.props.numComments}
                   </p>
                 </div>
               </div>
