@@ -28,8 +28,8 @@ class TrackPage extends React.Component {
     super(props);
 
     this.state = {
-      trackURL: "",
-      userURL: "",
+      trackURL: this.props.params.trackURL,
+      userURL: this.props.params.userURL,
       title: "",
       artist: "",
       genre: "",
@@ -43,13 +43,7 @@ class TrackPage extends React.Component {
     };
 
     this.tracksDataSource = this.tracksDataSource.bind(this);
-    this.handleChange = this.handleChange.bind(this);
     this.uploaderNameDataSource = this.uploaderNameDataSource.bind(this);
-  }
-
-  componentWillMount() {
-    this.setState({ trackURL: this.props.params.trackURL });
-    this.setState({ userURL: this.props.params.userURL });
   }
 
   componentDidMount() {
@@ -59,27 +53,27 @@ class TrackPage extends React.Component {
   tracksDataSource() {
     let trackURL = this.state.trackURL;
 
-    TrackApi.getTrackByTrackURL(trackURL, 1, 5, (err, result) => {
+    TrackApi.getTrackByTrackURL(trackURL, 1, 5, (err, track) => {
       if (err) {
         toastr.error(err);
       } else {
-        let uploaderId = result.uploaderId;
+        let uploaderId = track.uploaderId;
         let newState = {
-          title: result.title,
-          genre: result.genre,
-          description: result.description,
-          uploadDate: result.dateUploaded,
-          numPlays: result.numPlays,
-          numLikes: result.numLikes,
-          numComments: result.numComments,
-          trackBinaryURL: "http://localhost:3001/tracks/" + result.trackBinaryId + "/stream",
-          comments: result.comments
+          title: track.title,
+          genre: track.genre,
+          description: track.description,
+          uploadDate: track.dateUploaded,
+          numPlays: track.numPlays,
+          numLikes: track.numLikes,
+          numComments: track.numComments,
+          trackBinaryURL: "http://localhost:3001/tracks/" + track.trackBinaryId + "/stream",
+          comments: track.comments
         };
-        this.uploaderNameDataSource(uploaderId, (err, result) => {
+        this.uploaderNameDataSource(uploaderId, (err, userDisplayName) => {
           if (err) {
             toastr.error("Unable to retrieve artist name");
           } else {
-            newState.artist = result.displayName;
+            newState.artist = userDisplayName;
             this.setState(newState);
           }
         });
@@ -88,26 +82,13 @@ class TrackPage extends React.Component {
   }
 
   uploaderNameDataSource(userId, cb) {
-    UserApi.getUserByUserId(userId, (err, result) => {
+    UserApi.getUserByUserId(userId, (err, user) => {
       if (err) {
-        cb(err);
+        toastr.error(err);
       } else {
-        cb(null, result);
+        cb(null, user.displayName);
       }
     });
-  }
-
-  handleChange(e) {
-    const target = e.target;
-    const name = target.name;
-
-    var newState = update(this.state, {
-      [name]: {
-        $set: target.value
-      }
-    });
-
-    this.setState(newState);
   }
 
   render() {

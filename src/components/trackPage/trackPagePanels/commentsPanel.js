@@ -9,7 +9,7 @@ class CommentsPanel extends React.Component {
     let renderedCommentCounter = 0;
     var createCommentRow = function(comment) {
       let lastComment = false;
-      if (renderedCommentCounter >= commentsLength - 1) {
+      if (renderedCommentCounter >= comments.length - 1) {
         lastComment = true;
       }
       renderedCommentCounter++;
@@ -43,8 +43,8 @@ class CommentsPanel extends React.Component {
     })();
 
     var results;
-    let commentsLength = self.props.comments.length;
-    if (commentsLength > 0) {
+
+    if (comments && comments.length > 0) {
       results = <ul className="list-group">{comments.map(createCommentRow)}</ul>;
     } else {
       results = <div className="text-center">{noComments}</div>;
