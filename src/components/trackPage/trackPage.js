@@ -74,7 +74,10 @@ class TrackPage extends React.Component {
             toastr.error("Unable to retrieve artist name");
           } else {
             newState.artist = userDisplayName;
-            this.setState(newState);
+            this.commentsDataSource(track._id, (err, comments) => {
+              newState.comments = comments;
+              this.setState(newState);
+            });
           }
         });
       }
@@ -88,6 +91,13 @@ class TrackPage extends React.Component {
       } else {
         cb(null, user.displayName);
       }
+    });
+  }
+
+  commentsDataSource(trackId, cb) {
+    console.log(trackId);
+    TrackApi.getTrackCommentsById(trackId, (err, comments) => {
+      cb(null, comments);
     });
   }
 

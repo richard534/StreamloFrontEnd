@@ -96,6 +96,17 @@ class TrackApi {
         cb(error.response);
       });
   }
+
+  static getTrackCommentsById(trackId, cb) {
+    axios
+      .get(ApiUrl + "tracks/" + trackId + "/comments")
+      .then(response => {
+        cb(null, response.data.comments);
+      })
+      .catch(error => {
+        cb(error.response);
+      });
+  }
 }
 
 export default TrackApi;
