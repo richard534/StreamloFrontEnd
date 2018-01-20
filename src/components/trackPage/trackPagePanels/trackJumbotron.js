@@ -69,7 +69,7 @@ class TrackJumbotron extends React.Component {
           </div>
 
           <div className="col-md-12" style={bottomAlignText}>
-            <audio id="audioElement" style={audioTagStyle} controls>
+            <audio id="audioElement" style={audioTagStyle} controls controlsList="nodownload">
               <source src={this.props.trackBinaryURL} type="audio/mp3" />
             </audio>
           </div>

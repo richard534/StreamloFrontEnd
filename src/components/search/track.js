@@ -89,7 +89,7 @@ class Track extends React.Component {
             </div>
 
             <div className="col-md-12" style={audioDivStyle}>
-              <audio id={this.props.trackId} style={audioTagStyle} controls="controls">
+              <audio id={this.props.trackId} style={audioTagStyle} controls controlsList="nodownload">
                 <source src={TrackBinaryURL} type="audio/mp3" />
               </audio>
             </div>

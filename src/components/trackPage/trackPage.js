@@ -95,7 +95,6 @@ class TrackPage extends React.Component {
   }
 
   commentsDataSource(trackId, cb) {
-    console.log(trackId);
     TrackApi.getTrackCommentsById(trackId, (err, comments) => {
       cb(null, comments);
     });
