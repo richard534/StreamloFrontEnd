@@ -32,7 +32,6 @@ footer {
 }
 
 #homeJumbotron {
-  background-image: url("../images/belfast1.jpg");
   background-size: cover;
   height: 600px;
   color: white;

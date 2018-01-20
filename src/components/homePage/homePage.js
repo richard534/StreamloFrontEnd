@@ -7,6 +7,9 @@ import Chart from "./chart";
 import TrackApi from "api/trackApi";
 import UserApi from "api/userApi";
 
+let derryImg = require("images/derry.jpg");
+let belfastImg = require("images/belfast1.jpg");
+
 class Home extends React.Component {
   constructor(props) {
     super(props);
@@ -58,12 +61,24 @@ class Home extends React.Component {
   }
 
   render() {
+    let divStyle;
+    if (this.state.resultsCityHeader == "Derry") {
+      divStyle = {
+        backgroundImage: "url(" + derryImg + ")"
+      };
+    } else {
+      divStyle = {
+        backgroundImage: "url(" + belfastImg + ")"
+      };
+    }
+
     return (
       <div>
         <SearchCity
           handleChange={this.handleChange}
           searchString={this.state.citySearchString}
           onSearchSubmit={this.onSearchSubmit}
+          cityImg={divStyle}
         />
         <Chart trackResults={this.state.trackResults} resultsHeader={this.state.resultsCityHeader} />
       </div>

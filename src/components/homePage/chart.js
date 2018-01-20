@@ -36,7 +36,7 @@ class Chart extends React.Component {
         <div className="container">
           <div className="row>">
             <h2 className="text-center">
-              Top 10 Tracks for "<strong>{this.props.resultsHeader}</strong>"
+              Top 10 Tracks In "<strong>{this.props.resultsHeader}</strong>"
             </h2>
           </div>
           <br />

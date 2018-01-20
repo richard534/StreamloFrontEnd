@@ -4,7 +4,7 @@ class SearchCity extends React.Component {
   render() {
     return (
       <div className="container-full">
-        <div className="jumbotron text-center" id="homeJumbotron">
+        <div className="jumbotron text-center" id="homeJumbotron" style={this.props.cityImg}>
           <h1>Streamlo</h1>
           <p>Discover your local musicians</p>
 
