@@ -30,6 +30,7 @@ class TrackPage extends React.Component {
     this.state = {
       trackURL: this.props.params.trackURL,
       userURL: this.props.params.userURL,
+      id: "",
       title: "",
       artist: "",
       genre: "",
@@ -39,11 +40,16 @@ class TrackPage extends React.Component {
       numComments: 0,
       description: "",
       trackBinaryURL: "",
-      comments: []
+      comments: [],
+      commentsPageNum: 1,
+      commentsPerPage: 5,
+      hasMoreComments: false
     };
 
     this.tracksDataSource = this.tracksDataSource.bind(this);
     this.uploaderNameDataSource = this.uploaderNameDataSource.bind(this);
+    this.handleNextCommentsPager = this.handleNextCommentsPager.bind(this);
+    this.handlePreviousCommentsPager = this.handlePreviousCommentsPager.bind(this);
   }
 
   componentDidMount() {
@@ -59,6 +65,7 @@ class TrackPage extends React.Component {
       } else {
         let uploaderId = track.uploaderId;
         let newState = {
+          id: track._id,
           title: track.title,
           genre: track.genre,
           description: track.description,
@@ -74,10 +81,10 @@ class TrackPage extends React.Component {
             toastr.error("Unable to retrieve artist name");
           } else {
             newState.artist = userDisplayName;
-            this.commentsDataSource(track._id, (err, comments) => {
-              newState.comments = comments;
-              this.setState(newState);
-            });
+            this.commentsDataSource(track._id, this.state.commentsPageNum, this.state.commentsPerPage, (err, result) =>
+              this.setStateToCommentDataSourceResults(err, result)
+            );
+            this.setState(newState);
           }
         });
       }
@@ -94,10 +101,46 @@ class TrackPage extends React.Component {
     });
   }
 
-  commentsDataSource(trackId, cb) {
-    TrackApi.getTrackCommentsById(trackId, (err, comments) => {
-      cb(null, comments);
+  commentsDataSource(trackId, pageNum = 1, perPage = 5, cb) {
+    TrackApi.getTrackCommentsById(trackId, pageNum, perPage, (err, result) => {
+      cb(null, result);
     });
+  }
+
+  setStateToCommentDataSourceResults(err, result) {
+    let newState = {};
+    if (result) {
+      newState.comments = result.comments;
+      newState.commentsPageNum = result.page;
+      if (result.page == result.pageCount) {
+        newState.hasMoreComments = false;
+      } else {
+        newState.hasMoreComments = true;
+      }
+    }
+    this.setState(newState);
+  }
+
+  handleNextCommentsPager(e) {
+    e.preventDefault();
+    let trackId = this.state.id;
+    let nextPageNum = this.state.commentsPageNum + 1;
+    let perPage = this.state.commentsPerPage;
+
+    this.commentsDataSource(trackId, nextPageNum, perPage, (err, result) =>
+      this.setStateToCommentDataSourceResults(err, result)
+    );
+  }
+
+  handlePreviousCommentsPager(e) {
+    e.preventDefault();
+    let trackId = this.state.id;
+    let previousPageNum = this.state.commentsPageNum - 1;
+    let perPage = this.state.commentsPerPage;
+
+    this.commentsDataSource(trackId, previousPageNum, perPage, (err, result) =>
+      this.setStateToCommentDataSourceResults(err, result)
+    );
   }
 
   render() {
@@ -124,7 +167,14 @@ class TrackPage extends React.Component {
               profile={this.props.auth.getProfile()}
               jwtToken={this.props.auth.getToken()}
             />
-            <CommentsPanel comments={this.state.comments} />
+            <CommentsPanel
+              comments={this.state.comments}
+              pageNum={this.state.commentsPageNum}
+              hasMoreComments={this.state.hasMoreComments}
+              numComments={this.state.numComments}
+              handleNextCommentsPager={this.handleNextCommentsPager}
+              handlePreviousCommentsPager={this.handlePreviousCommentsPager}
+            />
           </div>
           <div className="col-md-4" style={descriptionDivStyle}>
             <DescriptionPanel description={this.state.description} />

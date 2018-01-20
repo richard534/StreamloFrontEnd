@@ -50,9 +50,34 @@ class CommentsPanel extends React.Component {
       results = <div className="text-center">{noComments}</div>;
     }
 
+    let previousButtonClass = this.props.pageNum == 1 ? "previous disabled disableClick" : "previous";
+    let nextButtonClass = this.props.hasMoreComments == false ? "next disabled disableClick" : "next";
+
+    let pagerControls = (
+      <nav>
+        <ul className="pager">
+          <li className={previousButtonClass} onClick={this.props.handlePreviousCommentsPager}>
+            <a href="">
+              <span aria-hidden="true">&larr;</span> Previous
+            </a>
+          </li>
+          <li className={nextButtonClass} onClick={this.props.handleNextCommentsPager}>
+            <a href="">
+              Next <span aria-hidden="true">&rarr;</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    );
+
+    if (!this.props.numComments) pagerControls = undefined;
+
     return (
-      <div className="panel panel-default">
-        <div className="panel-body">{results}</div>
+      <div>
+        <div className="panel panel-default">
+          <div className="panel-body">{results}</div>
+        </div>
+        {pagerControls}
       </div>
     );
   }

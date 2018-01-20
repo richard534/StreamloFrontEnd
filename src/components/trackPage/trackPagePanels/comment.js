@@ -35,8 +35,10 @@ class Comment extends React.Component {
       if (err) {
         toastr.error(err);
       } else {
-        this.setState({ commentUsername: result.displayName });
-        this.setState({ commentUserURL: result.userURL });
+        this.setState({
+          commentUsername: result.displayName,
+          commentUserURL: result.userURL
+        });
       }
     });
   }

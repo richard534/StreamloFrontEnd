@@ -97,11 +97,11 @@ class TrackApi {
       });
   }
 
-  static getTrackCommentsById(trackId, cb) {
+  static getTrackCommentsById(trackId, pageNum = 1, perPage = 5, cb) {
     axios
-      .get(ApiUrl + "tracks/" + trackId + "/comments")
+      .get(ApiUrl + "tracks/" + trackId + "/comments?page=" + pageNum + "&per_page=" + perPage)
       .then(response => {
-        cb(null, response.data.comments);
+        cb(null, response.data);
       })
       .catch(error => {
         cb(error.response);
