@@ -104,9 +104,9 @@ class TrackPage extends React.Component {
   }
 
   commentsDataSource(trackId, pageNum = 1, perPage = 5, cb) {
-    TrackApi.getTrackCommentsById(trackId, pageNum, perPage, (err, track) => {
-      this.setStateToCommentDataSourceResults(track);
-      if (cb) cb(null, track);
+    TrackApi.getTrackCommentsById(trackId, pageNum, perPage, (err, result) => {
+      this.setStateToCommentDataSourceResults(result);
+      if (cb) cb(null, result);
     });
   }
 
@@ -166,7 +166,9 @@ class TrackPage extends React.Component {
         if (err) {
           toastr.error("Error adding comment");
         } else {
-          this.commentsDataSource(this.state.id, 1, 5, (err, track) => {
+          let commentsPageNum = this.state.commentsPageNum;
+          let perPage = this.state.commentsPerPage;
+          this.commentsDataSource(this.state.id, commentsPageNum, perPage, (err, track) => {
             toastr.success("Comment Added");
             this.setState({ postCommentBody: "" });
           });
