@@ -6,6 +6,7 @@ import TrackJumbotron from "./trackPagePanels/trackJumbotron";
 import CommentsPanel from "./trackPagePanels/commentsPanel";
 import PostCommentPanel from "./trackPagePanels/postCommentPanel";
 import DescriptionPanel from "./trackPagePanels/descriptionPanel";
+import CommentsSection from "./commentsSection";
 import TrackApi from "api/trackApi";
 import UserApi from "api/userApi";
 
@@ -43,13 +44,16 @@ class TrackPage extends React.Component {
       comments: [],
       commentsPageNum: 1,
       commentsPerPage: 5,
-      hasMoreComments: false
+      hasMoreComments: false,
+      postCommentBody: ""
     };
 
     this.tracksDataSource = this.tracksDataSource.bind(this);
     this.uploaderNameDataSource = this.uploaderNameDataSource.bind(this);
     this.handleNextCommentsPager = this.handleNextCommentsPager.bind(this);
     this.handlePreviousCommentsPager = this.handlePreviousCommentsPager.bind(this);
+    this.postComment = this.postComment.bind(this);
+    this.handleChange = this.handleChange.bind(this);
   }
 
   componentDidMount() {
@@ -81,9 +85,7 @@ class TrackPage extends React.Component {
             toastr.error("Unable to retrieve artist name");
           } else {
             newState.artist = userDisplayName;
-            this.commentsDataSource(track._id, this.state.commentsPageNum, this.state.commentsPerPage, (err, result) =>
-              this.setStateToCommentDataSourceResults(err, result)
-            );
+            this.commentsDataSource(track._id, this.state.commentsPageNum, this.state.commentsPerPage);
             this.setState(newState);
           }
         });
@@ -102,16 +104,18 @@ class TrackPage extends React.Component {
   }
 
   commentsDataSource(trackId, pageNum = 1, perPage = 5, cb) {
-    TrackApi.getTrackCommentsById(trackId, pageNum, perPage, (err, result) => {
-      cb(null, result);
+    TrackApi.getTrackCommentsById(trackId, pageNum, perPage, (err, track) => {
+      this.setStateToCommentDataSourceResults(track);
+      if (cb) cb(null, track);
     });
   }
 
-  setStateToCommentDataSourceResults(err, result) {
+  setStateToCommentDataSourceResults(result) {
     let newState = {};
     if (result) {
       newState.comments = result.comments;
       newState.commentsPageNum = result.page;
+      newState.numComments = result.total;
       if (result.page == result.pageCount) {
         newState.hasMoreComments = false;
       } else {
@@ -127,9 +131,7 @@ class TrackPage extends React.Component {
     let nextPageNum = this.state.commentsPageNum + 1;
     let perPage = this.state.commentsPerPage;
 
-    this.commentsDataSource(trackId, nextPageNum, perPage, (err, result) =>
-      this.setStateToCommentDataSourceResults(err, result)
-    );
+    this.commentsDataSource(trackId, nextPageNum, perPage);
   }
 
   handlePreviousCommentsPager(e) {
@@ -138,9 +140,53 @@ class TrackPage extends React.Component {
     let previousPageNum = this.state.commentsPageNum - 1;
     let perPage = this.state.commentsPerPage;
 
-    this.commentsDataSource(trackId, previousPageNum, perPage, (err, result) =>
-      this.setStateToCommentDataSourceResults(err, result)
-    );
+    this.commentsDataSource(trackId, previousPageNum, perPage);
+  }
+
+  postComment(e) {
+    e.preventDefault();
+    if (this.state.postCommentBody.trim() == "") {
+      toastr.remove();
+      toastr.error("Unable to submit empty comment");
+      return;
+    }
+
+    if (this.props.auth.loggedIn()) {
+      let trackURL = this.state.trackURL;
+      let userId = this.props.auth.getProfile().id;
+      let jwtToken = this.props.auth.getToken();
+
+      let data = {
+        user: userId,
+        date: Date.now(),
+        body: this.state.postCommentBody
+      };
+
+      TrackApi.postCommentToTrack(trackURL, data, jwtToken, (err, result) => {
+        if (err) {
+          toastr.error("Error adding comment");
+        } else {
+          this.commentsDataSource(this.state.id, 1, 5, (err, track) => {
+            toastr.success("Comment Added");
+            this.setState({ postCommentBody: "" });
+          });
+        }
+      });
+    } else {
+      toastr.error("Please Log in before commenting");
+    }
+  }
+
+  handleChange(e) {
+    const target = e.target;
+    const name = target.name;
+
+    var newState = update(this.state, {
+      [name]: {
+        $set: target.value
+      }
+    });
+    this.setState(newState);
   }
 
   render() {
@@ -159,23 +205,18 @@ class TrackPage extends React.Component {
         />
 
         <div className="col-md-12" style={commentsAndDescriptionStyle}>
-          <div className="col-md-8" style={commentsDivStyle}>
-            <PostCommentPanel
-              numComments={this.state.numComments}
-              trackURL={this.state.trackURL}
-              loggedIn={this.props.auth.loggedIn()}
-              profile={this.props.auth.getProfile()}
-              jwtToken={this.props.auth.getToken()}
-            />
-            <CommentsPanel
-              comments={this.state.comments}
-              pageNum={this.state.commentsPageNum}
-              hasMoreComments={this.state.hasMoreComments}
-              numComments={this.state.numComments}
-              handleNextCommentsPager={this.handleNextCommentsPager}
-              handlePreviousCommentsPager={this.handlePreviousCommentsPager}
-            />
-          </div>
+          <CommentsSection
+            numComments={this.state.numComments}
+            comments={this.state.comments}
+            pageNum={this.state.commentsPageNum}
+            hasMoreComments={this.state.hasMoreComments}
+            handleNextCommentsPager={this.handleNextCommentsPager}
+            handlePreviousCommentsPager={this.handlePreviousCommentsPager}
+            postComment={this.postComment}
+            postCommentBody={this.state.postCommentBody}
+            handleChange={this.handleChange}
+            loggedIn={this.props.auth.loggedIn()}
+          />
           <div className="col-md-4" style={descriptionDivStyle}>
             <DescriptionPanel description={this.state.description} />
           </div>
