@@ -4,9 +4,9 @@ let ApiUrl = __API_DOMAIN__;
 import axios from "axios";
 
 class UserApi {
-  static getUsersByDisplaynameLimitedByPageNum(displayName, pageNum = 0, cb) {
+  static getUsersByDisplayname(displayName, pageNum = 0, perPage = 5, cb) {
     axios
-      .get(ApiUrl + "users?display_name=" + displayName + "&page=" + pageNum)
+      .get(ApiUrl + "users?display_name=" + displayName + "&page=" + pageNum + "&per_page=" + perPage)
       .then(response => {
         cb(null, response.data);
       })

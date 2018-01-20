@@ -1,5 +1,7 @@
 import React from "react";
 import Person from "./person";
+import { Link } from "react-router";
+
 var noResultImg = require("images/noResultsSearch.png");
 
 var ThumbnailStyle = {
@@ -12,8 +14,8 @@ var PersonListingStyle = {
 
 class PeopleSearchResultsList extends React.Component {
   render() {
-    var self = this;
-    var people = self.props.peopleResults;
+    var people = this.props.peopleResults;
+    let searchString = this.props.searchString;
 
     var createPersonResultRow = function(person) {
       return (
@@ -24,37 +26,62 @@ class PeopleSearchResultsList extends React.Component {
       );
     };
 
-    var resultsNotFound = (function() {
+    var resultsNotFound = (() => {
       return (
         <div>
           <img src={noResultImg} className="center-block search-result-image" />
-          <p className="text-center text-muted">Sorry we didn't find any results for "{self.props.searchString}".</p>
+          <p className="text-center text-muted">Sorry we didn't find any results for "{searchString}".</p>
           <p className="text-center text-muted">Check the spelling, or try a different search.</p>
         </div>
       );
     })();
 
-    let previousButtonClass = self.props.peoplePageNum == 1 ? "previous disabled disableClick" : "previous";
-    let nextButtonClass = self.props.hasMorePeople == false ? "next disabled disableClick" : "next";
+    let previousButtonClass = this.props.pageNum == 1 ? "previous disabled disableClick" : "previous";
+    let nextButtonClass = this.props.hasMorePeople == false ? "next disabled disableClick" : "next";
 
     var results;
     var numPeople;
-    if (self.props.peopleResults.length > 0) {
-      numPeople = <p className="text-muted">Found {self.props.numPeople} people</p>;
+
+    let nextPeoplePageNumber = parseInt(this.props.pageNum) + 1;
+    let previousTrackPageNumber = parseInt(this.props.pageNum) - 1;
+    let perPage = this.props.perPage;
+
+    if (this.props.peopleResults.length > 0) {
+      numPeople = <p className="text-muted">Found {this.props.numPeople} people</p>;
       results = (
         <div>
           <ul className="list-group">{people.map(createPersonResultRow)}</ul>
           <nav>
             <ul className="pager">
-              <li className={previousButtonClass} onClick={this.props.handlePreviousPager}>
-                <a href="">
+              <li className={previousButtonClass}>
+                <Link
+                  to={{
+                    pathname: "/search",
+                    query: {
+                      q: this.props.searchString,
+                      page: previousTrackPageNumber,
+                      per_page: perPage,
+                      filter: "people"
+                    }
+                  }}
+                >
                   <span aria-hidden="true">&larr;</span> Previous
-                </a>
+                </Link>
               </li>
-              <li className={nextButtonClass} onClick={this.props.handleNextPager}>
-                <a href="">
+              <li className={nextButtonClass}>
+                <Link
+                  to={{
+                    pathname: "/search",
+                    query: {
+                      q: this.props.searchString,
+                      page: nextPeoplePageNumber,
+                      per_page: perPage,
+                      filter: "people"
+                    }
+                  }}
+                >
                   Next <span aria-hidden="true">&rarr;</span>
-                </a>
+                </Link>
               </li>
             </ul>
           </nav>

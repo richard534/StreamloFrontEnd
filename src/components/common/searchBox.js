@@ -1,5 +1,4 @@
 import React, { PropTypes } from "react";
-import ReactDOM from "react-dom";
 import { Link } from "react-router";
 
 var searchBarStyle = {
@@ -16,6 +15,24 @@ class SearchBox extends React.Component {
   }
 
   render() {
+    let searchString = this.props.searchString;
+
+    let searchButton = (
+      <Link to={{ pathname: "/search", query: { q: searchString, page: 1, per_page: 5, filter: "tracks" } }}>
+        <button className="btn btn-default btn-sm" type="submit">
+          <span className="glyphicon glyphicon-search" />
+        </button>
+      </Link>
+    );
+
+    if (!searchString) {
+      searchButton = (
+        <button className="btn btn-default btn-sm" type="submit">
+          <span className="glyphicon glyphicon-search" />
+        </button>
+      );
+    }
+
     return (
       <form
         className="navbar-form"
@@ -28,18 +45,12 @@ class SearchBox extends React.Component {
           <input
             type="text"
             className="form-control"
-            value={this.props.searchString}
+            value={searchString}
             placeholder="Search..."
             style={searchBoxStyle}
           />
 
-          <span className="input-group-btn">
-            <Link to={{ pathname: "search", query: { q: this.props.searchString } }}>
-              <button className="btn btn-default btn-sm" type="submit">
-                <span className="glyphicon glyphicon-search" />
-              </button>
-            </Link>
-          </span>
+          <span className="input-group-btn">{searchButton}</span>
         </div>
       </form>
     );

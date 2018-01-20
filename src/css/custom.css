@@ -9,6 +9,10 @@ body {
   margin-bottom: 160px;
 }
 
+p.wrap {
+  word-wrap:break-word;
+}
+
 footer {
   position: absolute;
   bottom: 0;
@@ -28,7 +32,6 @@ footer {
 }
 
 #homeJumbotron {
-  background-image: url("../images/belfast1.jpg");
   background-size: cover;
   height: 600px;
   color: white;
@@ -50,6 +53,23 @@ footer {
   position: relative;
   background: #e2e2e2;
   margin-bottom: 20px;
+}
+
+.col-centered {
+  float: none;
+  margin: 0 auto;
+}
+
+.ThumbnailStyle {
+  marginBottom: "0px";
+}
+
+.chartMediaBody {
+  vertical-align: middle;
+}
+
+.chartLikesBarSeperator {
+  margin-top:15px;
 }
 
 .list-group-item {

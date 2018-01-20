@@ -4,7 +4,7 @@ class SearchCity extends React.Component {
   render() {
     return (
       <div className="container-full">
-        <div className="jumbotron text-center" id="homeJumbotron">
+        <div className="jumbotron text-center" id="homeJumbotron" style={this.props.cityImg}>
           <h1>Streamlo</h1>
           <p>Discover your local musicians</p>
 
@@ -12,9 +12,10 @@ class SearchCity extends React.Component {
             <div className="input-group input-group-sm">
               <input
                 type="text"
+                name="citySearchString"
                 className="form-control"
                 value={this.props.searchString}
-                onChange={this.props.onChange}
+                onChange={this.props.handleChange}
                 placeholder="Enter name of city..."
               />
               <span className="input-group-btn">

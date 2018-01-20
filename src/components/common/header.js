@@ -47,7 +47,17 @@ class Header extends React.Component {
             <Link to="/upload">Upload</Link>
           </li>
           <li className="nav">
-            <Link to={"/user/" + userProfile.userURL}>Signed in as {userProfile.displayName}</Link>
+            <Link
+              to={{
+                pathname: "/user/" + userProfile.userURL,
+                query: {
+                  page: 1,
+                  per_page: 5
+                }
+              }}
+            >
+              Signed in as {userProfile.displayName}
+            </Link>
           </li>
           <li className="nav">
             <button onClick={this.logout} className="btn btn-default navbar-btn">

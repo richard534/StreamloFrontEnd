@@ -1,11 +1,11 @@
 import React from "react";
 import { Link } from "react-router";
 
-var NotFoundPage = React.createClass({
-  render: function() {
+class NotFoundPage extends React.Component {
+  render() {
     return (
-      <div className="col-md-8">
-        <h1>Page not found</h1>
+      <div className="col-md-12 text-center">
+        <h1>404 Page not found</h1>
         <p>Whoops! nothing found here!</p>
         <p>
           <Link to="/">Back to home</Link>
@@ -13,6 +13,6 @@ var NotFoundPage = React.createClass({
       </div>
     );
   }
-});
+}
 
 export default NotFoundPage;

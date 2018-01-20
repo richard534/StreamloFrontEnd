@@ -1,12 +1,10 @@
 import React from "react";
-import { Link } from "react-router";
+import { Link, browserHistory } from "react-router";
 import SearchHeader from "./searchHeader";
 import SearchFilter from "./searchFilter";
 import TrackSearchResultsList from "./trackSearchResultsList";
 import PeopleSearchResultsList from "./peopleSearchResultsList";
-import update from "immutability-helper";
 import _ from "lodash";
-import toastr from "toastr";
 import TrackApi from "api/trackApi";
 import UserApi from "api/userApi";
 
@@ -26,8 +24,8 @@ class SearchResultsPage extends React.Component {
       peopleResults: [],
       numTracks: 0,
       numPeople: 0,
-      trackPageNum: 0,
-      peoplePageNum: 0,
+      pageNum: 0,
+      perPage: 0,
       hasMoreTracks: false,
       hasMorePeople: false,
       selectedFilter: {
@@ -39,66 +37,65 @@ class SearchResultsPage extends React.Component {
     this.tracksDataSource = this.tracksDataSource.bind(this);
     this.peopleDatasource = this.peopleDatasource.bind(this);
     this.changeSelectedFilter = this.changeSelectedFilter.bind(this);
-    this.handlePreviousPagerTracks = this.handlePreviousPagerTracks.bind(this);
-    this.handleNextPagerTracks = this.handleNextPagerTracks.bind(this);
-    this.handlePreviousPagerPeople = this.handlePreviousPagerPeople.bind(this);
-    this.handleNextPagerPeople = this.handleNextPagerPeople.bind(this);
-  }
-
-  componentWillMount() {
-    this.resetSearchResults();
   }
 
   componentDidMount() {
-    this.tracksDataSource();
-    this.peopleDatasource();
+    this.setInitialResultsPageState();
   }
 
   // Lifecycle method run when component revieves new props from router (i.e when another search performed)
   componentWillReceiveProps(nextProps) {
-    this.resetSearchResults(nextProps);
-    this.tracksDataSource(nextProps);
-    this.peopleDatasource(nextProps);
+    this.setInitialResultsPageState(nextProps);
   }
 
-  resetSearchResults(props) {
-    props = props || this.props;
-    this.setState({
-      searchString: props.location.query.q,
-      trackResults: [],
-      peopleResults: [],
-      numTracks: 0,
-      numPeople: 0
-    });
+  setInitialResultsPageState(props) {
+    props = props || this.props; // if props variable passed to this method then use it
+
+    let currentFilterState = this.determineFilterStateFromURI(props.location.query.filter);
+    this.setState(
+      {
+        searchString: props.location.query.q,
+        pageNum: props.location.query.page,
+        perPage: props.location.query.per_page,
+        selectedFilter: currentFilterState,
+        trackResults: [],
+        peopleResults: []
+      },
+      () => {
+        this.tracksDataSource();
+        this.peopleDatasource();
+      }
+    );
   }
 
-  tracksDataSource(props, pagenum = 1) {
-    props = props || this.props;
+  tracksDataSource(pagenum = 1) {
+    if (!this.state.selectedFilter.tracks) return;
 
-    let trackNameQuery = props.location.query.q;
-    let pageNum = pagenum;
+    let trackNameQuery = this.state.searchString;
+    let pageNum = this.state.pageNum;
+    let perPage = this.state.perPage;
 
-    TrackApi.getTracksByNameLimitedByPageNum(trackNameQuery, pageNum, (err, result) => {
+    TrackApi.getTracksByName(trackNameQuery, pageNum, perPage, (err, result) => {
       if (!err) {
         let hasMoreTracks = true;
         if (result.page == result.pageCount) hasMoreTracks = false;
         this.setState({
           trackResults: result.tracks,
           numTracks: result.total,
-          trackPageNum: pageNum,
           hasMoreTracks: hasMoreTracks
         });
       }
     });
   }
 
-  peopleDatasource(props, pagenum = 1) {
-    props = props || this.props;
+  peopleDatasource(pagenum = 1) {
+    if (!this.state.selectedFilter.people) return;
 
-    let displayName = props.location.query.q;
-    let pageNum = pagenum;
+    let displayNameQuery = this.state.searchString;
+    let pageNum = this.state.pageNum;
+    let perPage = this.state.perPage;
 
-    UserApi.getUsersByDisplaynameLimitedByPageNum(displayName, pageNum, (err, result) => {
+    UserApi.getUsersByDisplayname(displayNameQuery, pageNum, perPage, (err, result) => {
       if (err) return;
       else if (!_.isEmpty(result.users)) {
         let hasMorePeople = true;
@@ -106,56 +103,40 @@ class SearchResultsPage extends React.Component {
         this.setState({
           peopleResults: result.users,
           numPeople: result.total,
-          peoplePageNum: pageNum,
           hasMorePeople: hasMorePeople
         });
       }
     });
   }
 
+  determineFilterStateFromURI(selectedFilterString) {
+    let selectedFilterState = {
+      tracks: false,
+      people: false
+    };
+
+    if (selectedFilterString == "tracks") {
+      selectedFilterState.tracks = true;
+    } else {
+      selectedFilterState.people = true;
+    }
+    return selectedFilterState;
+  }
+
   changeSelectedFilter(e) {
     e.preventDefault();
-    const name = e.target.parentNode.getAttribute("name");
+    const filterString = e.target.parentNode.getAttribute("name");
 
-    var newState = update(this.state, {
-      selectedFilter: {
-        tracks: {
-          $set: false
-        },
-        people: {
-          $set: false
-        },
-        [name]: {
-          $set: true
-        }
-      }
-    });
-
-    this.setState(newState);
-  }
-
-  // Track Pagination handlers
-  handlePreviousPagerTracks(e) {
-    e.preventDefault();
-    if (this.state.trackPageNum === 0) return; // If first page do nothing
-    this.tracksDataSource(null, this.state.trackPageNum - 1);
-  }
-
-  handleNextPagerTracks(e) {
-    e.preventDefault();
-    this.tracksDataSource(null, this.state.trackPageNum + 1);
-  }
-
-  // People Pagination handlers
-  handlePreviousPagerPeople(e) {
-    e.preventDefault();
-    if (this.state.peoplePageNum === 0) return; // If first page do nothing
-    this.peopleDatasource(null, this.state.peoplePageNum - 1);
-  }
-
-  handleNextPagerPeople(e) {
-    e.preventDefault();
-    this.peopleDatasource(null, this.state.peoplePageNum + 1);
+    browserHistory.push(
+      "/search?filter=" +
+        filterString +
+        "&page=" +
+        "1" +
+        "&per_page=" +
+        this.state.perPage +
+        "&q=" +
+        this.state.searchString
+    );
   }
 
   render() {
@@ -168,9 +149,8 @@ class SearchResultsPage extends React.Component {
           trackResults={self.state.trackResults}
           searchString={self.state.searchString}
           numTracks={self.state.numTracks}
-          handlePreviousPager={self.handlePreviousPagerTracks}
-          handleNextPager={self.handleNextPagerTracks}
-          trackPageNum={self.state.trackPageNum}
+          pageNum={self.state.pageNum}
+          perPage={self.state.perPage}
           hasMoreTracks={self.state.hasMoreTracks}
         />
       );
@@ -182,9 +162,8 @@ class SearchResultsPage extends React.Component {
           peopleResults={self.state.peopleResults}
           searchString={self.state.searchString}
           numPeople={self.state.numPeople}
-          handlePreviousPager={self.handlePreviousPagerPeople}
-          handleNextPager={self.handleNextPagerPeople}
-          peoplePageNum={self.state.peoplePageNum}
+          pageNum={self.state.pageNum}
+          perPage={self.state.perPage}
           hasMorePeople={self.state.hasMorePeople}
         />
       );
@@ -212,8 +191,11 @@ class SearchResultsPage extends React.Component {
     return (
       <div className="container">
         <SearchHeader searchString={this.state.searchString} />
-        <SearchFilter onChangeFilter={this.changeSelectedFilter} filterSelected={selectedFilter} />
-        {resultsList}
+        <div className="col-md-2">
+          <h4>Filters</h4>
+          <SearchFilter onChangeFilter={this.changeSelectedFilter} filterSelected={selectedFilter} />
+        </div>
+        <div className="col-md-10">{resultsList}</div>
       </div>
     );
   }

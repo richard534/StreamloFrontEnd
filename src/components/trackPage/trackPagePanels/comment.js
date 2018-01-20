@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router";
 import toastr from "toastr";
+import moment from "moment";
 
 import UserApi from "api/userApi";
 var accountIcon = require("images/account-icon.png");
@@ -34,8 +35,10 @@ class Comment extends React.Component {
       if (err) {
         toastr.error(err);
       } else {
-        this.setState({ commentUsername: result.displayName });
-        this.setState({ commentUserURL: result.userURL });
+        this.setState({
+          commentUsername: result.displayName,
+          commentUserURL: result.userURL
+        });
       }
     });
   }
@@ -44,7 +47,7 @@ class Comment extends React.Component {
     return (
       <div className="media">
         <div className="col-md-1" style={commentThumbnail}>
-          <img className="img-circle" src={accountIcon} width="50" height="50" />
+          <img className="img-circle" src={accountIcon} width="100%" height="100%" />
         </div>
         <div className="col-md-11">
           <div className="col-md-6">
@@ -53,14 +56,11 @@ class Comment extends React.Component {
             </Link>
           </div>
           <div className="col-md-6">
-            <p className="text-muted pull-right">{this.props.datePosted}</p>
+            <p className="text-muted pull-right">{moment(this.props.commentDate).format("dddd, MMMM Do YYYY")}</p>
           </div>
           <div className="col-md-12">
-            <p>{this.props.commentBody}</p>
+            <p className="wrap">{this.props.commentBody}</p>
           </div>
-        </div>
-        <div className="col-md-12">
-          <hr />
         </div>
       </div>
     );

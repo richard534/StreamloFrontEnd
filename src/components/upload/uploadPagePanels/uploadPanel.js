@@ -145,7 +145,7 @@ class UploadPanel extends React.Component {
                     rows="3"
                     name="description"
                     value={this.props.data.description}
-                    placeholder="Enter Track Title..."
+                    placeholder="Enter Track Description..."
                   />
                 </div>
               </div>

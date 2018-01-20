@@ -71,20 +71,14 @@ class Track extends React.Component {
       <div className="media">
         <div className="media-left">
           <a>
-            <img
-              className="media-object thumbnail trackThumbnail"
-              src={defaultAlbumArt}
-              width="160"
-              height="160"
-              style={ThumbnailStyle}
-            />
+            <img className="media-object thumbnail ThumbnailStyle" src={defaultAlbumArt} width="160" height="160" />
           </a>
         </div>
         <div className="media-body">
           <div className="col-md-12" style={mediaDivStyle}>
             <div className="col-md-8" style={mediaDivStyle}>
               <p className="text-muted">{this.props.artist}</p>
-              <Link to={"track/" + this.state.userURL + "/" + this.props.trackURL}>
+              <Link to={"/track/" + this.state.userURL + "/" + this.props.trackURL}>
                 <h4 className="media-heading">{this.props.title}</h4>
               </Link>
               <p>Genre: {this.props.genre}</p>
@@ -95,7 +89,7 @@ class Track extends React.Component {
             </div>
 
             <div className="col-md-12" style={audioDivStyle}>
-              <audio id={this.props.trackId} style={audioTagStyle} controls="controls">
+              <audio id={this.props.trackId} style={audioTagStyle} controls controlsList="nodownload">
                 <source src={TrackBinaryURL} type="audio/mp3" />
               </audio>
             </div>
@@ -122,7 +116,7 @@ class Track extends React.Component {
                 <div className="col-md-3">
                   <p className="pull-right">
                     <span className="glyphicon glyphicon-comment" />
-                    {" " + this.props.numPlays}
+                    {" " + this.props.numComments}
                   </p>
                 </div>
               </div>

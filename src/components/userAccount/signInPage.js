@@ -52,7 +52,7 @@ class SignInPage extends React.Component {
     this.logout = this.logout.bind(this);
   }
 
-  componentWillMount() {
+  componentDidMount() {
     let profile = this.props.auth.getProfile();
     let newState = {
       profile: {
