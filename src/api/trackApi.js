@@ -107,6 +107,21 @@ class TrackApi {
         cb(error.response);
       });
   }
+
+  static deleteCommentByCommentId(commentId, jwtToken, cb) {
+    let instance = axios.create({
+      headers: { "x-access-token": jwtToken }
+    });
+
+    instance
+      .delete(ApiUrl + "tracks/comments/" + commentId)
+      .then(response => {
+        cb(null, response.data.message);
+      })
+      .catch(error => {
+        cb(error.response);
+      });
+  }
 }
 
 export default TrackApi;

@@ -7,7 +7,7 @@ class CommentsPanel extends React.Component {
     var comments = self.props.comments;
 
     let renderedCommentCounter = 0;
-    var createCommentRow = function(comment) {
+    var createCommentRow = comment => {
       let lastComment = false;
       if (renderedCommentCounter >= comments.length - 1) {
         lastComment = true;
@@ -27,7 +27,14 @@ class CommentsPanel extends React.Component {
       return (
         <div key={comment._id} className="col-md-12">
           <li key={comment._id} className="list-group-item">
-            <Comment commentUserId={comment.user} commentDate={comment.datePosted} commentBody={comment.body} />
+            <Comment
+              commentId={comment._id}
+              commentUserId={comment.user}
+              commentDate={comment.datePosted}
+              commentBody={comment.body}
+              loggedInUserId={this.props.profileId}
+              handleDeleteComment={this.props.handleDeleteComment}
+            />
           </li>
           {postCommentSeperator}
         </div>

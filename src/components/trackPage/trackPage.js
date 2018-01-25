@@ -54,6 +54,7 @@ class TrackPage extends React.Component {
     this.handlePreviousCommentsPager = this.handlePreviousCommentsPager.bind(this);
     this.postComment = this.postComment.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.handleDeleteComment = this.handleDeleteComment.bind(this);
   }
 
   componentDidMount() {
@@ -121,6 +122,11 @@ class TrackPage extends React.Component {
       } else {
         newState.hasMoreComments = true;
       }
+    } else {
+      newState.comments = {};
+      newState.commentsPageNum = 1;
+      newState.numComments = 0;
+      newState.hasMoreComments = false;
     }
     this.setState(newState);
   }
@@ -191,6 +197,20 @@ class TrackPage extends React.Component {
     this.setState(newState);
   }
 
+  handleDeleteComment(commentId) {
+    let jwtToken = this.props.auth.getToken();
+
+    TrackApi.deleteCommentByCommentId(commentId, jwtToken, (err, result) => {
+      if (err) return toastr.error("Error removing comment");
+
+      let commentsPageNum = this.state.commentsPageNum;
+      let perPage = this.state.commentsPerPage;
+      this.commentsDataSource(this.state.id, commentsPageNum, perPage, (err, track) => {
+        toastr.success("Comment Deleted");
+      });
+    });
+  }
+
   render() {
     return (
       <div className="container">
@@ -218,6 +238,8 @@ class TrackPage extends React.Component {
             postCommentBody={this.state.postCommentBody}
             handleChange={this.handleChange}
             loggedIn={this.props.auth.loggedIn()}
+            profileId={this.props.auth.getProfile().id}
+            handleDeleteComment={this.handleDeleteComment}
           />
           <div className="col-md-4" style={descriptionDivStyle}>
             <DescriptionPanel description={this.state.description} />

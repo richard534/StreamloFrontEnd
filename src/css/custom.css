@@ -95,3 +95,7 @@ footer {
 .disableClick {
   pointer-events: none;
 }
+
+.deleteCommentButton {
+  padding: 0px;
+}
