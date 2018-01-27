@@ -6,6 +6,7 @@ import TrackJumbotron from "./trackPagePanels/trackJumbotron";
 import CommentsPanel from "./trackPagePanels/commentsPanel";
 import PostCommentPanel from "./trackPagePanels/postCommentPanel";
 import DescriptionPanel from "./trackPagePanels/descriptionPanel";
+import NotFoundPage from "../notFoundPage";
 import CommentsSection from "./commentsSection";
 import TrackApi from "api/trackApi";
 import UserApi from "api/userApi";
@@ -45,7 +46,8 @@ class TrackPage extends React.Component {
       commentsPageNum: 1,
       commentsPerPage: 5,
       hasMoreComments: false,
-      postCommentBody: ""
+      postCommentBody: "",
+      trackFound: true
     };
 
     this.tracksDataSource = this.tracksDataSource.bind(this);
@@ -57,7 +59,7 @@ class TrackPage extends React.Component {
     this.handleDeleteComment = this.handleDeleteComment.bind(this);
   }
 
-  componentDidMount() {
+  componentWillMount() {
     this.tracksDataSource();
   }
 
@@ -66,7 +68,8 @@ class TrackPage extends React.Component {
 
     TrackApi.getTrackByTrackURL(trackURL, 1, 5, (err, track) => {
       if (err) {
-        toastr.error(err);
+        // show 404 page if trackURL does not map to a track on the system
+        this.setState({ trackFound: false });
       } else {
         let uploaderId = track.uploaderId;
         let newState = {
@@ -212,42 +215,50 @@ class TrackPage extends React.Component {
   }
 
   render() {
-    return (
-      <div className="container">
-        <TrackJumbotron
-          title={this.state.title}
-          artist={this.state.artist}
-          genre={this.state.genre}
-          uploadDate={this.state.uploadDate}
-          numPlays={this.state.numPlays}
-          numLikes={this.state.numLikes}
-          numComments={this.state.numComments}
-          trackBinaryURL={this.state.trackBinaryURL}
-          userURL={this.state.userURL}
-        />
-
-        <div className="col-md-12" style={commentsAndDescriptionStyle}>
-          <CommentsSection
+    if (this.state.trackFound) {
+      return (
+        <div className="container">
+          <TrackJumbotron
+            title={this.state.title}
+            artist={this.state.artist}
+            genre={this.state.genre}
+            uploadDate={this.state.uploadDate}
+            numPlays={this.state.numPlays}
+            numLikes={this.state.numLikes}
             numComments={this.state.numComments}
-            comments={this.state.comments}
-            pageNum={this.state.commentsPageNum}
-            hasMoreComments={this.state.hasMoreComments}
-            handleNextCommentsPager={this.handleNextCommentsPager}
-            handlePreviousCommentsPager={this.handlePreviousCommentsPager}
-            postComment={this.postComment}
-            postCommentBody={this.state.postCommentBody}
-            handleChange={this.handleChange}
-            loggedIn={this.props.auth.loggedIn()}
-            profileId={this.props.auth.getProfile().id}
-            handleDeleteComment={this.handleDeleteComment}
+            trackBinaryURL={this.state.trackBinaryURL}
+            userURL={this.state.userURL}
           />
-          <div className="col-md-4" style={descriptionDivStyle}>
-            <DescriptionPanel description={this.state.description} />
+
+          <div className="col-md-12" style={commentsAndDescriptionStyle}>
+            <CommentsSection
+              numComments={this.state.numComments}
+              comments={this.state.comments}
+              pageNum={this.state.commentsPageNum}
+              hasMoreComments={this.state.hasMoreComments}
+              handleNextCommentsPager={this.handleNextCommentsPager}
+              handlePreviousCommentsPager={this.handlePreviousCommentsPager}
+              postComment={this.postComment}
+              postCommentBody={this.state.postCommentBody}
+              handleChange={this.handleChange}
+              loggedIn={this.props.auth.loggedIn()}
+              profileId={this.props.auth.getProfile().id}
+              handleDeleteComment={this.handleDeleteComment}
+            />
+            <div className="col-md-4" style={descriptionDivStyle}>
+              <DescriptionPanel description={this.state.description} />
+            </div>
           </div>
         </div>
-      </div>
-    );
+      );
+    } else {
+      return <NotFoundPage />;
+    }
   }
 }
+
+TrackPage.contextTypes = {
+  router: React.PropTypes.object.isRequired
+};
 
 export default TrackPage;
