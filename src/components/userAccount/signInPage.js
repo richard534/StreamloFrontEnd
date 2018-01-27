@@ -116,11 +116,20 @@ class SignInPage extends React.Component {
     var result;
 
     if (this.props.auth.loggedIn()) {
+      let userProfile = this.props.auth.getProfile();
       header = (
         <p>
           Signed in as{" "}
-          <Link to={"user/test"}>
-            <strong>{this.state.profile.email}</strong>
+          <Link
+            to={{
+              pathname: "/user/" + userProfile.userURL,
+              query: {
+                page: 1,
+                per_page: 5
+              }
+            }}
+          >
+            {userProfile.displayName}
           </Link>
         </p>
       );
