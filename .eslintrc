@@ -16,7 +16,6 @@
   "env": {
     "browser": true,
     "node": true,
-    "jquery": true,
     "mocha": true
   },
   "rules": {
@@ -38,8 +37,6 @@
     }
   },
   "globals": {
-    jQuery: true,
-    $: true,
     "API_DOMAIN": true
   }
 }
