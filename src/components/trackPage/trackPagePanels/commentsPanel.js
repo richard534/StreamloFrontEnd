@@ -33,6 +33,7 @@ class CommentsPanel extends React.Component {
               commentDate={comment.datePosted}
               commentBody={comment.body}
               loggedInUserId={this.props.profileId}
+              loggedIn={this.props.loggedIn}
               handleDeleteComment={this.props.handleDeleteComment}
             />
           </li>

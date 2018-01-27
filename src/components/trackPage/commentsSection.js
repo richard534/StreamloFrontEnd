@@ -30,6 +30,7 @@ class CommentsSection extends React.Component {
           hasMoreComments={this.props.hasMoreComments}
           numComments={this.props.numComments}
           profileId={this.props.profileId}
+          loggedIn={this.props.loggedIn}
           handleNextCommentsPager={this.props.handleNextCommentsPager}
           handlePreviousCommentsPager={this.props.handlePreviousCommentsPager}
           handleDeleteComment={this.props.handleDeleteComment}

@@ -47,7 +47,7 @@ class Comment extends React.Component {
     let deleteCommentButton;
 
     // if this comment belongs to logged in user, show comment delete button
-    if (this.props.loggedInUserId == this.props.commentUserId) {
+    if (this.props.loggedInUserId == this.props.commentUserId && this.props.loggedIn) {
       deleteCommentButton = (
         <button
           className="btn deleteCommentButton"
