@@ -99,3 +99,7 @@ footer {
 .deleteCommentButton {
   padding: 0px;
 }
+
+.editProfileModalCol {
+  padding-left: 0px;
+}

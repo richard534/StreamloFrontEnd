@@ -29,11 +29,13 @@ class ProfilePage extends React.Component {
       },
       uploadedTracks: [],
       followedUsers: [],
-      likedTracks: []
+      likedTracks: [],
+      showEditModal: false
     };
 
     this.profileDataSource = this.profileDataSource.bind(this);
     this.tracksUploadedDataSource = this.tracksUploadedDataSource.bind(this);
+    this.toggleModal = this.toggleModal.bind(this);
   }
 
   componentDidMount() {
@@ -103,6 +105,12 @@ class ProfilePage extends React.Component {
     });
   }
 
+  toggleModal(e) {
+    this.setState({
+      showEditModal: !this.state.showEditModal
+    });
+  }
+
   render() {
     return (
       <div>
@@ -117,7 +125,7 @@ class ProfilePage extends React.Component {
               | <span className="glyphicon glyphicon-eye-open" /> Following: {this.state.numFollowing}
             </span>
             <div className="btn-group-sm" role="group" style={followersStyle}>
-              <button type="button" className="btn btn-default" data-toggle="modal" data-target="#editDetailsModal">
+              <button type="button" className="btn btn-default" onClick={this.toggleModal}>
                 <span className="glyphicon glyphicon-edit" /> Edit
               </button>
               <span> </span>
@@ -154,7 +162,7 @@ class ProfilePage extends React.Component {
             hasMoreTracks={this.state.uploadedTracksMetadata.hasMoreTracks}
             userURL={this.state.userURL}
           />
-          <EditDetailsModal />
+          <EditDetailsModal show={this.state.showEditModal} onClose={this.toggleModal} />
         </div>
       </div>
     );
