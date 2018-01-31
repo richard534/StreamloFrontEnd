@@ -1,5 +1,6 @@
 import React from "react";
 import toastr from "toastr";
+import update from "immutability-helper";
 import EditDetailsModal from "./userAccountModals/editDetailsModal";
 import UploadedTracksList from "components/search/trackSearchResultsList.js";
 import UserApi from "api/userApi";
@@ -15,7 +16,8 @@ class ProfilePage extends React.Component {
     super(props);
 
     this.state = {
-      userURL: "",
+      profileUserId: "",
+      profileUserURL: "",
       profileDisplayname: "",
       numFollowers: 0,
       numFollowing: 0,
@@ -30,12 +32,21 @@ class ProfilePage extends React.Component {
       uploadedTracks: [],
       followedUsers: [],
       likedTracks: [],
-      showEditModal: false
+      showEditModal: false,
+      candidateUserData: {
+        email: "",
+        password: "",
+        confPassword: "",
+        displayName: "",
+        city: ""
+      }
     };
 
     this.profileDataSource = this.profileDataSource.bind(this);
     this.tracksUploadedDataSource = this.tracksUploadedDataSource.bind(this);
     this.toggleModal = this.toggleModal.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+    this.submitUpdateUserDataHandler = this.submitUpdateUserDataHandler.bind(this);
   }
 
   componentDidMount() {
@@ -52,7 +63,7 @@ class ProfilePage extends React.Component {
 
     this.setState(
       {
-        userURL: props.params.userURL,
+        profileUserURL: props.params.userURL,
         pageData: {
           pageNum: props.location.query.page,
           perPage: props.location.query.per_page
@@ -65,18 +76,23 @@ class ProfilePage extends React.Component {
   }
 
   profileDataSource(props) {
-    UserApi.getUserByUserURL(this.state.userURL, (err, result) => {
+    UserApi.getUserByUserURL(this.state.profileUserURL, (err, result) => {
       if (err) {
         toastr.error("Error retrieving profile");
       } else {
         let returnedUser = result.users[0];
         let newState = {
-          uploaderId: returnedUser._id,
+          profileUserId: returnedUser._id,
           profileDisplayname: returnedUser.displayName,
           numFollowers: returnedUser.numberOfFollowers,
           numFollowing: returnedUser.numberOfFollowedUsers,
           followedUsers: returnedUser.followedUsers,
-          likedTracks: returnedUser.likedTracks
+          likedTracks: returnedUser.likedTracks,
+          candidateUserData: {
+            email: returnedUser.email,
+            displayName: returnedUser.displayName,
+            city: returnedUser.city
+          }
         };
         this.setState(newState);
         this.tracksUploadedDataSource(returnedUser._id);
@@ -105,13 +121,61 @@ class ProfilePage extends React.Component {
     });
   }
 
+  submitUpdateUserDataHandler(e) {
+    e.preventDefault();
+    let signedInUserjwtToken = this.props.auth.getToken();
+    let signedInUserId = this.props.auth.getProfile().id;
+
+    let candidateUserData = {
+      email: this.state.candidateUserData.email,
+      password: this.state.candidateUserData.password,
+      displayName: this.state.candidateUserData.displayName,
+      city: this.state.candidateUserData.city
+    };
+
+    UserApi.updateUserById(signedInUserId, candidateUserData, signedInUserjwtToken, (errorList, response) => {
+      if (errorList) {
+        for (let err in errorList) {
+          toastr.error(errorList[err]);
+        }
+      } else {
+        toastr.success(response.message);
+      }
+    });
+  }
+
   toggleModal(e) {
     this.setState({
       showEditModal: !this.state.showEditModal
     });
   }
 
+  handleChange(e) {
+    const target = e.target;
+    const name = target.name;
+
+    let newState = update(this.state, {
+      candidateUserData: {
+        [name]: {
+          $set: target.value
+        }
+      }
+    });
+
+    this.setState(newState);
+  }
+
   render() {
+    let editButton;
+    // if user is logged in and profilePage is the logged in users profile, display edit details button
+    if (this.props.auth.loggedIn() && this.props.auth.getProfile().id == this.state.profileUserId) {
+      editButton = (
+        <button type="button" className="btn btn-default" onClick={this.toggleModal}>
+          <span className="glyphicon glyphicon-edit" /> Edit
+        </button>
+      );
+    }
+
     return (
       <div>
         <div className="container-full">
@@ -125,9 +189,7 @@ class ProfilePage extends React.Component {
               | <span className="glyphicon glyphicon-eye-open" /> Following: {this.state.numFollowing}
             </span>
             <div className="btn-group-sm" role="group" style={followersStyle}>
-              <button type="button" className="btn btn-default" onClick={this.toggleModal}>
-                <span className="glyphicon glyphicon-edit" /> Edit
-              </button>
+              {editButton}
               <span> </span>
               <button type="button" className="btn btn-default">
                 <span className="glyphicon glyphicon-plus" /> Follow
@@ -160,9 +222,15 @@ class ProfilePage extends React.Component {
             pageNum={this.state.pageData.pageNum}
             perPage={this.state.pageData.perPage}
             hasMoreTracks={this.state.uploadedTracksMetadata.hasMoreTracks}
-            userURL={this.state.userURL}
+            userURL={this.state.profileUserURL}
           />
-          <EditDetailsModal show={this.state.showEditModal} onClose={this.toggleModal} />
+          <EditDetailsModal
+            show={this.state.showEditModal}
+            onClose={this.toggleModal}
+            handleChange={this.handleChange}
+            candidateUserData={this.state.candidateUserData}
+            handleSubmit={this.submitUpdateUserDataHandler}
+          />
         </div>
       </div>
     );
