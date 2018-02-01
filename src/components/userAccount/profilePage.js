@@ -75,7 +75,7 @@ class ProfilePage extends React.Component {
     );
   }
 
-  profileDataSource(props) {
+  profileDataSource() {
     UserApi.getUserByUserURL(this.state.profileUserURL, (err, result) => {
       if (err) {
         toastr.error("Error retrieving profile");
@@ -106,7 +106,7 @@ class ProfilePage extends React.Component {
 
     TrackApi.getTracksByUploaderId(uploaderId, pageNum, perPage, (err, result) => {
       if (err) {
-        toastr.error("Error retrieving uploaded tracks list");
+        return;
       } else {
         let hasMoreTracks = true;
         if (result.page == result.pageCount) hasMoreTracks = false;
@@ -126,6 +126,14 @@ class ProfilePage extends React.Component {
     let signedInUserjwtToken = this.props.auth.getToken();
     let signedInUserId = this.props.auth.getProfile().id;
 
+    // check if new password and conf password match
+    if (this.state.candidateUserData.password != this.state.candidateUserData.confPassword) {
+      toastr.error("New password and confirm password do not match");
+      return;
+    }
+
+    // if nothing has been changed, do nothing
+
     let candidateUserData = {
       email: this.state.candidateUserData.email,
       password: this.state.candidateUserData.password,
@@ -140,6 +148,8 @@ class ProfilePage extends React.Component {
         }
       } else {
         toastr.success(response.message);
+        this.toggleModal();
+        this.profileDataSource();
       }
     });
   }

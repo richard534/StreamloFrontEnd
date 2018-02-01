@@ -39,7 +39,6 @@ class EditDetailsModal extends React.Component {
                   </div>
                   <div className="col-md-6 editProfileModalCol">
                     <div className="form-group">
-                      <p className="text-muted">Replace info you wish to change:</p>
                       <label>Email</label>
                       <input
                         className="form-control"

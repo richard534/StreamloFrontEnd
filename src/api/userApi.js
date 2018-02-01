@@ -48,7 +48,6 @@ class UserApi {
         cb(null, response.data);
       })
       .catch(error => {
-        console.log(error.response.data.errors);
         cb(error.response.data.errors);
       });
   }
