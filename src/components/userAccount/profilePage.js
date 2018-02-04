@@ -47,6 +47,7 @@ class ProfilePage extends React.Component {
     this.toggleModal = this.toggleModal.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.submitUpdateUserDataHandler = this.submitUpdateUserDataHandler.bind(this);
+    this.deleteTrackHandler = this.deleteTrackHandler.bind(this);
   }
 
   componentDidMount() {
@@ -133,7 +134,6 @@ class ProfilePage extends React.Component {
     }
 
     // if nothing has been changed, do nothing
-
     let candidateUserData = {
       email: this.state.candidateUserData.email,
       password: this.state.candidateUserData.password,
@@ -173,6 +173,23 @@ class ProfilePage extends React.Component {
     });
 
     this.setState(newState);
+  }
+
+  deleteTrackHandler(e) {
+    e.preventDefault();
+
+    let profileId = this.state.profileUserId;
+    let jwtToken = this.props.auth.getToken();
+
+    UserApi.deleteUserById(profileId, jwtToken, (err, result) => {
+      if (err) {
+        toastr.error("Error deleting account");
+      } else {
+        this.props.auth.logout();
+        this.context.router.push("/signin");
+        toastr.success("Account deleted");
+      }
+    });
   }
 
   render() {
@@ -240,11 +257,16 @@ class ProfilePage extends React.Component {
             handleChange={this.handleChange}
             candidateUserData={this.state.candidateUserData}
             handleSubmit={this.submitUpdateUserDataHandler}
+            deleteTrackHandler={this.deleteTrackHandler}
           />
         </div>
       </div>
     );
   }
 }
+
+ProfilePage.contextTypes = {
+  router: React.PropTypes.object.isRequired
+};
 
 export default ProfilePage;

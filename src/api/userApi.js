@@ -51,6 +51,21 @@ class UserApi {
         cb(error.response.data.errors);
       });
   }
+
+  static deleteUserById(userId, jwtToken, cb) {
+    let instance = axios.create({
+      headers: { "x-access-token": jwtToken }
+    });
+
+    instance
+      .delete(ApiUrl + "users/" + userId)
+      .then(response => {
+        cb(null, response.data);
+      })
+      .catch(error => {
+        cb(error.response.data.errors);
+      });
+  }
 }
 
 export default UserApi;
