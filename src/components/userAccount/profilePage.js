@@ -47,7 +47,7 @@ class ProfilePage extends React.Component {
     this.toggleModal = this.toggleModal.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.submitUpdateUserDataHandler = this.submitUpdateUserDataHandler.bind(this);
-    this.deleteTrackHandler = this.deleteTrackHandler.bind(this);
+    this.deleteAccountHandler = this.deleteAccountHandler.bind(this);
   }
 
   componentDidMount() {
@@ -175,7 +175,7 @@ class ProfilePage extends React.Component {
     this.setState(newState);
   }
 
-  deleteTrackHandler(e) {
+  deleteAccountHandler(e) {
     e.preventDefault();
 
     let profileId = this.state.profileUserId;
@@ -257,7 +257,7 @@ class ProfilePage extends React.Component {
             handleChange={this.handleChange}
             candidateUserData={this.state.candidateUserData}
             handleSubmit={this.submitUpdateUserDataHandler}
-            deleteTrackHandler={this.deleteTrackHandler}
+            deleteAccountHandler={this.deleteAccountHandler}
           />
         </div>
       </div>

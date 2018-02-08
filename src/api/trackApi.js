@@ -122,6 +122,21 @@ class TrackApi {
         cb(error.response);
       });
   }
+
+  static deleteTrackByTrackId(trackId, jwtToken, cb) {
+    let instance = axios.create({
+      headers: { "x-access-token": jwtToken }
+    });
+
+    instance
+      .delete(ApiUrl + "tracks/" + trackId)
+      .then(response => {
+        cb(null, response.data.message);
+      })
+      .catch(error => {
+        cb(error.response);
+      });
+  }
 }
 
 export default TrackApi;

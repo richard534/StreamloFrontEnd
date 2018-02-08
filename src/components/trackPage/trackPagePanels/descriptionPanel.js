@@ -2,6 +2,18 @@ import React from "react";
 
 class DescriptionPanel extends React.Component {
   render() {
+    let deleteTrackButton;
+
+    if (this.props.uploaderLoggedIn) {
+      deleteTrackButton = (
+        <div className="panel-footer clearfix">
+          <button onClick={this.props.deleteTrackHandler} className="btn btn-danger pull-left">
+            Delete Track
+          </button>
+        </div>
+      );
+    }
+
     return (
       <div className="panel panel-default">
         <div className="panel-body">
@@ -13,6 +25,7 @@ class DescriptionPanel extends React.Component {
             <p className="wrap">{this.props.description}</p>
           </div>
         </div>
+        {deleteTrackButton}
       </div>
     );
   }

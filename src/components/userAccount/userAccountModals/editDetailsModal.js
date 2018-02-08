@@ -86,7 +86,7 @@ class EditDetailsModal extends React.Component {
               </div>
 
               <div className="modal-footer">
-                <button onClick={this.props.deleteTrackHandler} className="btn btn-danger pull-left">
+                <button onClick={this.props.deleteAccountHandler} className="btn btn-danger pull-left">
                   Delete Account
                 </button>
                 <button type="button" className="btn btn-default" data-dismiss="modal" onClick={this.props.onClose}>

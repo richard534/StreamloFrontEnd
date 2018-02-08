@@ -1,6 +1,7 @@
 import React from "react";
 import toastr from "toastr";
 import update from "immutability-helper";
+import { browserHistory } from "react-router";
 
 import TrackJumbotron from "./trackPagePanels/trackJumbotron";
 import CommentsPanel from "./trackPagePanels/commentsPanel";
@@ -47,7 +48,8 @@ class TrackPage extends React.Component {
       commentsPerPage: 5,
       hasMoreComments: false,
       postCommentBody: "",
-      trackFound: true
+      trackFound: true,
+      uploaderLoggedIn: false
     };
 
     this.tracksDataSource = this.tracksDataSource.bind(this);
@@ -57,6 +59,7 @@ class TrackPage extends React.Component {
     this.postComment = this.postComment.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleDeleteComment = this.handleDeleteComment.bind(this);
+    this.deleteTrackHandler = this.deleteTrackHandler.bind(this);
   }
 
   componentWillMount() {
@@ -71,7 +74,13 @@ class TrackPage extends React.Component {
         // show 404 page if trackURL does not map to a track on the system
         this.setState({ trackFound: false });
       } else {
-        let uploaderId = track.uploaderId;
+        let loggedInUserId = this.props.auth.getProfile().id;
+        let trackUploaderId = track.uploaderId;
+        let uploaderLoggedIn = false;
+        if (loggedInUserId == trackUploaderId) {
+          uploaderLoggedIn = true;
+        }
+
         let newState = {
           id: track._id,
           title: track.title,
@@ -82,9 +91,10 @@ class TrackPage extends React.Component {
           numLikes: track.numLikes,
           numComments: track.numComments,
           trackBinaryURL: "http://localhost:3001/tracks/" + track.trackBinaryId + "/stream",
-          comments: track.comments
+          comments: track.comments,
+          uploaderLoggedIn: uploaderLoggedIn
         };
-        this.uploaderNameDataSource(uploaderId, (err, userDisplayName) => {
+        this.uploaderNameDataSource(trackUploaderId, (err, userDisplayName) => {
           if (err) {
             toastr.error("Unable to retrieve artist name");
           } else {
@@ -214,6 +224,17 @@ class TrackPage extends React.Component {
     });
   }
 
+  deleteTrackHandler() {
+    let trackId = this.state.id;
+    let jwtToken = this.props.auth.getToken();
+
+    TrackApi.deleteTrackByTrackId(trackId, jwtToken, (err, result) => {
+      if (err) return toastr.error("Error deleting track");
+      toastr.success("Track Deleted");
+      browserHistory.push("");
+    });
+  }
+
   render() {
     if (this.state.trackFound) {
       return (
@@ -246,7 +267,11 @@ class TrackPage extends React.Component {
               handleDeleteComment={this.handleDeleteComment}
             />
             <div className="col-md-4" style={descriptionDivStyle}>
-              <DescriptionPanel description={this.state.description} />
+              <DescriptionPanel
+                description={this.state.description}
+                uploaderLoggedIn={this.state.uploaderLoggedIn}
+                deleteTrackHandler={this.deleteTrackHandler}
+              />
             </div>
           </div>
         </div>
