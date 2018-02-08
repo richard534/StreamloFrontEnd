@@ -44,6 +44,22 @@ class Comment extends React.Component {
   }
 
   render() {
+    let deleteCommentButton;
+
+    // if this comment belongs to logged in user, show comment delete button
+    if (this.props.loggedInUserId == this.props.commentUserId && this.props.loggedIn) {
+      deleteCommentButton = (
+        <button
+          className="btn deleteCommentButton"
+          type="submit"
+          value={this.props.commentId}
+          onClick={() => this.props.handleDeleteComment(this.props.commentId)}
+        >
+          <span className="glyphicon glyphicon-remove" />
+        </button>
+      );
+    }
+
     return (
       <div className="media">
         <div className="col-md-1" style={commentThumbnail}>
@@ -58,9 +74,10 @@ class Comment extends React.Component {
           <div className="col-md-6">
             <p className="text-muted pull-right">{moment(this.props.commentDate).format("dddd, MMMM Do YYYY")}</p>
           </div>
-          <div className="col-md-12">
+          <div className="col-md-11">
             <p className="wrap">{this.props.commentBody}</p>
           </div>
+          <div className="col-md-1">{deleteCommentButton}</div>
         </div>
       </div>
     );

@@ -15,13 +15,19 @@ class TrackSearchResultsList extends React.Component {
 
     let linkPathName;
     let linkFilter;
+
+    let searchResultsMessage1;
+    let searchResultsMessage2;
     // If userURL is passed down as props then assume user is on profile page
     // and set react router path names accordingly
     if (this.props.userURL) {
       linkPathName = "/user/" + this.props.userURL;
+      searchResultsMessage1 = "This user has not uploaded any tracks :(";
     } else {
       linkPathName = "/search";
       linkFilter = "tracks";
+      searchResultsMessage1 = "Sorry we didn't find any results for " + searchString;
+      searchResultsMessage2 = "Check the spelling, or try a different search.";
     }
 
     var createTrackResultRow = function(track) {
@@ -45,15 +51,13 @@ class TrackSearchResultsList extends React.Component {
       );
     };
 
-    var resultsNotFound = (() => {
-      return (
-        <div>
-          <img src={noResultImg} className="center-block search-result-image" />
-          <p className="text-center text-muted">Sorry we didn't find any results for "{searchString}".</p>
-          <p className="text-center text-muted">Check the spelling, or try a different search.</p>
-        </div>
-      );
-    })();
+    var resultsNotFound = (
+      <div>
+        <img src={noResultImg} className="center-block search-result-image" />
+        <p className="text-center text-muted">{searchResultsMessage1}</p>
+        <p className="text-center text-muted">{searchResultsMessage2}</p>
+      </div>
+    );
 
     let previousButtonClass = this.props.pageNum == 1 ? "previous disabled disableClick" : "previous";
     let nextButtonClass = this.props.hasMoreTracks == false ? "next disabled disableClick" : "next";

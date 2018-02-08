@@ -95,3 +95,11 @@ footer {
 .disableClick {
   pointer-events: none;
 }
+
+.deleteCommentButton {
+  padding: 0px;
+}
+
+.editProfileModalCol {
+  padding-left: 0px;
+}
