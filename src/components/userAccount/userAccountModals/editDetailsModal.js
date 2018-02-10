@@ -30,9 +30,18 @@ class EditDetailsModal extends React.Component {
               <div className="modal-body">
                 <div className="row">
                   <div className="col-md-5">
-                    <img className="img-circle center-block" src={accountIcon} width="200" height="200" />
+                    <img
+                      className="img-circle center-block"
+                      src={this.props.profileImageURI}
+                      width="200"
+                      height="200"
+                    />
                     <div className="form-group">
-                      <button className="btn btn-default center-block disabled" type="button">
+                      <button
+                        className="btn btn-primary center-block"
+                        onClick={this.props.updateImageHandler}
+                        type="button"
+                      >
                         Update Profile Picture
                       </button>
                     </div>

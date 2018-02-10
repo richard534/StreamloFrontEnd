@@ -37,6 +37,11 @@ class UserApi {
       });
   }
 
+  static getUserProfilePictureURIByUserId(userId) {
+    let profilePictureURI = ApiUrl + "users/" + userId + "/profileImage";
+    return profilePictureURI;
+  }
+
   static updateUserById(userId, candidateUserData, jwtToken, cb) {
     let instance = axios.create({
       headers: { "x-access-token": jwtToken }

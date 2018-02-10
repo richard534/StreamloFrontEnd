@@ -4,7 +4,7 @@ import toastr from "toastr";
 import moment from "moment";
 
 import UserApi from "api/userApi";
-var accountIcon = require("images/account-icon.png");
+var defaultProfilePic = require("images/account-icon.png");
 
 var commentThumbnail = {
   padding: 0
@@ -16,7 +16,8 @@ class Comment extends React.Component {
 
     this.state = {
       commentUsername: "",
-      commentUserURL: ""
+      commentUserURL: "",
+      commentUserProfileURI: ""
     };
 
     this.commentUserDataSource = this.commentUserDataSource.bind(this);
@@ -35,9 +36,16 @@ class Comment extends React.Component {
       if (err) {
         toastr.error(err);
       } else {
+        let userProfileImageURI = defaultProfilePic;
+
+        if (result.profileImageGridFSId) {
+          userProfileImageURI = UserApi.getUserProfilePictureURIByUserId(result._id);
+        }
+
         this.setState({
           commentUsername: result.displayName,
-          commentUserURL: result.userURL
+          commentUserURL: result.userURL,
+          commentUserProfileURI: userProfileImageURI
         });
       }
     });
@@ -63,7 +71,7 @@ class Comment extends React.Component {
     return (
       <div className="media">
         <div className="col-md-1" style={commentThumbnail}>
-          <img className="img-circle" src={accountIcon} width="100%" height="100%" />
+          <img className="img-circle" src={this.state.commentUserProfileURI} width="100%" height="100%" />
         </div>
         <div className="col-md-11">
           <div className="col-md-6">

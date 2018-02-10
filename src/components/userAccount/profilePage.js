@@ -19,6 +19,7 @@ class ProfilePage extends React.Component {
       profileUserId: "",
       profileUserURL: "",
       profileDisplayname: "",
+      profileImageURI: "",
       numFollowers: 0,
       numFollowing: 0,
       pageData: {
@@ -82,9 +83,17 @@ class ProfilePage extends React.Component {
         toastr.error("Error retrieving profile");
       } else {
         let returnedUser = result.users[0];
+        let userId = returnedUser._id;
+        let userProfileImageURI = accountIcon;
+
+        if (returnedUser.profileImageGridFSId) {
+          userProfileImageURI = UserApi.getUserProfilePictureURIByUserId(userId);
+        }
+
         let newState = {
-          profileUserId: returnedUser._id,
+          profileUserId: userId,
           profileDisplayname: returnedUser.displayName,
+          profileImageURI: userProfileImageURI,
           numFollowers: returnedUser.numberOfFollowers,
           numFollowing: returnedUser.numberOfFollowedUsers,
           followedUsers: returnedUser.followedUsers,
@@ -96,7 +105,7 @@ class ProfilePage extends React.Component {
           }
         };
         this.setState(newState);
-        this.tracksUploadedDataSource(returnedUser._id);
+        this.tracksUploadedDataSource(userId);
       }
     });
   }
@@ -192,6 +201,11 @@ class ProfilePage extends React.Component {
     });
   }
 
+  // TODO implement update image webservcie call
+  updateImageHandler() {
+    console.log("blah");
+  }
+
   render() {
     let editButton;
     // if user is logged in and profilePage is the logged in users profile, display edit details button
@@ -207,7 +221,7 @@ class ProfilePage extends React.Component {
       <div>
         <div className="container-full">
           <div className="jumbotron text-center" id="userJumbotron">
-            <img className="img-circle" src={accountIcon} width="150" height="150" />
+            <img className="img-circle" src={this.state.profileImageURI} width="150" height="150" />
             <h4 className="text-center">{this.state.profileDisplayname}</h4>
             <span className="text-center">
               <span className="glyphicon glyphicon-user" /> Followers: {this.state.numFollowers}{" "}
@@ -256,8 +270,10 @@ class ProfilePage extends React.Component {
             onClose={this.toggleModal}
             handleChange={this.handleChange}
             candidateUserData={this.state.candidateUserData}
+            profileImageURI={this.state.profileImageURI}
             handleSubmit={this.submitUpdateUserDataHandler}
             deleteAccountHandler={this.deleteAccountHandler}
+            updateImageHandler={this.updateImageHandler}
           />
         </div>
       </div>
