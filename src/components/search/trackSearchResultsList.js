@@ -26,7 +26,7 @@ class TrackSearchResultsList extends React.Component {
     } else {
       linkPathName = "/search";
       linkFilter = "tracks";
-      searchResultsMessage1 = "Sorry we didn't find any results for " + searchString;
+      searchResultsMessage1 = "Sorry we didn't find any results for \"" + searchString + '"';
       searchResultsMessage2 = "Check the spelling, or try a different search.";
     }
 

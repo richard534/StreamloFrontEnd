@@ -26,15 +26,13 @@ class PeopleSearchResultsList extends React.Component {
       );
     };
 
-    var resultsNotFound = (() => {
-      return (
-        <div>
-          <img src={noResultImg} className="center-block search-result-image" />
-          <p className="text-center text-muted">Sorry we didn't find any results for "{searchString}".</p>
-          <p className="text-center text-muted">Check the spelling, or try a different search.</p>
-        </div>
-      );
-    })();
+    var resultsNotFound = (
+      <div>
+        <img src={noResultImg} className="center-block search-result-image" />
+        <p className="text-center text-muted">Sorry we didn't find any results for "{searchString}"</p>
+        <p className="text-center text-muted">Check the spelling, or try a different search.</p>
+      </div>
+    );
 
     let previousButtonClass = this.props.pageNum == 1 ? "previous disabled disableClick" : "previous";
     let nextButtonClass = this.props.hasMorePeople == false ? "next disabled disableClick" : "next";
@@ -92,7 +90,7 @@ class PeopleSearchResultsList extends React.Component {
     }
 
     return (
-      <div className="col-md-10">
+      <div className="col-md-12">
         {numPeople}
         {results}
       </div>
