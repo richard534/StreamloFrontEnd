@@ -8,6 +8,11 @@ class EditDetailsModal extends React.Component {
       return null;
     }
 
+    let updateProfilePicBtnClass = "btn btn-primary center-block updateProfilePictureBtn disabled";
+    if (this.props.candidateUserData.profileImage) {
+      updateProfilePicBtnClass = "btn btn-primary center-block updateProfilePictureBtn";
+    }
+
     return (
       <div className="modal show" id="editDetailsModal" tabIndex="-1" role="dialog" aria-labelledby="myModalLabel">
         <div className="modal-dialog" role="document">
@@ -29,24 +34,33 @@ class EditDetailsModal extends React.Component {
               </div>
               <div className="modal-body">
                 <div className="row">
-                  <div className="col-md-5">
+                  <div className="col-md-6 ">
                     <img
                       className="img-circle center-block"
                       src={this.props.profileImageURI}
                       width="200"
                       height="200"
                     />
-                    <div className="form-group">
-                      <button
-                        className="btn btn-primary center-block"
-                        onClick={this.props.updateImageHandler}
-                        type="button"
-                      >
-                        Update Profile Picture
-                      </button>
+                    <div className="col-md-10 col-md-offset-1">
+                      <div className="form-group">
+                        <input
+                          className="form-control editProfilePicInput"
+                          name="profileImage"
+                          type="file"
+                          accept="image/*"
+                        />
+
+                        <button
+                          className={updateProfilePicBtnClass}
+                          onClick={this.props.updateImageHandler}
+                          type="button"
+                        >
+                          Update Profile Picture
+                        </button>
+                      </div>
                     </div>
                   </div>
-                  <div className="col-md-6 editProfileModalCol">
+                  <div className="col-md-6 editProfileModalCol pull-right">
                     <div className="form-group">
                       <label>Email</label>
                       <input

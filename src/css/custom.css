@@ -103,3 +103,15 @@ footer {
 .editProfileModalCol {
   padding-left: 0px;
 }
+
+.updateProfilePictureBtn {
+  margin-top: 8px;
+}
+
+.editProfilePicInput {
+  margin-top: 10px;
+}
+
+editModalPicCol {
+  padding-top: 100px;
+}

@@ -39,7 +39,8 @@ class ProfilePage extends React.Component {
         password: "",
         confPassword: "",
         displayName: "",
-        city: ""
+        city: "",
+        profileImage: ""
       }
     };
 
@@ -49,6 +50,7 @@ class ProfilePage extends React.Component {
     this.handleChange = this.handleChange.bind(this);
     this.submitUpdateUserDataHandler = this.submitUpdateUserDataHandler.bind(this);
     this.deleteAccountHandler = this.deleteAccountHandler.bind(this);
+    this.updateImageHandler = this.updateImageHandler.bind(this);
   }
 
   componentDidMount() {
@@ -84,16 +86,16 @@ class ProfilePage extends React.Component {
       } else {
         let returnedUser = result.users[0];
         let userId = returnedUser._id;
-        let userProfileImageURI = accountIcon;
+        let userProfileImage = accountIcon;
 
         if (returnedUser.profileImageGridFSId) {
-          userProfileImageURI = UserApi.getUserProfilePictureURIByUserId(userId);
+          userProfileImage = UserApi.getUserProfilePictureURIByUserId(userId);
         }
 
         let newState = {
           profileUserId: userId,
           profileDisplayname: returnedUser.displayName,
-          profileImageURI: userProfileImageURI,
+          profileImageURI: userProfileImage,
           numFollowers: returnedUser.numberOfFollowers,
           numFollowing: returnedUser.numberOfFollowedUsers,
           followedUsers: returnedUser.followedUsers,
@@ -172,15 +174,25 @@ class ProfilePage extends React.Component {
   handleChange(e) {
     const target = e.target;
     const name = target.name;
+    let newState;
 
-    let newState = update(this.state, {
-      candidateUserData: {
-        [name]: {
-          $set: target.value
+    if (name == "profileImage") {
+      newState = update(this.state, {
+        candidateUserData: {
+          profileImage: {
+            $set: e.target.files[0]
+          }
         }
-      }
-    });
-
+      });
+    } else {
+      newState = update(this.state, {
+        candidateUserData: {
+          [name]: {
+            $set: target.value
+          }
+        }
+      });
+    }
     this.setState(newState);
   }
 
@@ -201,9 +213,23 @@ class ProfilePage extends React.Component {
     });
   }
 
-  // TODO implement update image webservcie call
   updateImageHandler() {
-    console.log("blah");
+    let candidateProfileImageURI;
+
+    let jwtToken = this.props.auth.getToken();
+    let userId = this.props.auth.getProfile().id;
+
+    var fd = new FormData();
+    fd.append("image", this.state.candidateUserData.profileImage);
+
+    UserApi.updateUserProfilePictureById(userId, fd, jwtToken, (err, response) => {
+      if (err) {
+        toastr.error("Error updating profile picture");
+      } else {
+        toastr.success("Profile picture updated successfuly");
+        this.profileDataSource();
+      }
+    });
   }
 
   render() {
