@@ -5,7 +5,6 @@ import EditDetailsModal from "./userAccountModals/editDetailsModal";
 import UploadedTracksList from "components/search/trackSearchResultsList.js";
 import UserApi from "api/userApi";
 import TrackApi from "api/trackApi";
-var accountIcon = require("images/account-icon.png");
 
 var followersStyle = {
   paddingTop: "10px"
@@ -86,11 +85,7 @@ class ProfilePage extends React.Component {
       } else {
         let returnedUser = result.users[0];
         let userId = returnedUser._id;
-        let userProfileImage = accountIcon;
-
-        if (returnedUser.profileImageGridFSId) {
-          userProfileImage = UserApi.getUserProfilePictureURIByUserId(userId);
-        }
+        let userProfileImage = UserApi.getUserProfilePictureURIByUserId(userId);
 
         let newState = {
           profileUserId: userId,

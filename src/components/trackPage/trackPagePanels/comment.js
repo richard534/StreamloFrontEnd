@@ -4,7 +4,6 @@ import toastr from "toastr";
 import moment from "moment";
 
 import UserApi from "api/userApi";
-var defaultProfilePic = require("images/account-icon.png");
 
 var commentThumbnail = {
   padding: 0
@@ -36,11 +35,7 @@ class Comment extends React.Component {
       if (err) {
         toastr.error(err);
       } else {
-        let userProfileImageURI = defaultProfilePic;
-
-        if (result.profileImageGridFSId) {
-          userProfileImageURI = UserApi.getUserProfilePictureURIByUserId(result._id);
-        }
+        let userProfileImageURI = UserApi.getUserProfilePictureURIByUserId(result._id);
 
         this.setState({
           commentUsername: result.displayName,

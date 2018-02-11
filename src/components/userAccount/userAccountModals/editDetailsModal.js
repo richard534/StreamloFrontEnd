@@ -1,7 +1,5 @@
 import React from "react";
 
-var accountIcon = require("images/account-icon.png");
-
 class EditDetailsModal extends React.Component {
   render() {
     if (!this.props.show) {

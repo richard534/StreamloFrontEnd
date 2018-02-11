@@ -4,8 +4,6 @@ import { Link } from "react-router";
 
 import UserApi from "api/userApi";
 
-var defaultProfilePic = require("images/account-icon.png");
-
 var noResultImg = require("images/noResultsSearch.png");
 
 var ThumbnailStyle = {
@@ -22,11 +20,7 @@ class PeopleSearchResultsList extends React.Component {
     let searchString = this.props.searchString;
 
     var createPersonResultRow = function(person) {
-      let userProfileImageURI = defaultProfilePic;
-
-      if (person.profileImageGridFSId) {
-        userProfileImageURI = UserApi.getUserProfilePictureURIByUserId(person._id);
-      }
+      let userProfileImageURI = UserApi.getUserProfilePictureURIByUserId(person._id);
 
       return (
         <li key={person._id} className="list-group-item" style={PersonListingStyle}>
