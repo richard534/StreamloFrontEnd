@@ -1,6 +1,7 @@
 import React from "react";
 import Track from "./track";
 import { Link } from "react-router";
+import TrackApi from "api/trackApi";
 
 var noResultImg = require("images/noResultsSearch.png");
 
@@ -45,6 +46,7 @@ class TrackSearchResultsList extends React.Component {
             numLikes={track.numLikes}
             numPlays={track.numPlays}
             numComments={track.numComments}
+            trackAlbumArtURI={TrackApi.getTrackAlbumArtByTrackId(track._id)}
           />
           <hr />
         </li>

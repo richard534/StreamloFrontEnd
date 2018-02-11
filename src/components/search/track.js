@@ -1,6 +1,5 @@
 import React from "react";
 import { Link } from "react-router";
-var defaultAlbumArt = require("images/altAlbumArtLogo.png");
 import UserApi from "api/userApi";
 
 var ThumbnailStyle = {
@@ -71,7 +70,12 @@ class Track extends React.Component {
       <div className="media">
         <div className="media-left">
           <a>
-            <img className="media-object thumbnail ThumbnailStyle" src={defaultAlbumArt} width="160" height="160" />
+            <img
+              className="media-object thumbnail ThumbnailStyle"
+              src={this.props.trackAlbumArtURI}
+              width="160"
+              height="160"
+            />
           </a>
         </div>
         <div className="media-body">

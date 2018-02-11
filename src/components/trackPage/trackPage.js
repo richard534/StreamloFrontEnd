@@ -43,6 +43,7 @@ class TrackPage extends React.Component {
       numComments: 0,
       description: "",
       trackBinaryURL: "",
+      trackAlbumArtURI: "",
       comments: [],
       commentsPageNum: 1,
       commentsPerPage: 5,
@@ -91,6 +92,7 @@ class TrackPage extends React.Component {
           numLikes: track.numLikes,
           numComments: track.numComments,
           trackBinaryURL: "http://localhost:3001/tracks/" + track.trackBinaryId + "/stream",
+          trackAlbumArtURI: TrackApi.getTrackAlbumArtByTrackId(track._id),
           comments: track.comments,
           uploaderLoggedIn: uploaderLoggedIn
         };
@@ -249,6 +251,7 @@ class TrackPage extends React.Component {
             numComments={this.state.numComments}
             trackBinaryURL={this.state.trackBinaryURL}
             userURL={this.state.userURL}
+            trackAlbumArtURI={this.state.trackAlbumArtURI}
           />
 
           <div className="col-md-12" style={commentsAndDescriptionStyle}>

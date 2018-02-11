@@ -1,8 +1,6 @@
 import React from "react";
 import { Link } from "react-router";
 
-var altAlbumArtLogo = require("images/altAlbumArtLogo.png");
-
 var trackNameStyle = {
   marginTop: "0px"
 };
@@ -75,7 +73,13 @@ class TrackJumbotron extends React.Component {
           </div>
         </div>
         <div className="col-md-3">
-          <img className="img-responsive pull-right" src={altAlbumArtLogo} alt="" width="215" height="215" />
+          <img
+            className="img-responsive pull-right"
+            src={this.props.trackAlbumArtURI}
+            alt=""
+            width="215"
+            height="215"
+          />
         </div>
       </div>
     );

@@ -56,7 +56,9 @@ class UploadPage extends React.Component {
         city: "Belfast",
         uploaderId: "",
         description: "",
-        track: []
+        track: [],
+        albumArt: [],
+        albumArtLocalFilePath: ""
       },
       errors: {
         title: "Enter Track Details"
@@ -85,15 +87,40 @@ class UploadPage extends React.Component {
   handleChange(e) {
     const target = e.target;
     const name = target.name;
-    let newState;
+    let newState = this.state;
+
+    var reader = new FileReader();
+
     if (name == "track") {
-      newState = update(this.state, {
-        data: {
-          track: {
-            $set: e.target.files[0]
+      let file = e.target.files[0];
+      reader.onload = e => {
+        newState = update(this.state, {
+          data: {
+            [name]: {
+              $set: file
+            }
           }
-        }
-      });
+        });
+        this.setState(newState, this.validate);
+      };
+      reader.readAsDataURL(e.target.files[0]);
+    } else if (name == "albumArt") {
+      let file = e.target.files[0];
+      reader.onload = e => {
+        let localFilePath = e.target.result;
+        newState = update(this.state, {
+          data: {
+            [name]: {
+              $set: file
+            },
+            albumArtLocalFilePath: {
+              $set: localFilePath
+            }
+          }
+        });
+        this.setState(newState, this.validate);
+      };
+      reader.readAsDataURL(e.target.files[0]);
     } else {
       newState = update(this.state, {
         data: {
@@ -102,8 +129,8 @@ class UploadPage extends React.Component {
           }
         }
       });
+      this.setState(newState, this.validate);
     }
-    this.setState(newState, this.validate);
   }
 
   handleSubmit(e) {
@@ -121,6 +148,7 @@ class UploadPage extends React.Component {
     fd.append("uploaderId", uploaderId);
     fd.append("description", this.state.data.description);
     fd.append("track", this.state.data.track);
+    fd.append("albumArt", this.state.data.albumArt);
 
     TrackApi.postTrack(fd, jwtToken, err => {
       if (err) {

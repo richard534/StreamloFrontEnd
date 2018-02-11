@@ -3,6 +3,8 @@ import { Link } from "react-router";
 import _ from "lodash";
 import TrackApi from "api/trackApi";
 
+var tempAlbumArt = require("images/altAlbumArtLogo.png");
+
 var trackURLText = {
   paddingTop: "6px",
   paddingRight: "0px"
@@ -73,6 +75,11 @@ class UploadPanel extends React.Component {
       uploadTrackButton = enableduploadTrackButton();
     }
 
+    let albumArtPreviewImage = tempAlbumArt;
+    if (this.props.data.albumArtLocalFilePath) {
+      albumArtPreviewImage = this.props.data.albumArtLocalFilePath;
+    }
+
     return (
       <div className="panel panel-default">
         <div className="panel-body">
@@ -108,11 +115,26 @@ class UploadPanel extends React.Component {
                   />
                 </div>
               </div>
-              <br />
-              <div className="col-md-12" style={uploadLabelDivStyle}>
-                <div className="form-group">
-                  <label>Select Track to Upload</label>
-                  <input className="form-control" name="track" type="file" accept="audio/*" />
+
+              <div className="col-md-12 nopadding">
+                <div className="col-md-9" style={uploadLabelDivStyle}>
+                  <div className="form-group">
+                    <label>Select Track to Upload</label>
+                    <input className="form-control" name="track" type="file" accept="audio/*" />
+                  </div>
+
+                  <div className="form-group">
+                    <label>Select Track Album Art (Optional)</label>
+                    <input className="form-control" name="albumArt" type="file" accept="image/*" />
+                  </div>
+                </div>
+                <div className="col-md-3 center-upload-albumArt">
+                  <img
+                    className="img-responsive pull-right upload-album-art-img"
+                    src={albumArtPreviewImage}
+                    width="215"
+                    height="215"
+                  />
                 </div>
               </div>
 

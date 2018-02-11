@@ -144,7 +144,6 @@ class ProfilePage extends React.Component {
       return;
     }
 
-    // if nothing has been changed, do nothing
     let candidateUserData = {
       email: this.state.candidateUserData.email,
       password: this.state.candidateUserData.password,
