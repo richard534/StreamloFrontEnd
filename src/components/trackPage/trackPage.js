@@ -274,6 +274,7 @@ class TrackPage extends React.Component {
                 description={this.state.description}
                 uploaderLoggedIn={this.state.uploaderLoggedIn}
                 deleteTrackHandler={this.deleteTrackHandler}
+                loggedIn={this.props.auth.loggedIn()}
               />
             </div>
           </div>
