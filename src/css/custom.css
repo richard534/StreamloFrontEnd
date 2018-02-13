@@ -124,3 +124,7 @@ editModalPicCol {
 .upload-album-art-img {
   border: 1px solid #dddddd;
 }
+
+.trackJumbotronDateDiv {
+  padding-right: 0px
+}

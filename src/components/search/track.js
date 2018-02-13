@@ -1,5 +1,7 @@
 import React from "react";
 import { Link } from "react-router";
+import ReactPlayer from "react-player";
+
 import UserApi from "api/userApi";
 
 var ThumbnailStyle = {
@@ -20,7 +22,8 @@ var audioTagStyle = {
 };
 
 var audioDivStyle = {
-  paddingLeft: "4px"
+  paddingLeft: "4px",
+  paddingTop: "30px"
 };
 
 class Track extends React.Component {
@@ -92,12 +95,6 @@ class Track extends React.Component {
               <p className="pull-right">{TrackUploadDate}</p>
             </div>
 
-            <div className="col-md-12" style={audioDivStyle}>
-              <audio id={this.props.trackId} style={audioTagStyle} controls controlsList="nodownload">
-                <source src={TrackBinaryURL} type="audio/mp3" />
-              </audio>
-            </div>
-
             <div className="col-md-12" style={likesRowstyle}>
               <div className="col-md-4">
                 <div className="btn-toolbar" role="toolbar">
@@ -124,6 +121,26 @@ class Track extends React.Component {
                   </p>
                 </div>
               </div>
+            </div>
+
+            <div className="col-md-12" style={audioDivStyle}>
+              <ReactPlayer
+                id={this.props.trackId}
+                style={audioTagStyle}
+                url={TrackBinaryURL}
+                width="100%"
+                height="100%"
+                config={{
+                  file: {
+                    forceAudio: true,
+                    preload: true,
+                    attributes: { controls: "true", controlsList: "nodownload" }
+                  }
+                }}
+              />
+              {/* <audio id={this.props.trackId} style={audioTagStyle} controls controlsList="nodownload">
+                <source src={TrackBinaryURL} type="audio/mp3" />
+              </audio> */}
             </div>
           </div>
         </div>
