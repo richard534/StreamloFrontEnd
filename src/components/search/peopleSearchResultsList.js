@@ -19,6 +19,24 @@ class PeopleSearchResultsList extends React.Component {
     var people = this.props.peopleResults;
     let searchString = this.props.searchString;
 
+    let linkPathName;
+    let linkFilter;
+
+    let searchResultsMessage1;
+    let searchResultsMessage2;
+
+    // If userURL is passed down as props then assume user is on profile page
+    // and set react router path names accordingly
+    if (this.props.userURL) {
+      linkPathName = "/user/" + this.props.userURL;
+      searchResultsMessage1 = "This user has not followed any people :(";
+    } else {
+      linkPathName = "/search";
+      linkFilter = "tracks";
+      searchResultsMessage1 = "Sorry we didn't find any results for \"" + searchString + '"';
+      searchResultsMessage2 = "Check the spelling, or try a different search.";
+    }
+
     var createPersonResultRow = function(person) {
       let userProfileImageURI = UserApi.getUserProfilePictureURIByUserId(person._id);
 
@@ -39,8 +57,8 @@ class PeopleSearchResultsList extends React.Component {
     var resultsNotFound = (
       <div>
         <img src={noResultImg} className="center-block search-result-image" />
-        <p className="text-center text-muted">Sorry we didn't find any results for "{searchString}"</p>
-        <p className="text-center text-muted">Check the spelling, or try a different search.</p>
+        <p className="text-center text-muted">{searchResultsMessage1}</p>
+        <p className="text-center text-muted">{searchResultsMessage2}</p>
       </div>
     );
 

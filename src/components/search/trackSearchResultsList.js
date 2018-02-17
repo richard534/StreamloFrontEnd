@@ -19,11 +19,16 @@ class TrackSearchResultsList extends React.Component {
 
     let searchResultsMessage1;
     let searchResultsMessage2;
+
     // If userURL is passed down as props then assume user is on profile page
     // and set react router path names accordingly
     if (this.props.userURL) {
       linkPathName = "/user/" + this.props.userURL;
-      searchResultsMessage1 = "This user has not uploaded any tracks :(";
+      if (this.props.isLikedTracksList) {
+        searchResultsMessage1 = "This user has not liked any tracks :(";
+      } else {
+        searchResultsMessage1 = "This user has not uploaded any tracks :(";
+      }
     } else {
       linkPathName = "/search";
       linkFilter = "tracks";

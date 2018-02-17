@@ -1,8 +1,12 @@
 import React from "react";
 import toastr from "toastr";
 import update from "immutability-helper";
+import { browserHistory } from "react-router";
+
 import EditDetailsModal from "./userAccountModals/editDetailsModal";
-import UploadedTracksList from "components/search/trackSearchResultsList.js";
+import TracksList from "components/search/trackSearchResultsList.js";
+import FollowingUsersList from "components/search/peopleSearchResultsList.js";
+
 import UserApi from "api/userApi";
 import TrackApi from "api/trackApi";
 
@@ -25,14 +29,27 @@ class ProfilePage extends React.Component {
         pageNum: 0,
         perPage: 0
       },
+      uploadedTracks: [],
+      followedUsers: [],
+      likedTracks: [],
       uploadedTracksMetadata: {
         hasMoreTracks: false,
         numTracks: 0
       },
-      uploadedTracks: [],
-      followedUsers: [],
-      likedTracks: [],
+      followedUsersMetadata: {
+        hasMoreUsers: false,
+        numUsers: 0
+      },
+      likedTracksMetadata: {
+        hasMoreTracks: false,
+        numTracks: 0
+      },
       showEditModal: false,
+      selectedProfileTab: {
+        uploaded: false,
+        liked: false,
+        following: false
+      },
       candidateUserData: {
         email: "",
         password: "",
@@ -50,6 +67,7 @@ class ProfilePage extends React.Component {
     this.submitUpdateUserDataHandler = this.submitUpdateUserDataHandler.bind(this);
     this.deleteAccountHandler = this.deleteAccountHandler.bind(this);
     this.updateImageHandler = this.updateImageHandler.bind(this);
+    this.changeSelectedProfileTab = this.changeSelectedProfileTab.bind(this);
   }
 
   componentDidMount() {
@@ -64,13 +82,35 @@ class ProfilePage extends React.Component {
   setInitialPageStateFromURI(props) {
     props = props || this.props; // if props variable passed to this method then use it
 
+    let selectedTabState = {
+      uploaded: false,
+      liked: false,
+      following: false
+    };
+
+    let selectedTabFromURI = props.location.query.selectedTab;
+    switch (selectedTabFromURI) {
+      case "uploaderTracks":
+        selectedTabState.uploaded = true;
+        break;
+      case "likedTracks":
+        selectedTabState.liked = true;
+        break;
+      case "followingUsers":
+        selectedTabState.following = true;
+        break;
+      default:
+        selectedTabState.uploaded = true;
+    }
+
     this.setState(
       {
         profileUserURL: props.params.userURL,
         pageData: {
           pageNum: props.location.query.page,
           perPage: props.location.query.per_page
-        }
+        },
+        selectedProfileTab: selectedTabState
       },
       () => {
         this.profileDataSource();
@@ -103,6 +143,8 @@ class ProfilePage extends React.Component {
         };
         this.setState(newState);
         this.tracksUploadedDataSource(userId);
+        this.followedUsersDataSource(userId);
+        this.likedUsersDataSource(userId);
       }
     });
   }
@@ -126,6 +168,14 @@ class ProfilePage extends React.Component {
         });
       }
     });
+  }
+
+  followedUsersDataSource(uploaderId) {
+    // TODO
+  }
+
+  likedUsersDataSource(uploaderId) {
+    // TODO
   }
 
   submitUpdateUserDataHandler(e) {
@@ -226,16 +276,128 @@ class ProfilePage extends React.Component {
     });
   }
 
+  changeSelectedProfileTab(e) {
+    // set state to selected tab
+    let selectedProfileTab = e.target.name;
+
+    let uplodedTracksSelected = false;
+    let followedUsersSelected = false;
+    let likedTracksSelected = false;
+
+    if (selectedProfileTab == "uploadedTracks") uplodedTracksSelected = true;
+    if (selectedProfileTab == "followingUsers") followedUsersSelected = true;
+    if (selectedProfileTab == "likedTracks") likedTracksSelected = true;
+
+    this.setState(
+      {
+        selectedProfileTab: {
+          uploaded: uplodedTracksSelected,
+          liked: likedTracksSelected,
+          following: followedUsersSelected
+        }
+      },
+      () => {
+        browserHistory.push(
+          "/user/" +
+            this.state.profileUserURL +
+            "?selectedTab=" +
+            selectedProfileTab +
+            "&page=" +
+            "1" +
+            "&per_page=" +
+            this.state.pageData.perPage
+        );
+      }
+    );
+  }
+
   render() {
+    let profileOwnerLoggedIn =
+      this.props.auth.loggedIn() && this.props.auth.getProfile().id == this.state.profileUserId;
+
     let editButton;
+    let followButton = (
+      <button type="button" className="btn btn-default">
+        <span className="glyphicon glyphicon-plus" /> Follow
+      </button>
+    );
     // if user is logged in and profilePage is the logged in users profile, display edit details button
-    if (this.props.auth.loggedIn() && this.props.auth.getProfile().id == this.state.profileUserId) {
+    // && hide follow button
+    if (profileOwnerLoggedIn) {
       editButton = (
         <button type="button" className="btn btn-default" onClick={this.toggleModal}>
           <span className="glyphicon glyphicon-edit" /> Edit
         </button>
       );
+      followButton = undefined;
     }
+
+    // Determine which tab body to render
+    let uploadedTracksList = (
+      <TracksList
+        trackResults={this.state.uploadedTracks}
+        numTracks={this.state.uploadedTracksMetadata.numTracks}
+        pageNum={this.state.pageData.pageNum}
+        perPage={this.state.pageData.perPage}
+        hasMoreTracks={this.state.uploadedTracksMetadata.hasMoreTracks}
+        userURL={this.state.profileUserURL}
+      />
+    );
+
+    let followingUsersList = (
+      <FollowingUsersList
+        peopleResults={this.state.followedUsers}
+        numUsers={this.state.followedUsersMetadata.numUsers}
+        pageNum={this.state.pageData.pageNum}
+        perPage={this.state.pageData.perPage}
+        hasMoreUsers={this.state.uploadedTracksMetadata.hasMoreUsers}
+        userURL={this.state.profileUserURL}
+      />
+    );
+
+    let likedTracksList = (
+      <TracksList
+        trackResults={this.state.likedTracks}
+        numTracks={this.state.likedTracksMetadata.numTracks}
+        pageNum={this.state.pageData.pageNum}
+        perPage={this.state.pageData.perPage}
+        hasMoreTracks={this.state.likedTracksMetadata.hasMoreTracks}
+        userURL={this.state.profileUserURL}
+        isLikedTracksList={true}
+      />
+    );
+
+    let likedTracksTabClass = "";
+    let uploadedTracksTabClass = "";
+    let followingUsersTabClass = "";
+    let profileTabBody;
+
+    if (this.state.selectedProfileTab.liked) {
+      likedTracksTabClass = "active";
+      profileTabBody = likedTracksList;
+    }
+    if (this.state.selectedProfileTab.uploaded) {
+      uploadedTracksTabClass = "active";
+      profileTabBody = uploadedTracksList;
+    }
+    if (this.state.selectedProfileTab.following) {
+      followingUsersTabClass = "active";
+      profileTabBody = followingUsersList;
+    }
+
+    let profileTabList = (
+      <ul className="nav nav-pills nav-justified">
+        <li className={likedTracksTabClass} onClick={e => this.changeSelectedProfileTab(e)}>
+          <a name="likedTracks">Liked</a>
+        </li>
+        <li className={uploadedTracksTabClass} onClick={e => this.changeSelectedProfileTab(e)}>
+          <a name="uploadedTracks">Uploaded</a>
+        </li>
+        <li className={followingUsersTabClass} onClick={e => this.changeSelectedProfileTab(e)}>
+          <a name="followingUsers">Following</a>
+        </li>
+      </ul>
+    );
 
     return (
       <div>
@@ -252,50 +414,27 @@ class ProfilePage extends React.Component {
             <div className="btn-group-sm" role="group" style={followersStyle}>
               {editButton}
               <span> </span>
-              <button type="button" className="btn btn-default">
-                <span className="glyphicon glyphicon-plus" /> Follow
-              </button>
+              {followButton}
             </div>
             <br />
           </div>
         </div>
         <div className="container-full">
           <div className="row" id="profileNav">
-            <div className="col-md-8 col-md-offset-2">
-              <ul className="nav nav-pills nav-justified">
-                <li role="presentation">
-                  <a>Liked</a>
-                </li>
-                <li role="presentation" className="active">
-                  <a>Uploaded</a>
-                </li>
-                <li role="presentation">
-                  <a>Following</a>
-                </li>
-              </ul>
-            </div>
+            <div className="col-md-8 col-md-offset-2">{profileTabList}</div>
           </div>
         </div>
-        <div className="container">
-          <UploadedTracksList
-            trackResults={this.state.uploadedTracks}
-            numTracks={this.state.uploadedTracksMetadata.numTracks}
-            pageNum={this.state.pageData.pageNum}
-            perPage={this.state.pageData.perPage}
-            hasMoreTracks={this.state.uploadedTracksMetadata.hasMoreTracks}
-            userURL={this.state.profileUserURL}
-          />
-          <EditDetailsModal
-            show={this.state.showEditModal}
-            onClose={this.toggleModal}
-            handleChange={this.handleChange}
-            candidateUserData={this.state.candidateUserData}
-            profileImageURI={this.state.profileImageURI}
-            handleSubmit={this.submitUpdateUserDataHandler}
-            deleteAccountHandler={this.deleteAccountHandler}
-            updateImageHandler={this.updateImageHandler}
-          />
-        </div>
+        <div className="container">{profileTabBody}</div>
+        <EditDetailsModal
+          show={this.state.showEditModal}
+          onClose={this.toggleModal}
+          handleChange={this.handleChange}
+          candidateUserData={this.state.candidateUserData}
+          profileImageURI={this.state.profileImageURI}
+          handleSubmit={this.submitUpdateUserDataHandler}
+          deleteAccountHandler={this.deleteAccountHandler}
+          updateImageHandler={this.updateImageHandler}
+        />
       </div>
     );
   }

@@ -128,3 +128,8 @@ editModalPicCol {
 .trackJumbotronDateDiv {
   padding-right: 0px
 }
+
+.img100 {
+  width: 100%;
+  height: 100%;
+}
