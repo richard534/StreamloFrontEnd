@@ -86,12 +86,6 @@ footer {
   padding-bottom: 20px;
 }
 
-#uploadImage {
-  border-style: solid;
-  border-width: 1px;
-  border-color: #333;
-}
-
 .disableClick {
   pointer-events: none;
 }
@@ -102,4 +96,40 @@ footer {
 
 .editProfileModalCol {
   padding-left: 0px;
+}
+
+.updateProfilePictureBtn {
+  margin-top: 8px;
+}
+
+.editProfilePicInput {
+  margin-top: 10px;
+}
+
+editModalPicCol {
+  padding-top: 100px;
+}
+
+.nopadding {
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.center-upload-albumArt {
+  padding-top: 3%;
+  display: flex;
+  align-items: center;
+}
+
+.upload-album-art-img {
+  border: 1px solid #dddddd;
+}
+
+.trackJumbotronDateDiv {
+  padding-right: 0px
+}
+
+.img100 {
+  width: 100%;
+  height: 100%;
 }

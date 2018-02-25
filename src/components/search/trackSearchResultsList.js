@@ -1,6 +1,7 @@
 import React from "react";
 import Track from "./track";
 import { Link } from "react-router";
+import TrackApi from "api/trackApi";
 
 var noResultImg = require("images/noResultsSearch.png");
 
@@ -18,15 +19,20 @@ class TrackSearchResultsList extends React.Component {
 
     let searchResultsMessage1;
     let searchResultsMessage2;
+
     // If userURL is passed down as props then assume user is on profile page
     // and set react router path names accordingly
     if (this.props.userURL) {
       linkPathName = "/user/" + this.props.userURL;
-      searchResultsMessage1 = "This user has not uploaded any tracks :(";
+      if (this.props.isLikedTracksList) {
+        searchResultsMessage1 = "This user has not liked any tracks :(";
+      } else {
+        searchResultsMessage1 = "This user has not uploaded any tracks :(";
+      }
     } else {
       linkPathName = "/search";
       linkFilter = "tracks";
-      searchResultsMessage1 = "Sorry we didn't find any results for " + searchString;
+      searchResultsMessage1 = "Sorry we didn't find any results for \"" + searchString + '"';
       searchResultsMessage2 = "Check the spelling, or try a different search.";
     }
 
@@ -45,6 +51,7 @@ class TrackSearchResultsList extends React.Component {
             numLikes={track.numLikes}
             numPlays={track.numPlays}
             numComments={track.numComments}
+            trackAlbumArtURI={TrackApi.getTrackAlbumArtByTrackId(track._id)}
           />
           <hr />
         </li>

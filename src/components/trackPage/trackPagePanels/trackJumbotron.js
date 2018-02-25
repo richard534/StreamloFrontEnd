@@ -1,7 +1,6 @@
 import React from "react";
 import { Link } from "react-router";
-
-var altAlbumArtLogo = require("images/altAlbumArtLogo.png");
+import ReactPlayer from "react-player";
 
 var trackNameStyle = {
   marginTop: "0px"
@@ -29,11 +28,6 @@ var colHeight = {
 };
 
 class TrackJumbotron extends React.Component {
-  componentWillReceiveProps(nextProps) {
-    var audio = document.getElementById("audioElement");
-    audio.load();
-  }
-
   render() {
     var self = this;
 
@@ -64,18 +58,30 @@ class TrackJumbotron extends React.Component {
               </button>
             </div>
           </div>
-          <div className="col-md-6">
+          <div className="col-md-6 trackJumbotronDateDiv">
             <span className="pull-right">{trackUploadDate}</span>
           </div>
 
           <div className="col-md-12" style={bottomAlignText}>
-            <audio id="audioElement" style={audioTagStyle} controls controlsList="nodownload">
-              <source src={this.props.trackBinaryURL} type="audio/mp3" />
-            </audio>
+            <ReactPlayer
+              style={audioTagStyle}
+              url={this.props.trackBinaryURL}
+              width="100%"
+              height="100%"
+              config={{
+                file: { forceAudio: true, preload: true, attributes: { controls: "true", controlsList: "nodownload" } }
+              }}
+            />
           </div>
         </div>
         <div className="col-md-3">
-          <img className="img-responsive pull-right" src={altAlbumArtLogo} alt="" width="215" height="215" />
+          <img
+            className="img-responsive pull-right"
+            src={this.props.trackAlbumArtURI}
+            alt=""
+            width="215"
+            height="215"
+          />
         </div>
       </div>
     );

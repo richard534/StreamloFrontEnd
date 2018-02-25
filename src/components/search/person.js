@@ -1,6 +1,5 @@
 import React from "react";
 import { Link } from "react-router";
-var defaultProfilePic = require("images/account-icon.png");
 
 var ThumbnailStyle = {
   marginBottom: "0px"
@@ -13,19 +12,12 @@ var profileNameStyle = {
 
 class Person extends React.Component {
   render() {
-    var self = this;
-
-    var TrackUploadDate = (function() {
-      var date = new Date(self.props.uploadDate);
-      return date.toString();
-    })();
-
     return (
       <div className="media">
         <div className="media-left">
           <img
             className="media-object thumbnail img-circle accountThumbnail"
-            src={defaultProfilePic}
+            src={this.props.profilePictureURI}
             width="160"
             height="160"
             style={ThumbnailStyle}

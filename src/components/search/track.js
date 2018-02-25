@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router";
-var defaultAlbumArt = require("images/altAlbumArtLogo.png");
+import ReactPlayer from "react-player";
+
 import UserApi from "api/userApi";
 
 var ThumbnailStyle = {
@@ -21,7 +22,8 @@ var audioTagStyle = {
 };
 
 var audioDivStyle = {
-  paddingLeft: "4px"
+  paddingLeft: "4px",
+  paddingTop: "30px"
 };
 
 class Track extends React.Component {
@@ -71,7 +73,12 @@ class Track extends React.Component {
       <div className="media">
         <div className="media-left">
           <a>
-            <img className="media-object thumbnail ThumbnailStyle" src={defaultAlbumArt} width="160" height="160" />
+            <img
+              className="media-object thumbnail ThumbnailStyle"
+              src={this.props.trackAlbumArtURI}
+              width="160"
+              height="160"
+            />
           </a>
         </div>
         <div className="media-body">
@@ -86,12 +93,6 @@ class Track extends React.Component {
 
             <div className="col-md-4 pull-right">
               <p className="pull-right">{TrackUploadDate}</p>
-            </div>
-
-            <div className="col-md-12" style={audioDivStyle}>
-              <audio id={this.props.trackId} style={audioTagStyle} controls controlsList="nodownload">
-                <source src={TrackBinaryURL} type="audio/mp3" />
-              </audio>
             </div>
 
             <div className="col-md-12" style={likesRowstyle}>
@@ -120,6 +121,26 @@ class Track extends React.Component {
                   </p>
                 </div>
               </div>
+            </div>
+
+            <div className="col-md-12" style={audioDivStyle}>
+              <ReactPlayer
+                id={this.props.trackId}
+                style={audioTagStyle}
+                url={TrackBinaryURL}
+                width="100%"
+                height="100%"
+                config={{
+                  file: {
+                    forceAudio: true,
+                    preload: true,
+                    attributes: { controls: "true", controlsList: "nodownload" }
+                  }
+                }}
+              />
+              {/* <audio id={this.props.trackId} style={audioTagStyle} controls controlsList="nodownload">
+                <source src={TrackBinaryURL} type="audio/mp3" />
+              </audio> */}
             </div>
           </div>
         </div>

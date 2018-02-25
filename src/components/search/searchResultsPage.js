@@ -68,7 +68,7 @@ class SearchResultsPage extends React.Component {
     );
   }
 
-  tracksDataSource(pagenum = 1) {
+  tracksDataSource() {
     if (!this.state.selectedFilter.tracks) return;
 
     let trackNameQuery = this.state.searchString;
@@ -88,7 +88,7 @@ class SearchResultsPage extends React.Component {
     });
   }
 
-  peopleDatasource(pagenum = 1) {
+  peopleDatasource() {
     if (!this.state.selectedFilter.people) return;
 
     let displayNameQuery = this.state.searchString;

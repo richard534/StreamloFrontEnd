@@ -43,6 +43,7 @@ class TrackPage extends React.Component {
       numComments: 0,
       description: "",
       trackBinaryURL: "",
+      trackAlbumArtURI: "",
       comments: [],
       commentsPageNum: 1,
       commentsPerPage: 5,
@@ -91,7 +92,7 @@ class TrackPage extends React.Component {
           numLikes: track.numLikes,
           numComments: track.numComments,
           trackBinaryURL: "http://localhost:3001/tracks/" + track.trackBinaryId + "/stream",
-          comments: track.comments,
+          trackAlbumArtURI: TrackApi.getTrackAlbumArtByTrackId(track._id),
           uploaderLoggedIn: uploaderLoggedIn
         };
         this.uploaderNameDataSource(trackUploaderId, (err, userDisplayName) => {
@@ -117,10 +118,9 @@ class TrackPage extends React.Component {
     });
   }
 
-  commentsDataSource(trackId, pageNum = 1, perPage = 5, cb) {
+  commentsDataSource(trackId, pageNum = 1, perPage = 5) {
     TrackApi.getTrackCommentsById(trackId, pageNum, perPage, (err, result) => {
       this.setStateToCommentDataSourceResults(result);
-      if (cb) cb(null, result);
     });
   }
 
@@ -249,6 +249,7 @@ class TrackPage extends React.Component {
             numComments={this.state.numComments}
             trackBinaryURL={this.state.trackBinaryURL}
             userURL={this.state.userURL}
+            trackAlbumArtURI={this.state.trackAlbumArtURI}
           />
 
           <div className="col-md-12" style={commentsAndDescriptionStyle}>
@@ -271,6 +272,7 @@ class TrackPage extends React.Component {
                 description={this.state.description}
                 uploaderLoggedIn={this.state.uploaderLoggedIn}
                 deleteTrackHandler={this.deleteTrackHandler}
+                loggedIn={this.props.auth.loggedIn()}
               />
             </div>
           </div>

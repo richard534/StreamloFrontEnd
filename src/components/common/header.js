@@ -37,11 +37,11 @@ class Header extends React.Component {
 
   render() {
     let loggedIn = this.props.auth.loggedIn();
-    let leftNav;
+    let rightNav;
 
     if (loggedIn) {
       let userProfile = this.props.auth.getProfile();
-      leftNav = (
+      rightNav = (
         <ul className="nav navbar-nav navbar-right">
           <li className="nav">
             <Link to="/upload">Upload</Link>
@@ -67,7 +67,7 @@ class Header extends React.Component {
         </ul>
       );
     } else {
-      leftNav = (
+      rightNav = (
         <ul className="nav navbar-nav navbar-right">
           <li className="nav">
             <Link to="/upload">Upload</Link>
@@ -100,7 +100,7 @@ class Header extends React.Component {
               />
             </li>
           </ul>
-          {leftNav}
+          {rightNav}
         </nav>
       </div>
     );

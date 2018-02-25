@@ -1,5 +1,7 @@
 import React from "react";
 import ChartListing from "./chartListing";
+import TrackApi from "api/trackApi";
+
 let noResultImg = require("images/noResultsSearch.png");
 
 class Chart extends React.Component {
@@ -26,6 +28,7 @@ class Chart extends React.Component {
           numComments={track.numComments}
           numLikes={track.numLikes}
           numPlays={track.numPlays}
+          trackAlbumArtURI={TrackApi.getTrackAlbumArtByTrackId(track._id)}
         />
       );
     };

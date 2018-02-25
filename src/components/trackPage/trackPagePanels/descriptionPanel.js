@@ -4,7 +4,7 @@ class DescriptionPanel extends React.Component {
   render() {
     let deleteTrackButton;
 
-    if (this.props.uploaderLoggedIn) {
+    if (this.props.uploaderLoggedIn && this.props.loggedIn) {
       deleteTrackButton = (
         <div className="panel-footer clearfix">
           <button onClick={this.props.deleteTrackHandler} className="btn btn-danger pull-left">

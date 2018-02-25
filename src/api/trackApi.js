@@ -137,6 +137,11 @@ class TrackApi {
         cb(error.response);
       });
   }
+
+  static getTrackAlbumArtByTrackId(trackId) {
+    let trackAlbumArtURI = ApiUrl + "tracks/" + trackId + "/albumArt?t=" + new Date().getTime();
+    return trackAlbumArtURI;
+  }
 }
 
 export default TrackApi;

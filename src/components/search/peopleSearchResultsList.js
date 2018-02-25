@@ -2,6 +2,8 @@ import React from "react";
 import Person from "./person";
 import { Link } from "react-router";
 
+import UserApi from "api/userApi";
+
 var noResultImg = require("images/noResultsSearch.png");
 
 var ThumbnailStyle = {
@@ -14,72 +16,111 @@ var PersonListingStyle = {
 
 class PeopleSearchResultsList extends React.Component {
   render() {
-    var people = this.props.peopleResults;
     let searchString = this.props.searchString;
-
-    var createPersonResultRow = function(person) {
-      return (
-        <li key={person._id} className="list-group-item" style={PersonListingStyle}>
-          <Person displayName={person.displayName} userURL={person.userURL} />
-          <hr />
-        </li>
-      );
-    };
-
-    var resultsNotFound = (() => {
-      return (
-        <div>
-          <img src={noResultImg} className="center-block search-result-image" />
-          <p className="text-center text-muted">Sorry we didn't find any results for "{searchString}".</p>
-          <p className="text-center text-muted">Check the spelling, or try a different search.</p>
-        </div>
-      );
-    })();
-
-    let previousButtonClass = this.props.pageNum == 1 ? "previous disabled disableClick" : "previous";
-    let nextButtonClass = this.props.hasMorePeople == false ? "next disabled disableClick" : "next";
-
-    var results;
-    var numPeople;
 
     let nextPeoplePageNumber = parseInt(this.props.pageNum) + 1;
     let previousTrackPageNumber = parseInt(this.props.pageNum) - 1;
     let perPage = this.props.perPage;
 
+    let noPeopleFoundMessage1;
+    let noPeopleFoundMessage2;
+
+    // If userURL is passed down as props then assume user is on profile page
+    // and set react router path names accordingly
+    let nextPaginationLinkAttribute;
+    let prevPaginationLinkAttribute;
+
+    if (this.props.userURL) {
+      nextPaginationLinkAttribute = {
+        pathname: "/user/" + this.props.userURL,
+        query: {
+          selectedTab: "followingUsers",
+          page: nextPeoplePageNumber,
+          per_page: perPage
+        }
+      };
+
+      prevPaginationLinkAttribute = {
+        pathname: "/user/" + this.props.userURL,
+        query: {
+          selectedTab: "followingUsers",
+          page: previousTrackPageNumber,
+          per_page: perPage
+        }
+      };
+
+      noPeopleFoundMessage1 = "This user has not followed any people :(";
+    } else {
+      nextPaginationLinkAttribute = {
+        pathname: "/search",
+        query: {
+          q: this.props.searchString,
+          page: nextPeoplePageNumber,
+          per_page: perPage,
+          filter: "people"
+        }
+      };
+
+      prevPaginationLinkAttribute = {
+        pathname: "/search",
+        query: {
+          q: this.props.searchString,
+          page: previousTrackPageNumber,
+          per_page: perPage,
+          filter: "people"
+        }
+      };
+
+      noPeopleFoundMessage1 = "Sorry we didn't find any results for \"" + searchString + '"';
+      noPeopleFoundMessage2 = "Check the spelling, or try a different search.";
+    }
+
+    var createPersonResultRow = function(person) {
+      let userProfileImageURI = UserApi.getUserProfilePictureURIByUserId(person._id);
+
+      return (
+        <li key={person._id} className="list-group-item" style={PersonListingStyle}>
+          <Person
+            displayName={person.displayName}
+            userURL={person.userURL}
+            numFollowers={person.numberOfFollowers}
+            numUploadedTracks={person.numberOfTracksUploaded}
+            profilePictureURI={userProfileImageURI}
+          />
+          <hr />
+        </li>
+      );
+    };
+
+    var resultsNotFound = (
+      <div>
+        <img src={noResultImg} className="center-block search-result-image" />
+        <p className="text-center text-muted">{noPeopleFoundMessage1}</p>
+        <p className="text-center text-muted">{noPeopleFoundMessage2}</p>
+      </div>
+    );
+
+    let previousButtonClass = this.props.pageNum == 1 ? "previous disabled disableClick" : "previous";
+    let nextButtonClass = this.props.hasMorePeople == false ? "next disabled disableClick" : "next";
+
+    let results;
+    let numPeople;
+
     if (this.props.peopleResults.length > 0) {
       numPeople = <p className="text-muted">Found {this.props.numPeople} people</p>;
+
       results = (
         <div>
-          <ul className="list-group">{people.map(createPersonResultRow)}</ul>
+          <ul className="list-group">{this.props.peopleResults.map(createPersonResultRow)}</ul>
           <nav>
             <ul className="pager">
               <li className={previousButtonClass}>
-                <Link
-                  to={{
-                    pathname: "/search",
-                    query: {
-                      q: this.props.searchString,
-                      page: previousTrackPageNumber,
-                      per_page: perPage,
-                      filter: "people"
-                    }
-                  }}
-                >
+                <Link to={prevPaginationLinkAttribute}>
                   <span aria-hidden="true">&larr;</span> Previous
                 </Link>
               </li>
               <li className={nextButtonClass}>
-                <Link
-                  to={{
-                    pathname: "/search",
-                    query: {
-                      q: this.props.searchString,
-                      page: nextPeoplePageNumber,
-                      per_page: perPage,
-                      filter: "people"
-                    }
-                  }}
-                >
+                <Link to={nextPaginationLinkAttribute}>
                   Next <span aria-hidden="true">&rarr;</span>
                 </Link>
               </li>
@@ -92,7 +133,7 @@ class PeopleSearchResultsList extends React.Component {
     }
 
     return (
-      <div className="col-md-10">
+      <div className="col-md-12">
         {numPeople}
         {results}
       </div>
