@@ -93,7 +93,6 @@ class TrackPage extends React.Component {
           numComments: track.numComments,
           trackBinaryURL: "http://localhost:3001/tracks/" + track.trackBinaryId + "/stream",
           trackAlbumArtURI: TrackApi.getTrackAlbumArtByTrackId(track._id),
-          comments: track.comments,
           uploaderLoggedIn: uploaderLoggedIn
         };
         this.uploaderNameDataSource(trackUploaderId, (err, userDisplayName) => {
@@ -119,10 +118,9 @@ class TrackPage extends React.Component {
     });
   }
 
-  commentsDataSource(trackId, pageNum = 1, perPage = 5, cb) {
+  commentsDataSource(trackId, pageNum = 1, perPage = 5) {
     TrackApi.getTrackCommentsById(trackId, pageNum, perPage, (err, result) => {
       this.setStateToCommentDataSourceResults(result);
-      if (cb) cb(null, result);
     });
   }
 

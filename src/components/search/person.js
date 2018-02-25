@@ -12,13 +12,6 @@ var profileNameStyle = {
 
 class Person extends React.Component {
   render() {
-    var self = this;
-
-    var TrackUploadDate = (function() {
-      var date = new Date(self.props.uploadDate);
-      return date.toString();
-    })();
-
     return (
       <div className="media">
         <div className="media-left">

@@ -23,26 +23,24 @@ class ProfilePage extends React.Component {
       profileUserURL: "",
       profileDisplayname: "",
       profileImageURI: "",
-      numFollowers: 0,
-      numFollowing: 0,
       pageData: {
         pageNum: 0,
         perPage: 0
       },
-      uploadedTracks: [],
-      followedUsers: [],
-      likedTracks: [],
-      uploadedTracksMetadata: {
+      uploadedTracksData: {
+        uploadedTracks: [],
         hasMoreTracks: false,
         numTracks: 0
       },
-      followedUsersMetadata: {
-        hasMoreUsers: false,
-        numUsers: 0
+      followeeData: {
+        followees: [],
+        hasMoreFollowees: false,
+        numFollowees: 0
       },
-      likedTracksMetadata: {
-        hasMoreTracks: false,
-        numTracks: 0
+      likedTracksData: {
+        likedTracks: [],
+        hasMoreLikedTracks: false,
+        numLikedTracks: 0
       },
       showEditModal: false,
       selectedProfileTab: {
@@ -61,7 +59,7 @@ class ProfilePage extends React.Component {
     };
 
     this.profileDataSource = this.profileDataSource.bind(this);
-    this.tracksUploadedDataSource = this.tracksUploadedDataSource.bind(this);
+    this.uploadedTracksDataSource = this.uploadedTracksDataSource.bind(this);
     this.toggleModal = this.toggleModal.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.submitUpdateUserDataHandler = this.submitUpdateUserDataHandler.bind(this);
@@ -74,7 +72,7 @@ class ProfilePage extends React.Component {
     this.setInitialPageStateFromURI();
   }
 
-  // lifecycle hook called when profile page component recieves props from react router (on next/previous page naviagation)
+  // lifecycle hook called when profile page component recieves props from react router
   componentWillReceiveProps(nextProps) {
     this.setInitialPageStateFromURI(nextProps);
   }
@@ -90,7 +88,7 @@ class ProfilePage extends React.Component {
 
     let selectedTabFromURI = props.location.query.selectedTab;
     switch (selectedTabFromURI) {
-      case "uploaderTracks":
+      case "uploadedTracks":
         selectedTabState.uploaded = true;
         break;
       case "likedTracks":
@@ -123,6 +121,8 @@ class ProfilePage extends React.Component {
       if (err) {
         toastr.error("Error retrieving profile");
       } else {
+        if (!result) return;
+
         let returnedUser = result.users[0];
         let userId = returnedUser._id;
         let userProfileImage = UserApi.getUserProfilePictureURIByUserId(userId);
@@ -131,51 +131,85 @@ class ProfilePage extends React.Component {
           profileUserId: userId,
           profileDisplayname: returnedUser.displayName,
           profileImageURI: userProfileImage,
-          numFollowers: returnedUser.numberOfFollowers,
-          numFollowing: returnedUser.numberOfFollowedUsers,
-          followedUsers: returnedUser.followedUsers,
-          likedTracks: returnedUser.likedTracks,
           candidateUserData: {
             email: returnedUser.email,
             displayName: returnedUser.displayName,
             city: returnedUser.city
           }
         };
-        this.setState(newState);
-        this.tracksUploadedDataSource(userId);
-        this.followedUsersDataSource(userId);
-        this.likedUsersDataSource(userId);
-      }
-    });
-  }
 
-  tracksUploadedDataSource(uploaderId) {
-    let pageNum = this.state.pageData.pageNum;
-    let perPage = this.state.pageData.perPage;
+        this.setState(newState, () => {
+          let uploaderId = this.state.profileUserId;
+          let pageNum = this.state.pageData.pageNum;
+          let perPage = this.state.pageData.perPage;
 
-    TrackApi.getTracksByUploaderId(uploaderId, pageNum, perPage, (err, result) => {
-      if (err) {
-        return;
-      } else {
-        let hasMoreTracks = true;
-        if (result.page == result.pageCount) hasMoreTracks = false;
-        this.setState({
-          uploadedTracks: result.tracks,
-          uploadedTracksMetadata: {
-            numTracks: result.total,
-            hasMoreTracks: hasMoreTracks
-          }
+          if (this.state.selectedProfileTab.uploaded) this.uploadedTracksDataSource(uploaderId, pageNum, perPage);
+          if (this.state.selectedProfileTab.following) this.followedUsersDataSource(uploaderId, pageNum, perPage);
+          if (this.state.selectedProfileTab.liked) this.likedUsersDataSource(uploaderId, pageNum, perPage);
         });
       }
     });
   }
 
-  followedUsersDataSource(uploaderId) {
-    // TODO
+  uploadedTracksDataSource(uploaderId, pageNum, perPage) {
+    TrackApi.getTracksByUploaderId(uploaderId, pageNum, perPage, (err, result) => {
+      if (err) return;
+
+      let hasMoreTracks = true;
+      if (result.page == result.pageCount) hasMoreTracks = false;
+
+      let newState = {
+        uploadedTracksData: {
+          uploadedTracks: result.tracks,
+          numTracks: result.total,
+          hasMoreTracks: hasMoreTracks
+        }
+      };
+
+      this.setState(newState);
+    });
   }
 
-  likedUsersDataSource(uploaderId) {
-    // TODO
+  followedUsersDataSource(uploaderId, pageNum, perPage) {
+    UserApi.getFolloweesByFollowerUserId(uploaderId, pageNum, perPage, (err, result) => {
+      if (err) return;
+      if (!result) return;
+
+      let hasMoreFollowees = true;
+      if (result.page == result.pageCount) hasMoreFollowees = false;
+
+      let numFollowees = result.total;
+
+      // for each followee userid retrieved get the full user profile
+      let followeeFullProfiles = Array.apply(null, Array(result.followees.length));
+      let numFullProfilesRetieved = 0;
+
+      result.followees.forEach((followee, index, array) => {
+        UserApi.getUserByUserId(followee.userId, (err, user) => {
+          followeeFullProfiles[index] = user;
+          numFullProfilesRetieved++;
+          if (numFullProfilesRetieved === array.length) {
+            this.setFullProfileState(followeeFullProfiles, hasMoreFollowees, numFollowees);
+          }
+        });
+      });
+    });
+  }
+
+  setFullProfileState(followeeFullProfiles, hasMoreFollowees, numFollowees) {
+    let newState = {
+      followeeData: {
+        followees: followeeFullProfiles,
+        numFollowees: numFollowees,
+        hasMoreFollowees: hasMoreFollowees
+      }
+    };
+
+    this.setState(newState);
+  }
+
+  likedUsersDataSource(uploaderId, pageNum, perPage) {
+    // TODO likedUsersDataSource
   }
 
   submitUpdateUserDataHandler(e) {
@@ -277,37 +311,10 @@ class ProfilePage extends React.Component {
   }
 
   changeSelectedProfileTab(e) {
-    // set state to selected tab
     let selectedProfileTab = e.target.name;
 
-    let uplodedTracksSelected = false;
-    let followedUsersSelected = false;
-    let likedTracksSelected = false;
-
-    if (selectedProfileTab == "uploadedTracks") uplodedTracksSelected = true;
-    if (selectedProfileTab == "followingUsers") followedUsersSelected = true;
-    if (selectedProfileTab == "likedTracks") likedTracksSelected = true;
-
-    this.setState(
-      {
-        selectedProfileTab: {
-          uploaded: uplodedTracksSelected,
-          liked: likedTracksSelected,
-          following: followedUsersSelected
-        }
-      },
-      () => {
-        browserHistory.push(
-          "/user/" +
-            this.state.profileUserURL +
-            "?selectedTab=" +
-            selectedProfileTab +
-            "&page=" +
-            "1" +
-            "&per_page=" +
-            this.state.pageData.perPage
-        );
-      }
+    browserHistory.push(
+      "/user/" + this.state.profileUserURL + "?selectedTab=" + selectedProfileTab + "&page=" + "1" + "&per_page=" + "5"
     );
   }
 
@@ -335,33 +342,34 @@ class ProfilePage extends React.Component {
     // Determine which tab body to render
     let uploadedTracksList = (
       <TracksList
-        trackResults={this.state.uploadedTracks}
-        numTracks={this.state.uploadedTracksMetadata.numTracks}
+        trackResults={this.state.uploadedTracksData.uploadedTracks}
+        numTracks={this.state.uploadedTracksData.numTracks}
         pageNum={this.state.pageData.pageNum}
         perPage={this.state.pageData.perPage}
-        hasMoreTracks={this.state.uploadedTracksMetadata.hasMoreTracks}
+        hasMoreTracks={this.state.uploadedTracksData.hasMoreTracks}
         userURL={this.state.profileUserURL}
       />
     );
 
     let followingUsersList = (
       <FollowingUsersList
-        peopleResults={this.state.followedUsers}
-        numUsers={this.state.followedUsersMetadata.numUsers}
+        peopleResults={this.state.followeeData.followees}
+        numPeople={this.state.followeeData.numFollowees}
         pageNum={this.state.pageData.pageNum}
         perPage={this.state.pageData.perPage}
-        hasMoreUsers={this.state.uploadedTracksMetadata.hasMoreUsers}
+        hasMorePeople={this.state.followeeData.hasMoreFollowees}
         userURL={this.state.profileUserURL}
+        profileUserId={this.state.profileUserId}
       />
     );
 
     let likedTracksList = (
       <TracksList
-        trackResults={this.state.likedTracks}
-        numTracks={this.state.likedTracksMetadata.numTracks}
+        trackResults={this.state.likedTracksData.likedTracks}
+        numTracks={this.state.likedTracksData.numTracks}
         pageNum={this.state.pageData.pageNum}
         perPage={this.state.pageData.perPage}
-        hasMoreTracks={this.state.likedTracksMetadata.hasMoreTracks}
+        hasMoreTracks={this.state.likedTracksData.hasMoreTracks}
         userURL={this.state.profileUserURL}
         isLikedTracksList={true}
       />

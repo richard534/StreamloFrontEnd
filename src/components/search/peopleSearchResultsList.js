@@ -16,25 +16,63 @@ var PersonListingStyle = {
 
 class PeopleSearchResultsList extends React.Component {
   render() {
-    var people = this.props.peopleResults;
     let searchString = this.props.searchString;
 
-    let linkPathName;
-    let linkFilter;
+    let nextPeoplePageNumber = parseInt(this.props.pageNum) + 1;
+    let previousTrackPageNumber = parseInt(this.props.pageNum) - 1;
+    let perPage = this.props.perPage;
 
-    let searchResultsMessage1;
-    let searchResultsMessage2;
+    let noPeopleFoundMessage1;
+    let noPeopleFoundMessage2;
 
     // If userURL is passed down as props then assume user is on profile page
     // and set react router path names accordingly
+    let nextPaginationLinkAttribute;
+    let prevPaginationLinkAttribute;
+
     if (this.props.userURL) {
-      linkPathName = "/user/" + this.props.userURL;
-      searchResultsMessage1 = "This user has not followed any people :(";
+      nextPaginationLinkAttribute = {
+        pathname: "/user/" + this.props.userURL,
+        query: {
+          selectedTab: "followingUsers",
+          page: nextPeoplePageNumber,
+          per_page: perPage
+        }
+      };
+
+      prevPaginationLinkAttribute = {
+        pathname: "/user/" + this.props.userURL,
+        query: {
+          selectedTab: "followingUsers",
+          page: previousTrackPageNumber,
+          per_page: perPage
+        }
+      };
+
+      noPeopleFoundMessage1 = "This user has not followed any people :(";
     } else {
-      linkPathName = "/search";
-      linkFilter = "tracks";
-      searchResultsMessage1 = "Sorry we didn't find any results for \"" + searchString + '"';
-      searchResultsMessage2 = "Check the spelling, or try a different search.";
+      nextPaginationLinkAttribute = {
+        pathname: "/search",
+        query: {
+          q: this.props.searchString,
+          page: nextPeoplePageNumber,
+          per_page: perPage,
+          filter: "people"
+        }
+      };
+
+      prevPaginationLinkAttribute = {
+        pathname: "/search",
+        query: {
+          q: this.props.searchString,
+          page: previousTrackPageNumber,
+          per_page: perPage,
+          filter: "people"
+        }
+      };
+
+      noPeopleFoundMessage1 = "Sorry we didn't find any results for \"" + searchString + '"';
+      noPeopleFoundMessage2 = "Check the spelling, or try a different search.";
     }
 
     var createPersonResultRow = function(person) {
@@ -57,55 +95,32 @@ class PeopleSearchResultsList extends React.Component {
     var resultsNotFound = (
       <div>
         <img src={noResultImg} className="center-block search-result-image" />
-        <p className="text-center text-muted">{searchResultsMessage1}</p>
-        <p className="text-center text-muted">{searchResultsMessage2}</p>
+        <p className="text-center text-muted">{noPeopleFoundMessage1}</p>
+        <p className="text-center text-muted">{noPeopleFoundMessage2}</p>
       </div>
     );
 
     let previousButtonClass = this.props.pageNum == 1 ? "previous disabled disableClick" : "previous";
     let nextButtonClass = this.props.hasMorePeople == false ? "next disabled disableClick" : "next";
 
-    var results;
-    var numPeople;
-
-    let nextPeoplePageNumber = parseInt(this.props.pageNum) + 1;
-    let previousTrackPageNumber = parseInt(this.props.pageNum) - 1;
-    let perPage = this.props.perPage;
+    let results;
+    let numPeople;
 
     if (this.props.peopleResults.length > 0) {
       numPeople = <p className="text-muted">Found {this.props.numPeople} people</p>;
+
       results = (
         <div>
-          <ul className="list-group">{people.map(createPersonResultRow)}</ul>
+          <ul className="list-group">{this.props.peopleResults.map(createPersonResultRow)}</ul>
           <nav>
             <ul className="pager">
               <li className={previousButtonClass}>
-                <Link
-                  to={{
-                    pathname: "/search",
-                    query: {
-                      q: this.props.searchString,
-                      page: previousTrackPageNumber,
-                      per_page: perPage,
-                      filter: "people"
-                    }
-                  }}
-                >
+                <Link to={prevPaginationLinkAttribute}>
                   <span aria-hidden="true">&larr;</span> Previous
                 </Link>
               </li>
               <li className={nextButtonClass}>
-                <Link
-                  to={{
-                    pathname: "/search",
-                    query: {
-                      q: this.props.searchString,
-                      page: nextPeoplePageNumber,
-                      per_page: perPage,
-                      filter: "people"
-                    }
-                  }}
-                >
+                <Link to={nextPaginationLinkAttribute}>
                   Next <span aria-hidden="true">&rarr;</span>
                 </Link>
               </li>
