@@ -23,6 +23,8 @@ class ProfilePage extends React.Component {
       profileUserURL: "",
       profileDisplayname: "",
       profileImageURI: "",
+      profileNumberOfFollowees: 0,
+      profileNumberOfFollowers: 0,
       pageData: {
         pageNum: 0,
         perPage: 0
@@ -131,6 +133,8 @@ class ProfilePage extends React.Component {
           profileUserId: userId,
           profileDisplayname: returnedUser.displayName,
           profileImageURI: userProfileImage,
+          profileNumberOfFollowees: returnedUser.numberOfFollowees,
+          profileNumberOfFollowers: returnedUser.numberOfFollowers,
           candidateUserData: {
             email: returnedUser.email,
             displayName: returnedUser.displayName,
@@ -319,24 +323,40 @@ class ProfilePage extends React.Component {
   }
 
   render() {
-    let profileOwnerLoggedIn =
-      this.props.auth.loggedIn() && this.props.auth.getProfile().id == this.state.profileUserId;
+    let aUserIsLoggedIn = this.props.auth.loggedIn();
+    let profileOwnerIsLoggedIn = aUserIsLoggedIn && this.props.auth.getProfile().id == this.state.profileUserId;
 
-    let editButton;
+    let editButton = (
+      <button type="button" className="btn btn-default" onClick={this.toggleModal}>
+        <span className="glyphicon glyphicon-edit" /> Edit
+      </button>
+    );
     let followButton = (
       <button type="button" className="btn btn-default">
         <span className="glyphicon glyphicon-plus" /> Follow
       </button>
     );
-    // if user is logged in and profilePage is the logged in users profile, display edit details button
-    // && hide follow button
-    if (profileOwnerLoggedIn) {
-      editButton = (
-        <button type="button" className="btn btn-default" onClick={this.toggleModal}>
-          <span className="glyphicon glyphicon-edit" /> Edit
-        </button>
+    let buttonsRow;
+
+    let displayName = this.state.profileDisplayname;
+
+    // if any user is logged in and profilePage owner is logged in display edit details button && hide follow button
+    if (profileOwnerIsLoggedIn) {
+      buttonsRow = (
+        <div className="btn-group-sm" role="group" style={followersStyle}>
+          {editButton}
+        </div>
       );
-      followButton = undefined;
+      displayName += " (You)";
+    } else if (aUserIsLoggedIn && !profileOwnerIsLoggedIn) {
+      // if any user who isn't profile owner is logged in - show both follow and edit button
+      buttonsRow = (
+        <div className="btn-group-sm" role="group" style={followersStyle}>
+          {editButton}
+          <span> </span>
+          {followButton}
+        </div>
+      );
     }
 
     // Determine which tab body to render
@@ -412,18 +432,14 @@ class ProfilePage extends React.Component {
         <div className="container-full">
           <div className="jumbotron text-center" id="userJumbotron">
             <img className="img-circle" src={this.state.profileImageURI} width="150" height="150" />
-            <h4 className="text-center">{this.state.profileDisplayname}</h4>
+            <h4 className="text-center">{displayName}</h4>
             <span className="text-center">
-              <span className="glyphicon glyphicon-user" /> Followers: {this.state.numFollowers}{" "}
+              <span className="glyphicon glyphicon-user" /> Followers: {this.state.profileNumberOfFollowers}{" "}
             </span>
             <span className="text-center">
-              | <span className="glyphicon glyphicon-eye-open" /> Following: {this.state.numFollowing}
+              | <span className="glyphicon glyphicon-eye-open" /> Following: {this.state.profileNumberOfFollowees}
             </span>
-            <div className="btn-group-sm" role="group" style={followersStyle}>
-              {editButton}
-              <span> </span>
-              {followButton}
-            </div>
+            {buttonsRow}
             <br />
           </div>
         </div>
