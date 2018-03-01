@@ -25,6 +25,7 @@ class ProfilePage extends React.Component {
       profileImageURI: "",
       profileNumberOfFollowees: 0,
       profileNumberOfFollowers: 0,
+      isLoggedInUserFollowingThisProfile: false,
       pageData: {
         pageNum: 0,
         perPage: 0
@@ -68,6 +69,7 @@ class ProfilePage extends React.Component {
     this.deleteAccountHandler = this.deleteAccountHandler.bind(this);
     this.updateImageHandler = this.updateImageHandler.bind(this);
     this.changeSelectedProfileTab = this.changeSelectedProfileTab.bind(this);
+    this.followUserHandler = this.followUserHandler.bind(this);
   }
 
   componentDidMount() {
@@ -150,6 +152,7 @@ class ProfilePage extends React.Component {
           if (this.state.selectedProfileTab.uploaded) this.uploadedTracksDataSource(uploaderId, pageNum, perPage);
           if (this.state.selectedProfileTab.following) this.followedUsersDataSource(uploaderId, pageNum, perPage);
           if (this.state.selectedProfileTab.liked) this.likedUsersDataSource(uploaderId, pageNum, perPage);
+          if (this.props.auth.loggedIn()) this.determineIfLoggedInUserIsFollowingThisProfile();
         });
       }
     });
@@ -157,20 +160,28 @@ class ProfilePage extends React.Component {
 
   uploadedTracksDataSource(uploaderId, pageNum, perPage) {
     TrackApi.getTracksByUploaderId(uploaderId, pageNum, perPage, (err, result) => {
-      if (err) return;
+      if (err) {
+        let newState = {
+          uploadedTracksData: {
+            uploadedTracks: [],
+            numTracks: 0,
+            hasMoreTracks: false
+          }
+        };
+        this.setState(newState);
+      } else {
+        let hasMoreTracks = true;
+        if (result.page == result.pageCount) hasMoreTracks = false;
+        let newState = {
+          uploadedTracksData: {
+            uploadedTracks: result.tracks,
+            numTracks: result.total,
+            hasMoreTracks: hasMoreTracks
+          }
+        };
 
-      let hasMoreTracks = true;
-      if (result.page == result.pageCount) hasMoreTracks = false;
-
-      let newState = {
-        uploadedTracksData: {
-          uploadedTracks: result.tracks,
-          numTracks: result.total,
-          hasMoreTracks: hasMoreTracks
-        }
-      };
-
-      this.setState(newState);
+        this.setState(newState);
+      }
     });
   }
 
@@ -214,6 +225,41 @@ class ProfilePage extends React.Component {
 
   likedUsersDataSource(uploaderId, pageNum, perPage) {
     // TODO likedUsersDataSource
+  }
+
+  determineIfLoggedInUserIsFollowingThisProfile() {
+    let signedInUserId = this.props.auth.getProfile().id;
+
+    let followeesArray = new Array();
+
+    function getFollowers(signedInUserId, pageNum, perPage, cb) {
+      UserApi.getFolloweesByFollowerUserId(signedInUserId, pageNum, perPage, (err, result) => {
+        result.followees.forEach(followee => {
+          followeesArray.push(followee);
+        });
+
+        let hasMore = true;
+        if (result.page == result.pageCount) hasMore = false;
+
+        if (hasMore) {
+          getFollowers(signedInUserId, pageNum + 1, perPage, cb);
+        } else {
+          cb(); // Call when we are finished
+        }
+      });
+    }
+
+    getFollowers(signedInUserId, 1, 5, () => {
+      // Once we have an array of all of the loggin is users followees
+      // check if the userId of this profile page equals any of the followee's user Ids
+      var found = followeesArray.find(element => {
+        return element.userId == this.state.profileUserId;
+      });
+
+      if (found) {
+        this.setState({ isLoggedInUserFollowingThisProfile: true });
+      }
+    });
   }
 
   submitUpdateUserDataHandler(e) {
@@ -295,6 +341,47 @@ class ProfilePage extends React.Component {
     });
   }
 
+  followUserHandler(e) {
+    e.preventDefault();
+
+    let buttonName = e.target.name;
+
+    let profileId = this.state.profileUserId;
+    let jwtToken = this.props.auth.getToken();
+    let followerUserId = this.props.auth.getProfile().id;
+    let followeeUserId = this.state.profileUserId;
+
+    let postBodyData = new URLSearchParams();
+    postBodyData.append("followeeUserId", profileId);
+
+    switch (buttonName) {
+      case "follow":
+        UserApi.postUserToFolloweesByFollowerUserId(followerUserId, jwtToken, postBodyData, (err, result) => {
+          if (err) {
+            toastr.error("Error following user");
+          } else {
+            let profileDisplayname = this.state.profileDisplayname;
+            toastr.remove();
+            toastr.success(`Now following ${profileDisplayname}`);
+            this.setState({ isLoggedInUserFollowingThisProfile: true });
+          }
+        });
+        break;
+      case "unfollow":
+        UserApi.deleteUserFromFolloweesByFollowerUserId(followerUserId, followeeUserId, jwtToken, (err, result) => {
+          if (err) {
+            toastr.error("Error unfollowing user");
+          } else {
+            let profileDisplayname = this.state.profileDisplayname;
+            toastr.remove();
+            toastr.success(`Unfollowed ${profileDisplayname}`);
+            this.setState({ isLoggedInUserFollowingThisProfile: false });
+          }
+        });
+        break;
+    }
+  }
+
   updateImageHandler() {
     let candidateProfileImageURI;
 
@@ -326,16 +413,13 @@ class ProfilePage extends React.Component {
     let aUserIsLoggedIn = this.props.auth.loggedIn();
     let profileOwnerIsLoggedIn = aUserIsLoggedIn && this.props.auth.getProfile().id == this.state.profileUserId;
 
+    let followButtonText = "Follow";
     let editButton = (
       <button type="button" className="btn btn-default" onClick={this.toggleModal}>
         <span className="glyphicon glyphicon-edit" /> Edit
       </button>
     );
-    let followButton = (
-      <button type="button" className="btn btn-default">
-        <span className="glyphicon glyphicon-plus" /> Follow
-      </button>
-    );
+
     let buttonsRow;
 
     let displayName = this.state.profileDisplayname;
@@ -350,6 +434,22 @@ class ProfilePage extends React.Component {
       displayName += " (You)";
     } else if (aUserIsLoggedIn && !profileOwnerIsLoggedIn) {
       // if any user who isn't profile owner is logged in - show both follow and edit button
+      let followButton = (
+        <button type="button" name="follow" className="btn btn-default" onClick={this.followUserHandler}>
+          <span className="glyphicon glyphicon-plus" /> Follow
+        </button>
+      );
+
+      // check if logged in user is currently following the user who owns this profile page
+      let loggedInUserFollowingThisUser = this.state.isLoggedInUserFollowingThisProfile;
+      if (loggedInUserFollowingThisUser) {
+        followButton = (
+          <button type="button" name="unfollow" className="btn btn-default" onClick={this.followUserHandler}>
+            <span className="glyphicon glyphicon-minus" /> Unfollow
+          </button>
+        );
+      }
+
       buttonsRow = (
         <div className="btn-group-sm" role="group" style={followersStyle}>
           {editButton}

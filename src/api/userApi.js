@@ -98,13 +98,13 @@ class UserApi {
       });
   }
 
-  static postUserToFolloweesByFollowerUserId(userId, jwtToken, cb) {
+  static postUserToFolloweesByFollowerUserId(followeeUserId, jwtToken, postBodyData, cb) {
     let instance = axios.create({
       headers: { "x-access-token": jwtToken }
     });
 
     instance
-      .post(ApiUrl + "users/" + userId + "/followees")
+      .post(ApiUrl + "users/" + followeeUserId + "/followees", postBodyData)
       .then(response => {
         cb(null, response.data);
       })
@@ -113,13 +113,13 @@ class UserApi {
       });
   }
 
-  static deleteUserFromFolloweesByFollowerUserId(userId, followeeId, jwtToken, cb) {
+  static deleteUserFromFolloweesByFollowerUserId(followerUserId, followeeId, jwtToken, cb) {
     let instance = axios.create({
       headers: { "x-access-token": jwtToken }
     });
 
     instance
-      .post(ApiUrl + "users/" + userId + "/followees/" + followeeId)
+      .delete(ApiUrl + "users/" + followerUserId + "/followees/" + followeeId)
       .then(response => {
         cb(null, response.data);
       })
