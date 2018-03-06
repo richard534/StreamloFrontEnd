@@ -91,7 +91,7 @@ class TrackPage extends React.Component {
           numPlays: track.numPlays,
           numLikes: track.numLikes,
           numComments: track.numComments,
-          trackBinaryURL: "http://localhost:3001/tracks/" + track.trackBinaryId + "/stream",
+          trackBinaryURL: TrackApi.getTrackStreamURIByGridFSId(track._id),
           trackAlbumArtURI: TrackApi.getTrackAlbumArtByTrackId(track._id),
           uploaderLoggedIn: uploaderLoggedIn
         };

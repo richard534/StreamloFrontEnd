@@ -5,6 +5,11 @@ import axios from "axios";
 import authService from "utils/AuthService";
 
 class TrackApi {
+  static getTrackStreamURIByGridFSId(trackGridFSId) {
+    let trackStreamURI = "http://localhost:3001/tracks/" + trackGridFSId + "/stream";
+    return trackStreamURI;
+  }
+
   static getCityChartByName(cityName, cb) {
     if (cityName.length > 0) {
       axios

@@ -244,7 +244,7 @@ class ProfilePage extends React.Component {
         if (hasMore) {
           getFollowers(signedInUserId, pageNum + 1, perPage, cb);
         } else {
-          cb(); // Call when we are finished
+          cb();
         }
       });
     }
