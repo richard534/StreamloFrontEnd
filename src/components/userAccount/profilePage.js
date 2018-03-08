@@ -84,6 +84,24 @@ class ProfilePage extends React.Component {
   setInitialPageStateFromURI(props) {
     props = props || this.props; // if props variable passed to this method then use it
 
+    this.setState({
+      uploadedTracksData: {
+        uploadedTracks: [],
+        hasMoreTracks: false,
+        numTracks: 0
+      },
+      followeeData: {
+        followees: [],
+        hasMoreFollowees: false,
+        numFollowees: 0
+      },
+      likedTracksData: {
+        likedTracks: [],
+        hasMoreLikedTracks: false,
+        numLikedTracks: 0
+      }
+    });
+
     let selectedTabState = {
       uploaded: false,
       liked: false,
