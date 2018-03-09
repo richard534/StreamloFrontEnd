@@ -57,6 +57,8 @@ class TrackSearchResultsList extends React.Component {
       );
     };
 
+    let loadingSpinner = <div className="loader" />;
+
     var resultsNotFound = (
       <div>
         <img src={noResultImg} className="center-block search-result-image" />
@@ -116,6 +118,8 @@ class TrackSearchResultsList extends React.Component {
           </nav>
         </div>
       );
+    } else if (!this.props.loaded) {
+      results = loadingSpinner;
     } else {
       results = <div>{resultsNotFound}</div>;
     }

@@ -36,17 +36,7 @@ class TrackApi {
         cb(null, response.data);
       })
       .catch(error => {
-        if (error.response) {
-          // The request was made and the server responded with a status code
-          // that falls out of the range of 2xx
-          switch (error.response.status) {
-            case "404":
-              cb(error.response.data);
-              break;
-          }
-        } else {
-          cb(error);
-        }
+        cb(error);
       });
   }
 

@@ -1,6 +1,7 @@
 import React from "react";
 import toastr from "toastr";
 import update from "immutability-helper";
+import _ from "lodash";
 import { browserHistory } from "react-router";
 
 import EditDetailsModal from "./userAccountModals/editDetailsModal";
@@ -58,7 +59,8 @@ class ProfilePage extends React.Component {
         displayName: "",
         city: "",
         profileImage: ""
-      }
+      },
+      loaded: false
     };
 
     this.profileDataSource = this.profileDataSource.bind(this);
@@ -99,7 +101,8 @@ class ProfilePage extends React.Component {
         likedTracks: [],
         hasMoreLikedTracks: false,
         numLikedTracks: 0
-      }
+      },
+      loaded: false
     });
 
     let selectedTabState = {
@@ -178,35 +181,31 @@ class ProfilePage extends React.Component {
 
   uploadedTracksDataSource(uploaderId, pageNum, perPage) {
     TrackApi.getTracksByUploaderId(uploaderId, pageNum, perPage, (err, result) => {
-      if (err) {
-        let newState = {
-          uploadedTracksData: {
-            uploadedTracks: [],
-            numTracks: 0,
-            hasMoreTracks: false
-          }
-        };
-        this.setState(newState);
-      } else {
-        let hasMoreTracks = true;
-        if (result.page == result.pageCount) hasMoreTracks = false;
-        let newState = {
-          uploadedTracksData: {
-            uploadedTracks: result.tracks,
-            numTracks: result.total,
-            hasMoreTracks: hasMoreTracks
-          }
-        };
-
-        this.setState(newState);
+      if (err || !result) {
+        this.setState({ loaded: true });
+        return;
       }
+
+      let hasMoreTracks = true;
+      if (result.page == result.pageCount) hasMoreTracks = false;
+      let newState = {
+        uploadedTracksData: {
+          uploadedTracks: result.tracks,
+          numTracks: result.total,
+          hasMoreTracks: hasMoreTracks
+        },
+        loaded: true
+      };
+      this.setState(newState);
     });
   }
 
   followedUsersDataSource(uploaderId, pageNum, perPage) {
     UserApi.getFolloweesByFollowerUserId(uploaderId, pageNum, perPage, (err, result) => {
-      if (err) return;
-      if (!result) return;
+      if (err || !result || result.followees.length == 0) {
+        this.setState({ loaded: true });
+        return;
+      }
 
       let hasMoreFollowees = true;
       if (result.page == result.pageCount) hasMoreFollowees = false;
@@ -235,7 +234,8 @@ class ProfilePage extends React.Component {
         followees: followeeFullProfiles,
         numFollowees: numFollowees,
         hasMoreFollowees: hasMoreFollowees
-      }
+      },
+      loaded: true
     };
 
     this.setState(newState);
@@ -243,6 +243,8 @@ class ProfilePage extends React.Component {
 
   likedUsersDataSource(uploaderId, pageNum, perPage) {
     // TODO likedUsersDataSource
+    this.setState({ loaded: true });
+    return;
   }
 
   determineIfLoggedInUserIsFollowingThisProfile() {
@@ -486,6 +488,7 @@ class ProfilePage extends React.Component {
         perPage={this.state.pageData.perPage}
         hasMoreTracks={this.state.uploadedTracksData.hasMoreTracks}
         userURL={this.state.profileUserURL}
+        loaded={this.state.loaded}
       />
     );
 
@@ -498,6 +501,7 @@ class ProfilePage extends React.Component {
         hasMorePeople={this.state.followeeData.hasMoreFollowees}
         userURL={this.state.profileUserURL}
         profileUserId={this.state.profileUserId}
+        loaded={this.state.loaded}
       />
     );
 
@@ -509,6 +513,7 @@ class ProfilePage extends React.Component {
         perPage={this.state.pageData.perPage}
         hasMoreTracks={this.state.likedTracksData.hasMoreTracks}
         userURL={this.state.profileUserURL}
+        loaded={this.state.loaded}
         isLikedTracksList={true}
       />
     );

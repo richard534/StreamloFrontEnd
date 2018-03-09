@@ -25,7 +25,7 @@ class Person extends React.Component {
         </div>
         <div className="media-body">
           <div className="col-md-12">
-            <Link to={"/user/" + this.props.userURL}>
+            <Link to={"/user/" + this.props.userURL + "?selectedTab=uploadedTracks&page=1&per_page=5"}>
               <h3 style={profileNameStyle}>{this.props.displayName}</h3>
             </Link>
             <div className="col-md-12">
