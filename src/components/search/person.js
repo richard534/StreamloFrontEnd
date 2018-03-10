@@ -30,13 +30,11 @@ class Person extends React.Component {
             </Link>
             <div className="col-md-12">
               <span className="text-center">
-                <span className="glyphicon glyphicon-user" />
-                {this.props.numFollowers}
+                <span className="glyphicon glyphicon-user" /> {this.props.numFollowers}
               </span>
               <span className="text-center">
-                |
-                <span className="glyphicon glyphicon-upload" />
-                {this.props.numUploadedTracks}
+                {" "}
+                | <span className="glyphicon glyphicon-upload" /> {this.props.numUploadedTracks}
               </span>
             </div>
           </div>

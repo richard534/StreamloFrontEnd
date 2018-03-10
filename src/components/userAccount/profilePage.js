@@ -166,21 +166,21 @@ class ProfilePage extends React.Component {
         };
 
         this.setState(newState, () => {
-          let uploaderId = this.state.profileUserId;
+          let profileUserId = this.state.profileUserId;
           let pageNum = this.state.pageData.pageNum;
           let perPage = this.state.pageData.perPage;
 
-          if (this.state.selectedProfileTab.uploaded) this.uploadedTracksDataSource(uploaderId, pageNum, perPage);
-          if (this.state.selectedProfileTab.following) this.followedUsersDataSource(uploaderId, pageNum, perPage);
-          if (this.state.selectedProfileTab.liked) this.likedUsersDataSource(uploaderId, pageNum, perPage);
+          if (this.state.selectedProfileTab.uploaded) this.uploadedTracksDataSource(profileUserId, pageNum, perPage);
+          if (this.state.selectedProfileTab.following) this.followedUsersDataSource(profileUserId, pageNum, perPage);
+          if (this.state.selectedProfileTab.liked) this.likedTracksDataSource(profileUserId, pageNum, perPage);
           if (this.props.auth.loggedIn()) this.determineIfLoggedInUserIsFollowingThisProfile();
         });
       }
     });
   }
 
-  uploadedTracksDataSource(uploaderId, pageNum, perPage) {
-    TrackApi.getTracksByUploaderId(uploaderId, pageNum, perPage, (err, result) => {
+  uploadedTracksDataSource(profileUserId, pageNum, perPage) {
+    TrackApi.getTracksByUploaderId(profileUserId, pageNum, perPage, (err, result) => {
       if (err || !result) {
         this.setState({ loaded: true });
         return;
@@ -200,8 +200,8 @@ class ProfilePage extends React.Component {
     });
   }
 
-  followedUsersDataSource(uploaderId, pageNum, perPage) {
-    UserApi.getFolloweesByFollowerUserId(uploaderId, pageNum, perPage, (err, result) => {
+  followedUsersDataSource(profileUserId, pageNum, perPage) {
+    UserApi.getFolloweesByFollowerUserId(profileUserId, pageNum, perPage, (err, result) => {
       if (err || !result || result.followees.length == 0) {
         this.setState({ loaded: true });
         return;
@@ -214,13 +214,13 @@ class ProfilePage extends React.Component {
 
       // for each followee userid retrieved get the full user profile
       let followeeFullProfiles = Array.apply(null, Array(result.followees.length));
-      let numFullProfilesRetieved = 0;
+      let numFullProfilesRetrieved = 0;
 
       result.followees.forEach((followee, index, array) => {
         UserApi.getUserByUserId(followee.userId, (err, user) => {
           followeeFullProfiles[index] = user;
-          numFullProfilesRetieved++;
-          if (numFullProfilesRetieved === array.length) {
+          numFullProfilesRetrieved++;
+          if (numFullProfilesRetrieved === array.length) {
             this.setFullProfileState(followeeFullProfiles, hasMoreFollowees, numFollowees);
           }
         });
@@ -241,10 +241,45 @@ class ProfilePage extends React.Component {
     this.setState(newState);
   }
 
-  likedUsersDataSource(uploaderId, pageNum, perPage) {
-    // TODO likedUsersDataSource
-    this.setState({ loaded: true });
-    return;
+  likedTracksDataSource(profileUserId, pageNum, perPage) {
+    TrackApi.getLikedTracksByUserId(profileUserId, pageNum, perPage, (err, result) => {
+      if (err || !result || result.likedTracks.length == 0) {
+        this.setState({ loaded: true });
+        return;
+      }
+
+      let hasMoreLikedTracks = true;
+      if (result.page == result.pageCount) hasMoreLikedTracks = false;
+
+      let numLikedTracks = result.total;
+
+      // for each followee userid retrieved get the full user profile
+      let fullLikedTracks = Array.apply(null, Array(result.likedTracks.length));
+      let numFullTracksRetrieved = 0;
+
+      result.likedTracks.forEach((likedTrack, index, array) => {
+        TrackApi.getTrackByTrackId(likedTrack.trackId, (err, track) => {
+          fullLikedTracks[index] = track;
+          numFullTracksRetrieved++;
+          if (numFullTracksRetrieved === array.length) {
+            this.setFullTrackState(fullLikedTracks, hasMoreLikedTracks, numLikedTracks);
+          }
+        });
+      });
+    });
+  }
+
+  setFullTrackState(likedTracksFullProfiles, hasMoreLikedTracks, numLikedTracks) {
+    let newState = {
+      likedTracksData: {
+        likedTracks: likedTracksFullProfiles,
+        hasMoreLikedTracks: hasMoreLikedTracks,
+        numLikedTracks: numLikedTracks
+      },
+      loaded: true
+    };
+
+    this.setState(newState);
   }
 
   determineIfLoggedInUserIsFollowingThisProfile() {
@@ -504,10 +539,10 @@ class ProfilePage extends React.Component {
     let likedTracksList = (
       <TracksList
         trackResults={this.state.likedTracksData.likedTracks}
-        numTracks={this.state.likedTracksData.numTracks}
+        numTracks={this.state.likedTracksData.numLikedTracks}
         pageNum={this.state.pageData.pageNum}
         perPage={this.state.pageData.perPage}
-        hasMoreTracks={this.state.likedTracksData.hasMoreTracks}
+        hasMoreTracks={this.state.likedTracksData.hasMoreLikedTracks}
         userURL={this.state.profileUserURL}
         loaded={this.state.loaded}
         isLikedTracksList={true}
