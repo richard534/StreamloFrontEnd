@@ -433,33 +433,23 @@ class ProfilePage extends React.Component {
     let aUserIsLoggedIn = this.props.auth.loggedIn();
     let profileOwnerIsLoggedIn = aUserIsLoggedIn && this.props.auth.getProfile().id == this.state.profileUserId;
 
-    let followButtonText = "Follow";
-    let editButton = (
-      <button type="button" className="btn btn-default" onClick={this.toggleModal}>
-        <span className="glyphicon glyphicon-edit" /> Edit
-      </button>
-    );
-
+    let editButton;
+    let followButton;
     let buttonsRow;
 
     let displayName = this.state.profileDisplayname;
 
     // if any user is logged in and profilePage owner is logged in display edit details button && hide follow button
     if (profileOwnerIsLoggedIn) {
-      buttonsRow = (
-        <div className="btn-group-sm" role="group" style={followersStyle}>
-          {editButton}
-        </div>
-      );
-      displayName += " (You)";
-    } else if (aUserIsLoggedIn && !profileOwnerIsLoggedIn) {
-      // if any user who isn't profile owner is logged in - show both follow and edit button
-      let followButton = (
-        <button type="button" name="follow" className="btn btn-default" onClick={this.followUserHandler}>
-          <span className="glyphicon glyphicon-plus" /> Follow
+      editButton = (
+        <button type="button" className="btn btn-default" onClick={this.toggleModal}>
+          <span className="glyphicon glyphicon-edit" /> Edit
         </button>
       );
 
+      displayName += " (You)";
+    } else if (aUserIsLoggedIn && !profileOwnerIsLoggedIn) {
+      // if someone is logged in - and is not the owner of the profile
       // check if logged in user is currently following the user who owns this profile page
       let loggedInUserFollowingThisUser = this.state.isLoggedInUserFollowingThisProfile;
       if (loggedInUserFollowingThisUser) {
@@ -468,16 +458,22 @@ class ProfilePage extends React.Component {
             <span className="glyphicon glyphicon-minus" /> Unfollow
           </button>
         );
+      } else {
+        followButton = (
+          <button type="button" name="follow" className="btn btn-default" onClick={this.followUserHandler}>
+            <span className="glyphicon glyphicon-plus" /> Follow
+          </button>
+        );
       }
-
-      buttonsRow = (
-        <div className="btn-group-sm" role="group" style={followersStyle}>
-          {editButton}
-          <span> </span>
-          {followButton}
-        </div>
-      );
     }
+
+    buttonsRow = (
+      <div className="btn-group-sm" role="group" style={followersStyle}>
+        {editButton}
+        <span> </span>
+        {followButton}
+      </div>
+    );
 
     // Determine which tab body to render
     let uploadedTracksList = (
