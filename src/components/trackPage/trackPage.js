@@ -50,17 +50,20 @@ class TrackPage extends React.Component {
       hasMoreComments: false,
       postCommentBody: "",
       trackFound: true,
-      uploaderLoggedIn: false
+      uploaderUserId: "",
+      uploaderLoggedIn: false,
+      loggedInUserHasLikedThisTrack: false
     };
 
     this.tracksDataSource = this.tracksDataSource.bind(this);
-    this.uploaderNameDataSource = this.uploaderNameDataSource.bind(this);
+    this.uploaderProfileDataSource = this.uploaderProfileDataSource.bind(this);
     this.handleNextCommentsPager = this.handleNextCommentsPager.bind(this);
     this.handlePreviousCommentsPager = this.handlePreviousCommentsPager.bind(this);
     this.postComment = this.postComment.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleDeleteComment = this.handleDeleteComment.bind(this);
     this.deleteTrackHandler = this.deleteTrackHandler.bind(this);
+    this.clickLikeButtonHandler = this.clickLikeButtonHandler.bind(this);
   }
 
   componentWillMount() {
@@ -93,27 +96,35 @@ class TrackPage extends React.Component {
           numComments: track.numComments,
           trackBinaryURL: TrackApi.getTrackStreamURIByGridFSId(track._id),
           trackAlbumArtURI: TrackApi.getTrackAlbumArtByTrackId(track._id),
+          uploaderUserId: track.uploaderId,
           uploaderLoggedIn: uploaderLoggedIn
         };
-        this.uploaderNameDataSource(trackUploaderId, (err, userDisplayName) => {
-          if (err) {
-            toastr.error("Unable to retrieve artist name");
-          } else {
-            newState.artist = userDisplayName;
-            this.commentsDataSource(track._id, this.state.commentsPageNum, this.state.commentsPerPage);
-            this.setState(newState);
-          }
+        this.uploaderProfileDataSource(trackUploaderId, (err, userDisplayName, likedTracks) => {
+          if (err) return toastr.error("Unable to retrieve uploader info");
+
+          newState.artist = userDisplayName;
+
+          let hasLoggedInUserLikedThisTrack = false;
+          likedTracks.forEach(likedTrack => {
+            if (likedTrack.trackId == track._id) {
+              hasLoggedInUserLikedThisTrack = true;
+            }
+          });
+
+          newState.loggedInUserHasLikedThisTrack = hasLoggedInUserLikedThisTrack;
+          this.setState(newState);
+          this.commentsDataSource(track._id, this.state.commentsPageNum, this.state.commentsPerPage);
         });
       }
     });
   }
 
-  uploaderNameDataSource(userId, cb) {
+  uploaderProfileDataSource(userId, cb) {
     UserApi.getUserByUserId(userId, (err, user) => {
       if (err) {
         toastr.error(err);
       } else {
-        cb(null, user.displayName);
+        cb(null, user.displayName, user.likedTracks);
       }
     });
   }
@@ -235,6 +246,28 @@ class TrackPage extends React.Component {
     });
   }
 
+  clickLikeButtonHandler(e) {
+    e.preventDefault();
+
+    let loggedInUserHasLikedThisTrack = this.state.loggedInUserHasLikedThisTrack;
+
+    let userIdOfTrackUploader = this.state.uploaderUserId;
+    let trackId = this.state.id;
+    let jwtToken = this.props.auth.getToken();
+
+    if (loggedInUserHasLikedThisTrack) {
+      UserApi.deleteLikedTrackFromUserByLikedTrackId(userIdOfTrackUploader, trackId, jwtToken, (err, result) => {
+        if (err) return toastr.error("Error Unliking track");
+        this.tracksDataSource();
+      });
+    } else {
+      UserApi.putLikedTrackToUserByLikedTrackId(userIdOfTrackUploader, trackId, jwtToken, (err, result) => {
+        if (err) return toastr.error("Error liking track");
+        this.tracksDataSource();
+      });
+    }
+  }
+
   render() {
     if (this.state.trackFound) {
       return (
@@ -250,6 +283,9 @@ class TrackPage extends React.Component {
             trackBinaryURL={this.state.trackBinaryURL}
             userURL={this.state.userURL}
             trackAlbumArtURI={this.state.trackAlbumArtURI}
+            loggedIn={this.props.auth.loggedIn()}
+            clickLikeButtonHandler={this.clickLikeButtonHandler}
+            loggedInUserHasLikedThisTrack={this.state.loggedInUserHasLikedThisTrack}
           />
 
           <div className="col-md-12" style={commentsAndDescriptionStyle}>

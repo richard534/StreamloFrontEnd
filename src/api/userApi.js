@@ -127,6 +127,36 @@ class UserApi {
         cb(error.response.data.errors);
       });
   }
+
+  static putLikedTrackToUserByLikedTrackId(userId, likedTrackId, jwtToken, cb) {
+    let instance = axios.create({
+      headers: { "x-access-token": jwtToken }
+    });
+
+    instance
+      .put(ApiUrl + "users/" + userId + "/liked/" + likedTrackId)
+      .then(response => {
+        cb(null, response.data);
+      })
+      .catch(error => {
+        cb(error.response.data.errors);
+      });
+  }
+
+  static deleteLikedTrackFromUserByLikedTrackId(userId, likedTrackId, jwtToken, cb) {
+    let instance = axios.create({
+      headers: { "x-access-token": jwtToken }
+    });
+
+    instance
+      .delete(ApiUrl + "users/" + userId + "/liked/" + likedTrackId)
+      .then(response => {
+        cb(null, response.data);
+      })
+      .catch(error => {
+        cb(error.response.data.errors);
+      });
+  }
 }
 
 export default UserApi;
