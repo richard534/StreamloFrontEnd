@@ -57,7 +57,7 @@ class TrackJumbotron extends React.Component {
       <div className="jumbotron text-center" id="userJumbotron">
         <div className="col-md-9" style={colHeight}>
           <div className="col-md-6" style={detailsColStyle}>
-            <Link to={"/user/" + this.props.userURL}>
+            <Link to={"/user/" + this.props.userURL + "?page=1&per_page=5"}>
               <p className="text-muted" style={artistStyle}>
                 {this.props.artist}
               </p>
