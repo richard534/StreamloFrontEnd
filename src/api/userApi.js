@@ -1,5 +1,5 @@
 /* global __API_DOMAIN__ */
-let ApiUrl = __API_DOMAIN__;
+let ApiUrl = process.env.API_DOMAIN;
 
 import axios from "axios";
 
