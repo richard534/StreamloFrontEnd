@@ -33,21 +33,23 @@ module.exports = {
   // Instructs webpack to target a specific environment.
   target: "web",
 
-  devtool: "inline-source-map",
-  devServer: {
-    contentBase: "./dist"
-  },
-
   // configuration regarding modules
   module: {
     // rules for modules (configure loaders, parser options, etc.)
     rules: [
       {
+        enforce: "pre",
         test: /\.js$/,
         exclude: /node_modules/,
-        use: {
-          loader: "babel-loader"
+        loader: "eslint-loader",
+        options: {
+          emitError: true
         }
+      },
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        loader: "babel-loader"
       },
       {
         test: /\.html$/,
@@ -88,6 +90,7 @@ module.exports = {
       }
     ]
   },
+
   plugins: [
     new HtmlWebPackPlugin({
       template: "./src/index.html",
