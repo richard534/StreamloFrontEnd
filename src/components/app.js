@@ -1,4 +1,6 @@
 import React, { PropTypes } from "react";
+import { hot } from "react-hot-loader";
+
 import Header from "./common/header";
 import Footer from "./common/footer";
 
@@ -25,4 +27,4 @@ App.propTypes = {
   children: PropTypes.object.isRequired
 };
 
-export default App;
+export default hot(module)(App);
