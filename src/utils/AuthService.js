@@ -1,6 +1,4 @@
-// To prevent "no-undef" eslint rule firing
 /* global __API_DOMAIN__ */
-
 import { EventEmitter } from "events";
 import { isTokenExpired } from "./jwtHelper";
 import axios from "axios";

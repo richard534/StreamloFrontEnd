@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, browserHistory } from "react-router";
+import { browserHistory } from "react-router";
 import SearchHeader from "./searchHeader";
 import SearchFilter from "./searchFilter";
 import TrackSearchResultsList from "./trackSearchResultsList";
@@ -31,7 +31,8 @@ class SearchResultsPage extends React.Component {
       selectedFilter: {
         tracks: true,
         people: false
-      }
+      },
+      loaded: false
     };
 
     this.tracksDataSource = this.tracksDataSource.bind(this);
@@ -76,15 +77,19 @@ class SearchResultsPage extends React.Component {
     let perPage = this.state.perPage;
 
     TrackApi.getTracksByName(trackNameQuery, pageNum, perPage, (err, result) => {
-      if (!err) {
-        let hasMoreTracks = true;
-        if (result.page == result.pageCount) hasMoreTracks = false;
-        this.setState({
-          trackResults: result.tracks,
-          numTracks: result.total,
-          hasMoreTracks: hasMoreTracks
-        });
+      if (err || _.isEmpty(result.tracks)) {
+        this.setState({ loaded: true });
+        return;
       }
+
+      let hasMoreTracks = true;
+      if (result.page == result.pageCount) hasMoreTracks = false;
+      this.setState({
+        trackResults: result.tracks,
+        numTracks: result.total,
+        hasMoreTracks: hasMoreTracks,
+        loaded: true
+      });
     });
   }
 
@@ -96,16 +101,18 @@ class SearchResultsPage extends React.Component {
     let perPage = this.state.perPage;
 
     UserApi.getUsersByDisplayname(displayNameQuery, pageNum, perPage, (err, result) => {
-      if (err) return;
-      else if (!_.isEmpty(result.users)) {
-        let hasMorePeople = true;
-        if (result.page == result.pageCount) hasMorePeople = false;
-        this.setState({
-          peopleResults: result.users,
-          numPeople: result.total,
-          hasMorePeople: hasMorePeople
-        });
+      if (err || _.isEmpty(result.users)) {
+        this.setState({ loaded: true });
+        return;
       }
+      let hasMorePeople = true;
+      if (result.page == result.pageCount) hasMorePeople = false;
+      this.setState({
+        peopleResults: result.users,
+        numPeople: result.total,
+        hasMorePeople: hasMorePeople,
+        loaded: true
+      });
     });
   }
 
@@ -152,6 +159,7 @@ class SearchResultsPage extends React.Component {
           pageNum={self.state.pageNum}
           perPage={self.state.perPage}
           hasMoreTracks={self.state.hasMoreTracks}
+          loaded={self.state.loaded}
         />
       );
     })();
@@ -165,6 +173,7 @@ class SearchResultsPage extends React.Component {
           pageNum={self.state.pageNum}
           perPage={self.state.perPage}
           hasMorePeople={self.state.hasMorePeople}
+          loaded={self.state.loaded}
         />
       );
     })();

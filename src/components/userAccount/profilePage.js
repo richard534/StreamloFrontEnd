@@ -1,6 +1,7 @@
 import React from "react";
 import toastr from "toastr";
 import update from "immutability-helper";
+import _ from "lodash";
 import { browserHistory } from "react-router";
 
 import EditDetailsModal from "./userAccountModals/editDetailsModal";
@@ -23,6 +24,9 @@ class ProfilePage extends React.Component {
       profileUserURL: "",
       profileDisplayname: "",
       profileImageURI: "",
+      profileNumberOfFollowees: 0,
+      profileNumberOfFollowers: 0,
+      isLoggedInUserFollowingThisProfile: false,
       pageData: {
         pageNum: 0,
         perPage: 0
@@ -55,7 +59,8 @@ class ProfilePage extends React.Component {
         displayName: "",
         city: "",
         profileImage: ""
-      }
+      },
+      loaded: false
     };
 
     this.profileDataSource = this.profileDataSource.bind(this);
@@ -66,6 +71,7 @@ class ProfilePage extends React.Component {
     this.deleteAccountHandler = this.deleteAccountHandler.bind(this);
     this.updateImageHandler = this.updateImageHandler.bind(this);
     this.changeSelectedProfileTab = this.changeSelectedProfileTab.bind(this);
+    this.followUserHandler = this.followUserHandler.bind(this);
   }
 
   componentDidMount() {
@@ -79,6 +85,25 @@ class ProfilePage extends React.Component {
 
   setInitialPageStateFromURI(props) {
     props = props || this.props; // if props variable passed to this method then use it
+
+    this.setState({
+      uploadedTracksData: {
+        uploadedTracks: [],
+        hasMoreTracks: false,
+        numTracks: 0
+      },
+      followeeData: {
+        followees: [],
+        hasMoreFollowees: false,
+        numFollowees: 0
+      },
+      likedTracksData: {
+        likedTracks: [],
+        hasMoreLikedTracks: false,
+        numLikedTracks: 0
+      },
+      loaded: false
+    });
 
     let selectedTabState = {
       uploaded: false,
@@ -131,6 +156,8 @@ class ProfilePage extends React.Component {
           profileUserId: userId,
           profileDisplayname: returnedUser.displayName,
           profileImageURI: userProfileImage,
+          profileNumberOfFollowees: returnedUser.numberOfFollowees,
+          profileNumberOfFollowers: returnedUser.numberOfFollowers,
           candidateUserData: {
             email: returnedUser.email,
             displayName: returnedUser.displayName,
@@ -139,41 +166,46 @@ class ProfilePage extends React.Component {
         };
 
         this.setState(newState, () => {
-          let uploaderId = this.state.profileUserId;
+          let profileUserId = this.state.profileUserId;
           let pageNum = this.state.pageData.pageNum;
           let perPage = this.state.pageData.perPage;
 
-          if (this.state.selectedProfileTab.uploaded) this.uploadedTracksDataSource(uploaderId, pageNum, perPage);
-          if (this.state.selectedProfileTab.following) this.followedUsersDataSource(uploaderId, pageNum, perPage);
-          if (this.state.selectedProfileTab.liked) this.likedUsersDataSource(uploaderId, pageNum, perPage);
+          if (this.state.selectedProfileTab.uploaded) this.uploadedTracksDataSource(profileUserId, pageNum, perPage);
+          if (this.state.selectedProfileTab.following) this.followedUsersDataSource(profileUserId, pageNum, perPage);
+          if (this.state.selectedProfileTab.liked) this.likedTracksDataSource(profileUserId, pageNum, perPage);
+          if (this.props.auth.loggedIn()) this.determineIfLoggedInUserIsFollowingThisProfile();
         });
       }
     });
   }
 
-  uploadedTracksDataSource(uploaderId, pageNum, perPage) {
-    TrackApi.getTracksByUploaderId(uploaderId, pageNum, perPage, (err, result) => {
-      if (err) return;
+  uploadedTracksDataSource(profileUserId, pageNum, perPage) {
+    TrackApi.getTracksByUploaderId(profileUserId, pageNum, perPage, (err, result) => {
+      if (err || !result) {
+        this.setState({ loaded: true });
+        return;
+      }
 
       let hasMoreTracks = true;
       if (result.page == result.pageCount) hasMoreTracks = false;
-
       let newState = {
         uploadedTracksData: {
           uploadedTracks: result.tracks,
           numTracks: result.total,
           hasMoreTracks: hasMoreTracks
-        }
+        },
+        loaded: true
       };
-
       this.setState(newState);
     });
   }
 
-  followedUsersDataSource(uploaderId, pageNum, perPage) {
-    UserApi.getFolloweesByFollowerUserId(uploaderId, pageNum, perPage, (err, result) => {
-      if (err) return;
-      if (!result) return;
+  followedUsersDataSource(profileUserId, pageNum, perPage) {
+    UserApi.getFolloweesByFollowerUserId(profileUserId, pageNum, perPage, (err, result) => {
+      if (err || !result || result.followees.length == 0) {
+        this.setState({ loaded: true });
+        return;
+      }
 
       let hasMoreFollowees = true;
       if (result.page == result.pageCount) hasMoreFollowees = false;
@@ -182,13 +214,13 @@ class ProfilePage extends React.Component {
 
       // for each followee userid retrieved get the full user profile
       let followeeFullProfiles = Array.apply(null, Array(result.followees.length));
-      let numFullProfilesRetieved = 0;
+      let numFullProfilesRetrieved = 0;
 
       result.followees.forEach((followee, index, array) => {
         UserApi.getUserByUserId(followee.userId, (err, user) => {
           followeeFullProfiles[index] = user;
-          numFullProfilesRetieved++;
-          if (numFullProfilesRetieved === array.length) {
+          numFullProfilesRetrieved++;
+          if (numFullProfilesRetrieved === array.length) {
             this.setFullProfileState(followeeFullProfiles, hasMoreFollowees, numFollowees);
           }
         });
@@ -202,14 +234,87 @@ class ProfilePage extends React.Component {
         followees: followeeFullProfiles,
         numFollowees: numFollowees,
         hasMoreFollowees: hasMoreFollowees
-      }
+      },
+      loaded: true
     };
 
     this.setState(newState);
   }
 
-  likedUsersDataSource(uploaderId, pageNum, perPage) {
-    // TODO likedUsersDataSource
+  likedTracksDataSource(profileUserId, pageNum, perPage) {
+    TrackApi.getLikedTracksByUserId(profileUserId, pageNum, perPage, (err, result) => {
+      if (err || !result || result.likedTracks.length == 0) {
+        this.setState({ loaded: true });
+        return;
+      }
+
+      let hasMoreLikedTracks = true;
+      if (result.page == result.pageCount) hasMoreLikedTracks = false;
+
+      let numLikedTracks = result.total;
+
+      // for each followee userid retrieved get the full user profile
+      let fullLikedTracks = Array.apply(null, Array(result.likedTracks.length));
+      let numFullTracksRetrieved = 0;
+
+      result.likedTracks.forEach((likedTrack, index, array) => {
+        TrackApi.getTrackByTrackId(likedTrack.trackId, (err, track) => {
+          fullLikedTracks[index] = track;
+          numFullTracksRetrieved++;
+          if (numFullTracksRetrieved === array.length) {
+            this.setFullTrackState(fullLikedTracks, hasMoreLikedTracks, numLikedTracks);
+          }
+        });
+      });
+    });
+  }
+
+  setFullTrackState(likedTracksFullProfiles, hasMoreLikedTracks, numLikedTracks) {
+    let newState = {
+      likedTracksData: {
+        likedTracks: likedTracksFullProfiles,
+        hasMoreLikedTracks: hasMoreLikedTracks,
+        numLikedTracks: numLikedTracks
+      },
+      loaded: true
+    };
+
+    this.setState(newState);
+  }
+
+  determineIfLoggedInUserIsFollowingThisProfile() {
+    let signedInUserId = this.props.auth.getProfile().id;
+
+    let followeesArray = new Array();
+
+    function getFollowers(signedInUserId, pageNum, perPage, cb) {
+      UserApi.getFolloweesByFollowerUserId(signedInUserId, pageNum, perPage, (err, result) => {
+        result.followees.forEach(followee => {
+          followeesArray.push(followee);
+        });
+
+        let hasMore = true;
+        if (result.page == result.pageCount) hasMore = false;
+
+        if (hasMore) {
+          getFollowers(signedInUserId, pageNum + 1, perPage, cb);
+        } else {
+          cb();
+        }
+      });
+    }
+
+    getFollowers(signedInUserId, 1, 5, () => {
+      // Once we have an array of all of the loggin is users followees
+      // check if the userId of this profile page equals any of the followee's user Ids
+      var found = followeesArray.find(element => {
+        return element.userId == this.state.profileUserId;
+      });
+
+      if (found) {
+        this.setState({ isLoggedInUserFollowingThisProfile: true });
+      }
+    });
   }
 
   submitUpdateUserDataHandler(e) {
@@ -291,6 +396,47 @@ class ProfilePage extends React.Component {
     });
   }
 
+  followUserHandler(e) {
+    e.preventDefault();
+
+    let buttonName = e.target.name;
+
+    let profileId = this.state.profileUserId;
+    let jwtToken = this.props.auth.getToken();
+    let followerUserId = this.props.auth.getProfile().id;
+    let followeeUserId = this.state.profileUserId;
+
+    let postBodyData = new URLSearchParams();
+    postBodyData.append("followeeUserId", profileId);
+
+    switch (buttonName) {
+      case "follow":
+        UserApi.postUserToFolloweesByFollowerUserId(followerUserId, jwtToken, postBodyData, (err, result) => {
+          if (err) {
+            toastr.error("Error following user");
+          } else {
+            let profileDisplayname = this.state.profileDisplayname;
+            toastr.remove();
+            toastr.success(`Now following ${profileDisplayname}`);
+            this.setState({ isLoggedInUserFollowingThisProfile: true });
+          }
+        });
+        break;
+      case "unfollow":
+        UserApi.deleteUserFromFolloweesByFollowerUserId(followerUserId, followeeUserId, jwtToken, (err, result) => {
+          if (err) {
+            toastr.error("Error unfollowing user");
+          } else {
+            let profileDisplayname = this.state.profileDisplayname;
+            toastr.remove();
+            toastr.success(`Unfollowed ${profileDisplayname}`);
+            this.setState({ isLoggedInUserFollowingThisProfile: false });
+          }
+        });
+        break;
+    }
+  }
+
   updateImageHandler() {
     let candidateProfileImageURI;
 
@@ -319,25 +465,50 @@ class ProfilePage extends React.Component {
   }
 
   render() {
-    let profileOwnerLoggedIn =
-      this.props.auth.loggedIn() && this.props.auth.getProfile().id == this.state.profileUserId;
+    let aUserIsLoggedIn = this.props.auth.loggedIn();
+    let profileOwnerIsLoggedIn = aUserIsLoggedIn && this.props.auth.getProfile().id == this.state.profileUserId;
 
     let editButton;
-    let followButton = (
-      <button type="button" className="btn btn-default">
-        <span className="glyphicon glyphicon-plus" /> Follow
-      </button>
-    );
-    // if user is logged in and profilePage is the logged in users profile, display edit details button
-    // && hide follow button
-    if (profileOwnerLoggedIn) {
+    let followButton;
+    let buttonsRow;
+
+    let displayName = this.state.profileDisplayname;
+
+    // if any user is logged in and profilePage owner is logged in display edit details button && hide follow button
+    if (profileOwnerIsLoggedIn) {
       editButton = (
         <button type="button" className="btn btn-default" onClick={this.toggleModal}>
           <span className="glyphicon glyphicon-edit" /> Edit
         </button>
       );
-      followButton = undefined;
+
+      displayName += " (You)";
+    } else if (aUserIsLoggedIn && !profileOwnerIsLoggedIn) {
+      // if someone is logged in - and is not the owner of the profile
+      // check if logged in user is currently following the user who owns this profile page
+      let loggedInUserFollowingThisUser = this.state.isLoggedInUserFollowingThisProfile;
+      if (loggedInUserFollowingThisUser) {
+        followButton = (
+          <button type="button" name="unfollow" className="btn btn-default" onClick={this.followUserHandler}>
+            <span className="glyphicon glyphicon-minus" /> Unfollow
+          </button>
+        );
+      } else {
+        followButton = (
+          <button type="button" name="follow" className="btn btn-default" onClick={this.followUserHandler}>
+            <span className="glyphicon glyphicon-plus" /> Follow
+          </button>
+        );
+      }
     }
+
+    buttonsRow = (
+      <div className="btn-group-sm" role="group" style={followersStyle}>
+        {editButton}
+        <span> </span>
+        {followButton}
+      </div>
+    );
 
     // Determine which tab body to render
     let uploadedTracksList = (
@@ -348,6 +519,7 @@ class ProfilePage extends React.Component {
         perPage={this.state.pageData.perPage}
         hasMoreTracks={this.state.uploadedTracksData.hasMoreTracks}
         userURL={this.state.profileUserURL}
+        loaded={this.state.loaded}
       />
     );
 
@@ -360,17 +532,19 @@ class ProfilePage extends React.Component {
         hasMorePeople={this.state.followeeData.hasMoreFollowees}
         userURL={this.state.profileUserURL}
         profileUserId={this.state.profileUserId}
+        loaded={this.state.loaded}
       />
     );
 
     let likedTracksList = (
       <TracksList
         trackResults={this.state.likedTracksData.likedTracks}
-        numTracks={this.state.likedTracksData.numTracks}
+        numTracks={this.state.likedTracksData.numLikedTracks}
         pageNum={this.state.pageData.pageNum}
         perPage={this.state.pageData.perPage}
-        hasMoreTracks={this.state.likedTracksData.hasMoreTracks}
+        hasMoreTracks={this.state.likedTracksData.hasMoreLikedTracks}
         userURL={this.state.profileUserURL}
+        loaded={this.state.loaded}
         isLikedTracksList={true}
       />
     );
@@ -412,18 +586,14 @@ class ProfilePage extends React.Component {
         <div className="container-full">
           <div className="jumbotron text-center" id="userJumbotron">
             <img className="img-circle" src={this.state.profileImageURI} width="150" height="150" />
-            <h4 className="text-center">{this.state.profileDisplayname}</h4>
+            <h4 className="text-center">{displayName}</h4>
             <span className="text-center">
-              <span className="glyphicon glyphicon-user" /> Followers: {this.state.numFollowers}{" "}
+              <span className="glyphicon glyphicon-user" /> Followers: {this.state.profileNumberOfFollowers}{" "}
             </span>
             <span className="text-center">
-              | <span className="glyphicon glyphicon-eye-open" /> Following: {this.state.numFollowing}
+              | <span className="glyphicon glyphicon-eye-open" /> Following: {this.state.profileNumberOfFollowees}
             </span>
-            <div className="btn-group-sm" role="group" style={followersStyle}>
-              {editButton}
-              <span> </span>
-              {followButton}
-            </div>
+            {buttonsRow}
             <br />
           </div>
         </div>

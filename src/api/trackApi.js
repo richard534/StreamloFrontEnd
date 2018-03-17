@@ -1,10 +1,15 @@
 /* global __API_DOMAIN__ */
-let ApiUrl = __API_DOMAIN__;
+let ApiUrl = process.env.API_DOMAIN;
 
 import axios from "axios";
 import authService from "utils/AuthService";
 
 class TrackApi {
+  static getTrackStreamURIByGridFSId(trackGridFSId) {
+    let trackStreamURI = "http://localhost:3001/tracks/" + trackGridFSId + "/stream";
+    return trackStreamURI;
+  }
+
   static getCityChartByName(cityName, cb) {
     if (cityName.length > 0) {
       axios
@@ -31,17 +36,7 @@ class TrackApi {
         cb(null, response.data);
       })
       .catch(error => {
-        if (error.response) {
-          // The request was made and the server responded with a status code
-          // that falls out of the range of 2xx
-          switch (error.response.status) {
-            case "404":
-              cb(error.response.data);
-              break;
-          }
-        } else {
-          cb(error);
-        }
+        cb(error);
       });
   }
 
@@ -50,6 +45,17 @@ class TrackApi {
       .get(ApiUrl + "tracks?trackURL=" + trackURL + "&page=" + pageNum + "&per_page=" + perPage)
       .then(response => {
         cb(null, response.data.tracks[0]);
+      })
+      .catch(error => {
+        cb(error.response);
+      });
+  }
+
+  static getTrackByTrackId(trackId, cb) {
+    axios
+      .get(ApiUrl + "tracks/" + trackId)
+      .then(response => {
+        cb(null, response.data);
       })
       .catch(error => {
         cb(error.response);
@@ -141,6 +147,17 @@ class TrackApi {
   static getTrackAlbumArtByTrackId(trackId) {
     let trackAlbumArtURI = ApiUrl + "tracks/" + trackId + "/albumArt?t=" + new Date().getTime();
     return trackAlbumArtURI;
+  }
+
+  static getLikedTracksByUserId(userId, pageNum = 1, perPage = 5, cb) {
+    axios
+      .get(ApiUrl + "users/" + userId + "/liked?page=" + pageNum + "&per_page=" + perPage)
+      .then(response => {
+        cb(null, response.data);
+      })
+      .catch(error => {
+        cb(error.response);
+      });
   }
 }
 

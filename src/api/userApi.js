@@ -1,5 +1,5 @@
 /* global __API_DOMAIN__ */
-let ApiUrl = __API_DOMAIN__;
+let ApiUrl = process.env.API_DOMAIN;
 
 import axios from "axios";
 
@@ -98,13 +98,13 @@ class UserApi {
       });
   }
 
-  static postUserToFolloweesByFollowerUserId(userId, jwtToken, cb) {
+  static postUserToFolloweesByFollowerUserId(followeeUserId, jwtToken, postBodyData, cb) {
     let instance = axios.create({
       headers: { "x-access-token": jwtToken }
     });
 
     instance
-      .post(ApiUrl + "users/" + userId + "/followees")
+      .post(ApiUrl + "users/" + followeeUserId + "/followees", postBodyData)
       .then(response => {
         cb(null, response.data);
       })
@@ -113,13 +113,43 @@ class UserApi {
       });
   }
 
-  static deleteUserFromFolloweesByFollowerUserId(userId, followeeId, jwtToken, cb) {
+  static deleteUserFromFolloweesByFollowerUserId(followerUserId, followeeId, jwtToken, cb) {
     let instance = axios.create({
       headers: { "x-access-token": jwtToken }
     });
 
     instance
-      .post(ApiUrl + "users/" + userId + "/followees/" + followeeId)
+      .delete(ApiUrl + "users/" + followerUserId + "/followees/" + followeeId)
+      .then(response => {
+        cb(null, response.data);
+      })
+      .catch(error => {
+        cb(error.response.data.errors);
+      });
+  }
+
+  static putLikedTrackToUserByLikedTrackId(userId, likedTrackId, jwtToken, cb) {
+    let instance = axios.create({
+      headers: { "x-access-token": jwtToken }
+    });
+
+    instance
+      .put(ApiUrl + "users/" + userId + "/liked/" + likedTrackId)
+      .then(response => {
+        cb(null, response.data);
+      })
+      .catch(error => {
+        cb(error.response.data.errors);
+      });
+  }
+
+  static deleteLikedTrackFromUserByLikedTrackId(userId, likedTrackId, jwtToken, cb) {
+    let instance = axios.create({
+      headers: { "x-access-token": jwtToken }
+    });
+
+    instance
+      .delete(ApiUrl + "users/" + userId + "/liked/" + likedTrackId)
       .then(response => {
         cb(null, response.data);
       })

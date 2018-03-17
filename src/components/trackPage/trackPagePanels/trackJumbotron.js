@@ -37,11 +37,27 @@ class TrackJumbotron extends React.Component {
       return dateString;
     })();
 
+    let likeButton;
+    if (this.props.loggedIn) {
+      let likeButtonClass = "btn btn-default";
+      if (this.props.loggedInUserHasLikedThisTrack) {
+        likeButtonClass += " active";
+      }
+
+      likeButton = (
+        <div className="btn-group-sm" role="group" onClick={this.props.clickLikeButtonHandler}>
+          <button type="button" className={likeButtonClass}>
+            <span className="glyphicon glyphicon-thumbs-up" /> {this.props.numLikes}
+          </button>
+        </div>
+      );
+    }
+
     return (
       <div className="jumbotron text-center" id="userJumbotron">
         <div className="col-md-9" style={colHeight}>
           <div className="col-md-6" style={detailsColStyle}>
-            <Link to={"/user/" + this.props.userURL}>
+            <Link to={"/user/" + this.props.userURL + "?page=1&per_page=5"}>
               <p className="text-muted" style={artistStyle}>
                 {this.props.artist}
               </p>
@@ -51,12 +67,7 @@ class TrackJumbotron extends React.Component {
             <h5>
               <span className="glyphicon glyphicon-play" /> {this.props.numPlays}
             </h5>
-
-            <div className="btn-group-sm" role="group">
-              <button type="button" className="btn btn-default">
-                <span className="glyphicon glyphicon-thumbs-up" /> {this.props.numLikes}
-              </button>
-            </div>
+            {likeButton}
           </div>
           <div className="col-md-6 trackJumbotronDateDiv">
             <span className="pull-right">{trackUploadDate}</span>

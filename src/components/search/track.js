@@ -3,6 +3,7 @@ import { Link } from "react-router";
 import ReactPlayer from "react-player";
 
 import UserApi from "api/userApi";
+import TrackApi from "api/trackApi";
 
 var ThumbnailStyle = {
   marginBottom: "0px"
@@ -64,10 +65,7 @@ class Track extends React.Component {
       return dateString;
     })();
 
-    var TrackBinaryURL = (function() {
-      var trackBinaryURL = "http://localhost:3001/tracks/" + self.props.trackBinaryId + "/stream";
-      return trackBinaryURL;
-    })();
+    let TrackBinaryURL = TrackApi.getTrackStreamURIByGridFSId(self.props.trackId);
 
     return (
       <div className="media">
@@ -138,9 +136,6 @@ class Track extends React.Component {
                   }
                 }}
               />
-              {/* <audio id={this.props.trackId} style={audioTagStyle} controls controlsList="nodownload">
-                <source src={TrackBinaryURL} type="audio/mp3" />
-              </audio> */}
             </div>
           </div>
         </div>

@@ -14,24 +14,75 @@ class TrackSearchResultsList extends React.Component {
     var tracks = this.props.trackResults;
     let searchString = this.props.searchString;
 
-    let linkPathName;
-    let linkFilter;
+    let previousButtonClass = this.props.pageNum == 1 ? "previous disabled disableClick" : "previous";
+    let nextButtonClass = this.props.hasMoreTracks == false ? "next disabled disableClick" : "next";
+
+    var results;
+    var numTracks;
+
+    let nextTrackPageNumber = parseInt(this.props.pageNum) + 1;
+    let previousTrackPageNumber = parseInt(this.props.pageNum) - 1;
+    let perPage = this.props.perPage;
 
     let searchResultsMessage1;
     let searchResultsMessage2;
 
+    let nextPaginationLinkAttribute;
+    let prevPaginationLinkAttribute;
+
     // If userURL is passed down as props then assume user is on profile page
     // and set react router path names accordingly
     if (this.props.userURL) {
-      linkPathName = "/user/" + this.props.userURL;
+      let selectedTab = "uploadedTracks";
+      searchResultsMessage1 = "This user has not uploaded any tracks :(";
+
       if (this.props.isLikedTracksList) {
+        selectedTab = "likedTracks";
         searchResultsMessage1 = "This user has not liked any tracks :(";
-      } else {
-        searchResultsMessage1 = "This user has not uploaded any tracks :(";
       }
+
+      nextPaginationLinkAttribute = {
+        pathname: "/user/" + this.props.userURL,
+        query: {
+          selectedTab: selectedTab,
+          page: nextTrackPageNumber,
+          per_page: perPage
+        }
+      };
+
+      prevPaginationLinkAttribute = {
+        pathname: "/user/" + this.props.userURL,
+        query: {
+          selectedTab: selectedTab,
+          page: previousTrackPageNumber,
+          per_page: perPage,
+          filter: "tracks"
+        }
+      };
     } else {
-      linkPathName = "/search";
-      linkFilter = "tracks";
+      let linkPathName = "/search";
+      let linkFilter = "tracks";
+
+      nextPaginationLinkAttribute = {
+        pathname: linkPathName,
+        query: {
+          q: searchString,
+          page: nextTrackPageNumber,
+          per_page: perPage,
+          filter: linkFilter
+        }
+      };
+
+      prevPaginationLinkAttribute = {
+        pathname: linkPathName,
+        query: {
+          q: searchString,
+          page: previousTrackPageNumber,
+          per_page: perPage,
+          filter: "tracks"
+        }
+      };
+
       searchResultsMessage1 = "Sorry we didn't find any results for \"" + searchString + '"';
       searchResultsMessage2 = "Check the spelling, or try a different search.";
     }
@@ -42,7 +93,6 @@ class TrackSearchResultsList extends React.Component {
           <Track
             trackId={track._id}
             uploaderId={track.uploaderId}
-            trackBinaryId={track.trackBinaryId}
             title={track.title}
             artist={track.artist}
             genre={track.genre}
@@ -58,6 +108,8 @@ class TrackSearchResultsList extends React.Component {
       );
     };
 
+    let loadingSpinner = <div className="loader" />;
+
     var resultsNotFound = (
       <div>
         <img src={noResultImg} className="center-block search-result-image" />
@@ -66,17 +118,7 @@ class TrackSearchResultsList extends React.Component {
       </div>
     );
 
-    let previousButtonClass = this.props.pageNum == 1 ? "previous disabled disableClick" : "previous";
-    let nextButtonClass = this.props.hasMoreTracks == false ? "next disabled disableClick" : "next";
-
-    var results;
-    var numTracks;
-
-    let nextTrackPageNumber = parseInt(this.props.pageNum) + 1;
-    let previousTrackPageNumber = parseInt(this.props.pageNum) - 1;
-    let perPage = this.props.perPage;
-
-    if (this.props.trackResults.length > 0) {
+    if (this.props.trackResults && this.props.trackResults.length > 0) {
       numTracks = <p className="text-muted">Found {this.props.numTracks} tracks</p>;
       results = (
         <div>
@@ -84,32 +126,12 @@ class TrackSearchResultsList extends React.Component {
           <nav>
             <ul className="pager">
               <li className={previousButtonClass}>
-                <Link
-                  to={{
-                    pathname: linkPathName,
-                    query: {
-                      q: searchString,
-                      page: previousTrackPageNumber,
-                      per_page: perPage,
-                      filter: linkFilter
-                    }
-                  }}
-                >
+                <Link to={prevPaginationLinkAttribute}>
                   <span aria-hidden="true">&larr;</span> Previous
                 </Link>
               </li>
               <li className={nextButtonClass}>
-                <Link
-                  to={{
-                    pathname: linkPathName,
-                    query: {
-                      q: searchString,
-                      page: nextTrackPageNumber,
-                      per_page: perPage,
-                      filter: linkFilter
-                    }
-                  }}
-                >
+                <Link to={nextPaginationLinkAttribute}>
                   Next <span aria-hidden="true">&rarr;</span>
                 </Link>
               </li>
@@ -117,6 +139,8 @@ class TrackSearchResultsList extends React.Component {
           </nav>
         </div>
       );
+    } else if (!this.props.loaded) {
+      results = loadingSpinner;
     } else {
       results = <div>{resultsNotFound}</div>;
     }

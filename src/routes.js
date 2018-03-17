@@ -15,7 +15,7 @@ import CreateAccountPage from "./components/userAccount/createAccountPage";
 import ProfilePage from "./components/userAccount/profilePage";
 import NotFoundPage from "./components/notFoundPage";
 
-const auth = new AuthService(__API_DOMAIN__);
+const auth = new AuthService(process.env.API_DOMAIN);
 
 // onEnter callback to validate authentication in private routes
 const requireAuth = (nextState, replace) => {

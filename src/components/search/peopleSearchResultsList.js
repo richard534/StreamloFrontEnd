@@ -75,6 +75,8 @@ class PeopleSearchResultsList extends React.Component {
       noPeopleFoundMessage2 = "Check the spelling, or try a different search.";
     }
 
+    let loadingSpinner = <div className="loader" />;
+
     var createPersonResultRow = function(person) {
       let userProfileImageURI = UserApi.getUserProfilePictureURIByUserId(person._id);
 
@@ -128,6 +130,8 @@ class PeopleSearchResultsList extends React.Component {
           </nav>
         </div>
       );
+    } else if (!this.props.loaded) {
+      results = loadingSpinner;
     } else {
       results = <div>{resultsNotFound}</div>;
     }
