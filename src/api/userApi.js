@@ -1,5 +1,8 @@
 /* global __API_DOMAIN__ */
-let ApiUrl = process.env.API_DOMAIN;
+const ApiProtocol = process.env.BACKEND_API_PROTOCOL;
+const ApiDomainName = process.env.BACKEND_API_DOMAIN_NAME;
+const ApiPort = process.env.BACKEND_API_PORT;
+const ApiUrl = ApiProtocol + ApiDomainName + ":" + ApiPort + "/";
 
 import axios from "axios";
 
