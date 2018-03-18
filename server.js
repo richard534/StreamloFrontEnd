@@ -1,18 +1,37 @@
+/**
+ * Module dependencies.
+ */
 const path = require("path");
 const express = require("express");
-const app = express();
-const PORT = process.env.PORT || 8080;
+const dotenv = require("dotenv");
 
+/**
+ * Create Express server.
+ */
+const app = express();
+
+/**
+ * Load environment variables from .env file.
+ * if there is a variable in the .env file which collides with one that already
+ * exists in your environment, then that variable will be skipped
+ */
+dotenv.config();
+const port = process.env.PORT;
+
+/**
+ * Express configuration.
+ */
 app.use(express.static(path.join(__dirname, "dist")));
 
-app.get("/", function(request, response) {
+// Redirect all of your server requests to /index.html (client-side router (react router) handles routing)
+app.get("/*", function(request, response) {
   response.sendFile(__dirname + "/dist/index.html");
 });
 
 app.listen(
-  PORT,
+  port,
   error =>
     error
-      ? console.error(error)
-      : console.info(`Listening on port ${PORT}. Visit http://localhost:${PORT}/ in your browser.`)
+      ? console.log(error)
+      : console.log(`Streamlo Frontend Application Server Initialized. Listening on port ${port}`)
 );
