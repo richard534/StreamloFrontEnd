@@ -15,7 +15,13 @@ import CreateAccountPage from "./components/userAccount/createAccountPage";
 import ProfilePage from "./components/userAccount/profilePage";
 import NotFoundPage from "./components/notFoundPage";
 
-const auth = new AuthService(process.env.API_DOMAIN);
+// Construct URL to Auth Service from environment variables
+const ApiProtocol = process.env.BACKEND_API_PROTOCOL;
+const ApiDomainName = process.env.BACKEND_API_DOMAIN_NAME;
+const ApiPort = process.env.BACKEND_API_PORT;
+const ApiUrl = ApiProtocol + ApiDomainName + ":" + ApiPort + "/";
+
+const auth = new AuthService(ApiUrl);
 
 // onEnter callback to validate authentication in private routes
 const requireAuth = (nextState, replace) => {
