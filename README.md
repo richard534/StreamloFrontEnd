@@ -7,8 +7,8 @@ You can find the web service component : [Here](https://github.com/richard534/St
 Powered by:
 <ul>
   <li>React@15.6.2</li> 
-  <li>Express@4.16.3</li> 
-  <li>Node@8.5.0</li> 
+  <li>Express</li>
+  <li>Node</li> 
   <li>MongoDB</li> 
 </ul>
 
