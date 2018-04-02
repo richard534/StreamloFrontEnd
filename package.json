@@ -20,11 +20,8 @@
   "homepage": "https://github.com/richard534/MusicSteamWebsite#readme",
   "dependencies": {
     "axios": "0.16.2",
-    "babelify": "7.3.0",
     "bootstrap": "3.3.6",
-    "browserify": "11.0.1",
     "immutability-helper": "2.1.2",
-    "jquery": "^3.3.1",
     "jwt-decode": "^2.2.0",
     "lodash": "4.9.0",
     "moment": "^2.20.1",
