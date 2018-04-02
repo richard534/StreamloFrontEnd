@@ -6,9 +6,10 @@ import SearchCity from "./searchCity";
 import Chart from "./chart";
 import TrackApi from "api/trackApi";
 import UserApi from "api/userApi";
+import MiscApi from "api/miscApi";
 
-let derryImg = require("images/derry.jpg");
-let belfastImg = require("images/belfast1.jpg");
+let derryImg = MiscApi.getDerryImageUrl();
+let belfastImg = MiscApi.getBelfastImageUrl();
 
 class Home extends React.Component {
   constructor(props) {

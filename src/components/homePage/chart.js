@@ -1,8 +1,9 @@
 import React from "react";
 import ChartListing from "./chartListing";
 import TrackApi from "api/trackApi";
+import MiscApi from "api/miscApi";
 
-let noResultImg = require("images/noResultsSearch.png");
+let noResultImg = MiscApi.getNoSearchResultsImgUrl();
 
 class Chart extends React.Component {
   render() {

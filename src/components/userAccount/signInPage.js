@@ -3,7 +3,10 @@ import { Link } from "react-router";
 import validate from "validate.js";
 import toastr from "toastr";
 import update from "immutability-helper";
-var streamloLogo = require("images/StreamloWithAlpha.png");
+
+import MiscApi from "api/miscApi";
+
+var streamloLogo = MiscApi.getStreamloLogoImgUrl();
 
 var imgStyle = {
   paddingTop: "30px"

@@ -20,9 +20,7 @@
   "homepage": "https://github.com/richard534/MusicSteamWebsite#readme",
   "dependencies": {
     "axios": "0.16.2",
-    "babelify": "7.3.0",
     "bootstrap": "3.3.6",
-    "browserify": "11.0.1",
     "immutability-helper": "2.1.2",
     "jquery": "^3.3.1",
     "jwt-decode": "^2.2.0",
@@ -40,10 +38,11 @@
   "devDependencies": {
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.4",
-    "babel-minify-webpack-plugin": "^0.3.0",
+    "babel-plugin-transform-react-remove-prop-types": "^0.4.13",
     "babel-preset-env": "^1.6.1",
     "babel-preset-react": "^6.24.1",
     "clean-webpack-plugin": "^0.1.19",
+    "compression-webpack-plugin": "^1.1.11",
     "css-loader": "^0.23.1",
     "dotenv": "^5.0.1",
     "dotenv-webpack": "^1.5.5",

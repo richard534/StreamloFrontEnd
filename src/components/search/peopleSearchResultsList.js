@@ -3,8 +3,9 @@ import Person from "./person";
 import { Link } from "react-router";
 
 import UserApi from "api/userApi";
+import MiscApi from "api/miscApi";
 
-var noResultImg = require("images/noResultsSearch.png");
+let noResultImg = MiscApi.getNoSearchResultsImgUrl();
 
 var ThumbnailStyle = {
   marginBottom: "0px"

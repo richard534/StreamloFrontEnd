@@ -1,9 +1,11 @@
 import React from "react";
 import { Link } from "react-router";
 import _ from "lodash";
-import TrackApi from "api/trackApi";
 
-var tempAlbumArt = require("images/altAlbumArtLogo.png");
+import TrackApi from "api/trackApi";
+import MiscApi from "api/miscApi";
+
+var tempAlbumArt = MiscApi.getAltAlbumArtImgUrl();
 
 var trackURLText = {
   paddingTop: "6px",
