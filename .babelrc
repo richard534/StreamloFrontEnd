@@ -1,4 +1,14 @@
 {
-  "presets": ["env", "react"],
-  "plugins": ["react-hot-loader/babel"]
+  "presets": [
+    ["env", {
+        "modules": false
+    }], 
+    "react" 
+  ],
+  "plugins": ["react-hot-loader/babel"],
+  "env": {
+  "production": {
+    "plugins": ["transform-react-remove-prop-types"]
+    }
+  }
 }
