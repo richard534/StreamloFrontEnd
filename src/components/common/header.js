@@ -1,7 +1,9 @@
 import React from "react";
 import { Link } from "react-router";
 import SearchBox from "./searchBox";
-var streamloLogo = require("images/StreamloWithAlpha.png");
+import MiscApi from "api/miscApi";
+
+var streamloLogo = MiscApi.getStreamloLogoImgUrl();
 
 var navbarBrandStyle = {
   paddingTop: "3px"

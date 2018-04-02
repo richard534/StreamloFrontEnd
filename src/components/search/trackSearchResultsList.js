@@ -2,8 +2,9 @@ import React from "react";
 import Track from "./track";
 import { Link } from "react-router";
 import TrackApi from "api/trackApi";
+import MiscApi from "api/miscApi";
 
-var noResultImg = require("images/noResultsSearch.png");
+let noResultImg = MiscApi.getNoSearchResultsImgUrl();
 
 var trackListingStyle = {
   marginBottom: "10px"
