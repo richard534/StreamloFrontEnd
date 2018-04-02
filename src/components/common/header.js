@@ -80,29 +80,27 @@ class Header extends React.Component {
     }
 
     return (
-      <div className="container">
-        <nav className="navbar navbar-default navbar-fixed-top">
-          <div className="navbar-header">
-            <Link to="/" className="navbar-brand" style={navbarBrandStyle}>
-              <img src={streamloLogo} className="img-responsive pull-left" width="125" />
-            </Link>
-          </div>
+      <nav className="navbar navbar-default navbar-fixed-top">
+        <div className="navbar-header">
+          <Link to="/" className="navbar-brand" style={navbarBrandStyle}>
+            <img src={streamloLogo} className="img-responsive pull-left" width="125" />
+          </Link>
+        </div>
 
-          <ul className="nav navbar-nav navbar-left col-md-5 pull-left">
-            <li className="nav">
-              <Link to="/">Home</Link>
-            </li>
-            <li>
-              <SearchBox
-                searchString={this.state.searchString}
-                onChange={this.setSearchStringState}
-                onSearchSubmit={this.onSearchSubmit}
-              />
-            </li>
-          </ul>
-          {rightNav}
-        </nav>
-      </div>
+        <ul className="nav navbar-nav navbar-left">
+          <li className="nav">
+            <Link to="/">Home</Link>
+          </li>
+          <li>
+            <SearchBox
+              searchString={this.state.searchString}
+              onChange={this.setSearchStringState}
+              onSearchSubmit={this.onSearchSubmit}
+            />
+          </li>
+        </ul>
+        {rightNav}
+      </nav>
     );
   }
 }
