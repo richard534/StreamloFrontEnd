@@ -3,10 +3,11 @@ import { Link } from "react-router";
 import validate from "validate.js";
 import update from "immutability-helper";
 import toastr from "toastr";
-import moment from "moment";
 import validator from "validator";
 import UploadPanel from "./uploadPagePanels/uploadPanel.js";
 import TrackApi from "api/trackApi";
+import moment from "moment";
+moment.locale("en-gb");
 
 var uploadDiv = {
   marginTop: "30px"

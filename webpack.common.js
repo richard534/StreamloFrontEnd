@@ -1,3 +1,5 @@
+const webpack = require("webpack");
+
 const path = require("path");
 
 const HtmlWebPackPlugin = require("html-webpack-plugin");
@@ -97,6 +99,8 @@ module.exports = {
       filename: "index.html"
     }),
     new CleanWebpackPlugin(["dist"]),
-    new Dotenv()
+    new Dotenv(),
+    // Ignore all locale files of moment.js
+    new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/)
   ]
 };

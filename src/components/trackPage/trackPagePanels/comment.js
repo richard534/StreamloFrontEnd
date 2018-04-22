@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router";
 import toastr from "toastr";
 import moment from "moment";
+moment.locale("en-gb");
 
 import UserApi from "api/userApi";
 
