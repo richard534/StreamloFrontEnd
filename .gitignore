@@ -18,3 +18,6 @@ npm-debug.log
 
 # environment variables (don't commit)
 .env
+
+# Webpack Bundle Analysis Output
+stats.json
