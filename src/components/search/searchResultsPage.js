@@ -4,7 +4,7 @@ import SearchHeader from "./searchHeader";
 import SearchFilter from "./searchFilter";
 import TrackSearchResultsList from "./trackSearchResultsList";
 import PeopleSearchResultsList from "./peopleSearchResultsList";
-import _ from "lodash";
+import isEmpty from "lodash/isempty";
 import TrackApi from "api/trackApi";
 import UserApi from "api/userApi";
 
@@ -77,7 +77,7 @@ class SearchResultsPage extends React.Component {
     let perPage = this.state.perPage;
 
     TrackApi.getTracksByName(trackNameQuery, pageNum, perPage, (err, result) => {
-      if (err || _.isEmpty(result.tracks)) {
+      if (err || isEmpty(result.tracks)) {
         this.setState({ loaded: true });
         return;
       }
@@ -101,7 +101,7 @@ class SearchResultsPage extends React.Component {
     let perPage = this.state.perPage;
 
     UserApi.getUsersByDisplayname(displayNameQuery, pageNum, perPage, (err, result) => {
-      if (err || _.isEmpty(result.users)) {
+      if (err || isEmpty(result.users)) {
         this.setState({ loaded: true });
         return;
       }

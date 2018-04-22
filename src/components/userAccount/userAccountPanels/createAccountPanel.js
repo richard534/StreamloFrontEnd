@@ -1,7 +1,7 @@
 import React, { PropTypes } from "react";
 import { Link, browserHistory } from "react-router";
 import validate from "validate.js";
-import _ from "lodash";
+import isEmpty from "lodash/isempty";
 import toastr from "toastr";
 import update from "immutability-helper";
 
@@ -158,7 +158,7 @@ class CreateAccountPanel extends React.Component {
       );
     };
 
-    if (!_.isEmpty(self.state.errors)) {
+    if (!isEmpty(self.state.errors)) {
       errorsList = populateErrorsList();
       createAccountButton = disabledCreateAccountButton();
     } else {

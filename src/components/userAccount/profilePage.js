@@ -1,7 +1,6 @@
 import React from "react";
 import toastr from "toastr";
 import update from "immutability-helper";
-import _ from "lodash";
 import { browserHistory } from "react-router";
 
 import EditDetailsModal from "./userAccountModals/editDetailsModal";
