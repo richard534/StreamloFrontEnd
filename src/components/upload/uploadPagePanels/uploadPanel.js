@@ -70,7 +70,7 @@ class UploadPanel extends React.Component {
       );
     };
 
-    if (isEmpty(self.props.errors)) {
+    if (!isEmpty(self.props.errors)) {
       errorsList = populateErrorsList();
       uploadTrackButton = disableduploadTrackButton();
     } else {
