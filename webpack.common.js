@@ -2,6 +2,7 @@ const webpack = require("webpack");
 
 const path = require("path");
 
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const HtmlWebPackPlugin = require("html-webpack-plugin");
 const CleanWebpackPlugin = require("clean-webpack-plugin");
 
@@ -62,7 +63,13 @@ module.exports = {
           }
         ]
       },
-      { test: /\.css$/, use: ["style-loader", "css-loader"] },
+      {
+        test: /\.css$/,
+        use: ExtractTextPlugin.extract({
+          fallback: "style-loader",
+          use: "css-loader"
+        })
+      },
       {
         test: /\.(jpg|png|svg)$/,
         use: {
@@ -94,6 +101,7 @@ module.exports = {
   },
 
   plugins: [
+    new ExtractTextPlugin("styles.css"),
     new HtmlWebPackPlugin({
       template: "./src/index.html",
       filename: "index.html"
