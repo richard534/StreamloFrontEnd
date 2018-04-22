@@ -1,7 +1,7 @@
 import React, { PropTypes } from "react";
 import { Link, browserHistory } from "react-router";
 import validate from "validate.js";
-import isEmpty from "lodash/isempty";
+import isEmpty from "lodash/isEmpty";
 import toastr from "toastr";
 import update from "immutability-helper";
 

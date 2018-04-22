@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router";
-import isEmpty from "lodash/isempty";
+import isEmpty from "lodash/isEmpty";
 
 import TrackApi from "api/trackApi";
 import MiscApi from "api/miscApi";
