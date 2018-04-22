@@ -3,7 +3,7 @@ import { Link } from "react-router";
 import validate from "validate.js";
 import update from "immutability-helper";
 import toastr from "toastr";
-import validator from "validator";
+import isURL from "validator/lib/isURL";
 import UploadPanel from "./uploadPagePanels/uploadPanel.js";
 import TrackApi from "api/trackApi";
 import moment from "moment";
@@ -14,7 +14,7 @@ var uploadDiv = {
 };
 
 validate.validators.trackURLValidator = function(value, options, key, attributes) {
-  if (validator.isURL(value, { require_tld: false })) {
+  if (isURL(value, { require_tld: false })) {
     return undefined;
   } else {
     return "is invalid";
