@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router";
-import _ from "lodash";
+import isEmpty from "lodash/isempty";
 
 import TrackApi from "api/trackApi";
 import MiscApi from "api/miscApi";
@@ -70,7 +70,7 @@ class UploadPanel extends React.Component {
       );
     };
 
-    if (!_.isEmpty(self.props.errors)) {
+    if (!isEmpty(self.props.errors)) {
       errorsList = populateErrorsList();
       uploadTrackButton = disableduploadTrackButton();
     } else {
