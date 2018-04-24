@@ -28,7 +28,7 @@ class MiscApi {
   }
 
   static getAltAlbumArtImgUrl() {
-    let altAlbumArtImgUrl = ApiUrl + "static/defaultalbumart.png";
+    let altAlbumArtImgUrl = ApiUrl + "static/defaultAlbumArt.png";
     return altAlbumArtImgUrl;
   }
 }
