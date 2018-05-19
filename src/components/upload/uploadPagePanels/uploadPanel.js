@@ -31,6 +31,10 @@ var uploadLabelDivStyle = {
   paddingRight: "0px"
 };
 
+let progressBarStyle = {
+  width: "60%"
+};
+
 class UploadPanel extends React.Component {
   constructor(props) {
     super(props);
@@ -70,11 +74,31 @@ class UploadPanel extends React.Component {
       );
     };
 
+    let uploadProgressBar;
+    if (this.props.isUploading) {
+      uploadProgressBar = (() => {
+        return (
+          <div className="col-md-12" style={labelDivStyle}>
+            <div className="progress">
+              <div
+                className="progress-bar progress-bar-striped active"
+                style={{ width: this.props.uploadProgress + "%" }}
+              >
+                <span className="sr-only" />
+              </div>
+            </div>
+          </div>
+        );
+      })();
+    }
+
     if (!isEmpty(self.props.errors)) {
       errorsList = populateErrorsList();
       uploadTrackButton = disableduploadTrackButton();
     } else {
-      uploadTrackButton = enableduploadTrackButton();
+      if (!this.props.isUploading) {
+        uploadTrackButton = enableduploadTrackButton();
+      }
     }
 
     let albumArtPreviewImage = tempAlbumArt;
@@ -173,6 +197,7 @@ class UploadPanel extends React.Component {
                   />
                 </div>
               </div>
+              {uploadProgressBar}
               {uploadTrackButton}
               <br />
             </div>

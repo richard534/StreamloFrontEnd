@@ -76,9 +76,15 @@ class TrackApi {
       });
   }
 
-  static postTrack(formdata, jwtToken, cb) {
+  static postTrack(uploadPage, formdata, jwtToken, cb) {
+    uploadPage.setState({ isUploading: true });
+
     let instance = axios.create({
-      headers: { "x-access-token": jwtToken }
+      headers: { "x-access-token": jwtToken },
+      onUploadProgress: function(progressEvent) {
+        let percentageProgress = progressEvent.loaded / progressEvent.total * 100;
+        uploadPage.setState({ uploadProgress: percentageProgress });
+      }
     });
 
     instance
