@@ -25,7 +25,7 @@ app.use(express.static(path.join(__dirname, "dist")));
 
 // Redirect all of your server requests to /index.html (client-side router (react router) handles routing)
 app.get("/*", function(req, res) {
-  req.sendFile(__dirname + "/dist/index.html");
+  res.sendFile(__dirname + "/dist/index.html");
 });
 
 app.listen(
