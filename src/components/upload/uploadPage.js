@@ -63,7 +63,9 @@ class UploadPage extends React.Component {
       },
       errors: {
         title: "Enter Track Details"
-      }
+      },
+      uploadProgress: 0,
+      isUploading: false
     };
 
     this.validate = this.validate.bind(this);
@@ -151,8 +153,10 @@ class UploadPage extends React.Component {
     fd.append("track", this.state.data.track);
     fd.append("albumArt", this.state.data.albumArt);
 
-    TrackApi.postTrack(fd, jwtToken, err => {
+    TrackApi.postTrack(this, fd, jwtToken, err => {
       if (err) {
+        this.setState({ isUploading: false });
+        this.setState({ uploadProgress: 0 });
         toastr.remove();
         toastr.error("Error Uploading Track");
       } else {
@@ -176,6 +180,8 @@ class UploadPage extends React.Component {
             uploaderURL={this.props.auth.getProfile().userURL}
             data={this.state.data}
             errors={this.state.errors}
+            uploadProgress={this.state.uploadProgress}
+            isUploading={this.state.isUploading}
           />
         </div>
       </div>
