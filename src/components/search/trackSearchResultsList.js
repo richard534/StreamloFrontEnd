@@ -102,7 +102,7 @@ class TrackSearchResultsList extends React.Component {
             numLikes={track.numLikes}
             numPlays={track.numPlays}
             numComments={track.numComments}
-            trackAlbumArtURI={TrackApi.getTrackAlbumArtByTrackId(track._id)}
+            trackAlbumArtURI={TrackApi.getTrackAlbumArtURIByTrackId(track._id)}
           />
           <hr />
         </li>
