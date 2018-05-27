@@ -3,7 +3,7 @@ import ChartListing from "./chartListing";
 import TrackApi from "api/trackApi";
 import MiscApi from "api/miscApi";
 
-let noResultImg = MiscApi.getNoSearchResultsImgUrl();
+let noResultImg = MiscApi.getNoSearchResultsImgUri();
 
 class Chart extends React.Component {
   render() {

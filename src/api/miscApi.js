@@ -6,29 +6,30 @@ const ApiUrl = ApiProtocol + ApiDomainName + ":" + ApiPort + "/";
 
 import axios from "axios";
 
+// TODO maybe define endpoints on webservice that return s3 object URI for each image
 class MiscApi {
   static getBelfastImageUrl() {
-    let belfastImgUrl = ApiUrl + "static/belfast1.jpg";
+    let belfastImgUrl = "https://s3.eu-west-2.amazonaws.com/streamlo/static/belfast1.jpg";
     return belfastImgUrl;
   }
 
-  static getDerryImageUrl() {
-    let derryImgUrl = ApiUrl + "static/derry.jpg";
+  static getDerryImageUri() {
+    let derryImgUrl = "https://s3.eu-west-2.amazonaws.com/streamlo/static/derry.jpg";
     return derryImgUrl;
   }
 
-  static getNoSearchResultsImgUrl() {
-    let noSearchResultsImgUrl = ApiUrl + "static/noResultsSearch.png";
+  static getNoSearchResultsImgUri() {
+    let noSearchResultsImgUrl = "https://s3.eu-west-2.amazonaws.com/streamlo/static/noResultsSearch.png";
     return noSearchResultsImgUrl;
   }
 
-  static getStreamloLogoImgUrl() {
-    let streamloLogoImgUrl = ApiUrl + "static/StreamloWithAlpha.png";
+  static getStreamloLogoImgUri() {
+    let streamloLogoImgUrl = "https://s3.eu-west-2.amazonaws.com/streamlo/static/StreamloWithAlpha.png";
     return streamloLogoImgUrl;
   }
 
-  static getAltAlbumArtImgUrl() {
-    let altAlbumArtImgUrl = ApiUrl + "static/defaultAlbumArt.png";
+  static getAltAlbumArtImgUri() {
+    let altAlbumArtImgUrl = "https://s3.eu-west-2.amazonaws.com/streamlo/static/defaultAlbumArt.png";
     return altAlbumArtImgUrl;
   }
 }

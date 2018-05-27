@@ -4,7 +4,7 @@ import { Link } from "react-router";
 import TrackApi from "api/trackApi";
 import MiscApi from "api/miscApi";
 
-let noResultImg = MiscApi.getNoSearchResultsImgUrl();
+let noResultImg = MiscApi.getNoSearchResultsImgUri();
 
 var trackListingStyle = {
   marginBottom: "10px"

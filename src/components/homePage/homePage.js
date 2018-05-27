@@ -8,7 +8,7 @@ import TrackApi from "api/trackApi";
 import UserApi from "api/userApi";
 import MiscApi from "api/miscApi";
 
-let derryImg = MiscApi.getDerryImageUrl();
+let derryImg = MiscApi.getDerryImageUri();
 let belfastImg = MiscApi.getBelfastImageUrl();
 
 class Home extends React.Component {

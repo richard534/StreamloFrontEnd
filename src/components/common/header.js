@@ -3,7 +3,7 @@ import { Link } from "react-router";
 import SearchBox from "./searchBox";
 import MiscApi from "api/miscApi";
 
-var streamloLogo = MiscApi.getStreamloLogoImgUrl();
+var streamloLogo = MiscApi.getStreamloLogoImgUri();
 
 var navbarBrandStyle = {
   paddingTop: "3px"
