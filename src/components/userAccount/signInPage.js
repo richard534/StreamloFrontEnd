@@ -6,7 +6,7 @@ import update from "immutability-helper";
 
 import MiscApi from "api/miscApi";
 
-var streamloLogo = MiscApi.getStreamloLogoImgUrl();
+var streamloLogo = MiscApi.getStreamloLogoImgUri();
 
 var imgStyle = {
   paddingTop: "30px"

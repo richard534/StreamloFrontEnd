@@ -3,7 +3,7 @@ import ChartListing from "./chartListing";
 import TrackApi from "api/trackApi";
 import MiscApi from "api/miscApi";
 
-let noResultImg = MiscApi.getNoSearchResultsImgUrl();
+let noResultImg = MiscApi.getNoSearchResultsImgUri();
 
 class Chart extends React.Component {
   render() {
@@ -29,7 +29,7 @@ class Chart extends React.Component {
           numComments={track.numComments}
           numLikes={track.numLikes}
           numPlays={track.numPlays}
-          trackAlbumArtURI={TrackApi.getTrackAlbumArtByTrackId(track._id)}
+          trackAlbumArtURI={TrackApi.getTrackAlbumArtURIByTrackId(track._id)}
         />
       );
     };

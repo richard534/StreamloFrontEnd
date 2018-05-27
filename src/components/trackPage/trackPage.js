@@ -95,7 +95,7 @@ class TrackPage extends React.Component {
           numLikes: track.numLikes,
           numComments: track.numComments,
           trackBinaryURL: TrackApi.getTrackStreamURIByGridFSId(track._id),
-          trackAlbumArtURI: TrackApi.getTrackAlbumArtByTrackId(track._id),
+          trackAlbumArtURI: TrackApi.getTrackAlbumArtURIByTrackId(track._id),
           uploaderUserId: track.uploaderId,
           uploaderLoggedIn: uploaderLoggedIn
         };

@@ -4,7 +4,7 @@ import { Link } from "react-router";
 import TrackApi from "api/trackApi";
 import MiscApi from "api/miscApi";
 
-let noResultImg = MiscApi.getNoSearchResultsImgUrl();
+let noResultImg = MiscApi.getNoSearchResultsImgUri();
 
 var trackListingStyle = {
   marginBottom: "10px"
@@ -102,7 +102,7 @@ class TrackSearchResultsList extends React.Component {
             numLikes={track.numLikes}
             numPlays={track.numPlays}
             numComments={track.numComments}
-            trackAlbumArtURI={TrackApi.getTrackAlbumArtByTrackId(track._id)}
+            trackAlbumArtURI={TrackApi.getTrackAlbumArtURIByTrackId(track._id)}
           />
           <hr />
         </li>

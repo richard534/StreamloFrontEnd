@@ -5,7 +5,7 @@ import { Link } from "react-router";
 import UserApi from "api/userApi";
 import MiscApi from "api/miscApi";
 
-let noResultImg = MiscApi.getNoSearchResultsImgUrl();
+let noResultImg = MiscApi.getNoSearchResultsImgUri();
 
 var ThumbnailStyle = {
   marginBottom: "0px"

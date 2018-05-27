@@ -5,7 +5,7 @@ import isEmpty from "lodash/isEmpty";
 import TrackApi from "api/trackApi";
 import MiscApi from "api/miscApi";
 
-var tempAlbumArt = MiscApi.getAltAlbumArtImgUrl();
+var tempAlbumArt = MiscApi.getAltAlbumArtImgUri();
 
 var trackURLText = {
   paddingTop: "6px",

@@ -153,7 +153,7 @@ class TrackApi {
       });
   }
 
-  static getTrackAlbumArtByTrackId(trackId) {
+  static getTrackAlbumArtURIByTrackId(trackId) {
     let trackAlbumArtURI = ApiUrl + "tracks/" + trackId + "/albumArt?t=" + new Date().getTime();
     return trackAlbumArtURI;
   }
