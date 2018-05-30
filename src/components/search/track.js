@@ -131,8 +131,7 @@ class Track extends React.Component {
                 config={{
                   file: {
                     forceAudio: true,
-                    preload: true,
-                    attributes: { controls: "true", controlsList: "nodownload" }
+                    attributes: { controls: "true", controlsList: "nodownload", preload: "none" }
                   }
                 }}
               />
