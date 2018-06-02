@@ -6,7 +6,6 @@ const ApiUrl = ApiProtocol + ApiDomainName + ":" + ApiPort + "/";
 
 import axios from "axios";
 
-// TODO maybe define endpoints on webservice that return s3 object URI for each image
 class MiscApi {
   static getBelfastImageUrl() {
     let belfastImgUrl = "https://s3.eu-west-2.amazonaws.com/streamlo/static/belfast1.jpg";

@@ -10,9 +10,7 @@ module.exports = merge(common, {
     historyApiFallback: true
   },
   plugins: [
-    new webpack.DefinePlugin({
-      "process.env.NODE_ENV": JSON.stringify("development")
-    }),
+    new webpack.DefinePlugin({"process.env.NODE_ENV": JSON.stringify("development")}),
     new webpack.NamedModulesPlugin(),
     new webpack.HotModuleReplacementPlugin()
   ]
