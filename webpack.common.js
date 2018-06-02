@@ -30,7 +30,10 @@ module.exports = {
   resolve: {
     // options for resolving module requests
     // (does not apply to resolving to loaders)
-    modules: [path.resolve(__dirname, "src"), "node_modules"]
+    modules: [
+      path.resolve(__dirname, "src"),
+      "node_modules"
+    ]
   },
 
   // Instructs webpack to target a specific environment.
@@ -48,29 +51,34 @@ module.exports = {
         options: {
           emitError: true
         }
-      },
-      {
+      }, {
         test: /\.js$/,
         exclude: /node_modules/,
         loader: "babel-loader"
-      },
-      {
+      }, {
         test: /\.html$/,
         use: [
           {
             loader: "html-loader",
-            options: { minimize: true }
+            options: {
+              minimize: true
+            }
           }
         ]
-      },
-      {
+      }, {
         test: /\.css$/,
         use: ExtractTextPlugin.extract({
           fallback: "style-loader",
-          use: [{ loader: "css-loader", options: { minimize: true } }]
+          use: [
+            {
+              loader: "css-loader",
+              options: {
+                minimize: true
+              }
+            }
+          ]
         })
-      },
-      {
+      }, {
         test: /\.(jpg|png|svg)$/,
         use: {
           loader: "url-loader",
@@ -78,8 +86,7 @@ module.exports = {
             name: "images/[path][name].[hash].[ext]"
           }
         }
-      },
-      {
+      }, {
         test: /\.(woff|woff2|eot|ttf)$/,
         use: {
           loader: "url-loader",
@@ -87,8 +94,7 @@ module.exports = {
             limit: 100000
           }
         }
-      },
-      {
+      }, {
         test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
         use: {
           loader: "svg-inline-loader",
@@ -102,12 +108,12 @@ module.exports = {
 
   plugins: [
     new ExtractTextPlugin("styles.css"),
-    new HtmlWebPackPlugin({
-      template: "./src/index.html",
-      filename: "index.html"
-    }),
+    new HtmlWebPackPlugin({template: "./src/index.html", filename: "index.html"}),
     new CleanWebpackPlugin(["dist"]),
-    new Dotenv(),
+    new Dotenv({
+      safe: true, // load '.env.example' to verify the '.env' variables are all set. Can also be a string to a different file.
+      systemvars: true // load all the predefined 'process.env' variables which will trump anything local per dotenv specs.
+    }),
     // Ignore all locale files of moment.js
     new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/)
   ]
